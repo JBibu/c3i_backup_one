@@ -85,6 +85,34 @@
       "when": 1763644043601,
       "tag": "0011_familiar_stone_men",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1764100562084,
+      "tag": "0012_add_short_ids",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1764182159797,
+      "tag": "0013_elite_sprite",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1764182405089,
+      "tag": "0014_wild_echo",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1764182465287,
+      "tag": "0015_jazzy_sersi",
+      "breakpoints": true
     }
   ]
 }
