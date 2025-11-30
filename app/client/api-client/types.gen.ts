@@ -1991,6 +1991,10 @@ export type GetScheduleNotificationsResponses = {
                 shoutrrrUrl: string;
                 type: 'custom';
             } | {
+                type: 'telegram';
+                botToken: string;
+                chatId: string;
+            } | {
                 type: 'discord';
                 webhookUrl: string;
                 avatarUrl?: string;
@@ -2007,7 +2011,7 @@ export type GetScheduleNotificationsResponses = {
             enabled: boolean;
             id: number;
             name: string;
-            type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+            type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
             updatedAt: number;
         };
         destinationId: number;
@@ -2075,6 +2079,10 @@ export type UpdateScheduleNotificationsResponses = {
                 shoutrrrUrl: string;
                 type: 'custom';
             } | {
+                type: 'telegram';
+                botToken: string;
+                chatId: string;
+            } | {
                 type: 'discord';
                 webhookUrl: string;
                 avatarUrl?: string;
@@ -2091,7 +2099,7 @@ export type UpdateScheduleNotificationsResponses = {
             enabled: boolean;
             id: number;
             name: string;
-            type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+            type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
             updatedAt: number;
         };
         destinationId: number;
@@ -2148,6 +2156,10 @@ export type ListNotificationDestinationsResponses = {
             shoutrrrUrl: string;
             type: 'custom';
         } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
+        } | {
             type: 'discord';
             webhookUrl: string;
             avatarUrl?: string;
@@ -2164,7 +2176,7 @@ export type ListNotificationDestinationsResponses = {
         enabled: boolean;
         id: number;
         name: string;
-        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
         updatedAt: number;
     }>;
 };
@@ -2204,6 +2216,10 @@ export type CreateNotificationDestinationData = {
         } | {
             shoutrrrUrl: string;
             type: 'custom';
+        } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
         } | {
             type: 'discord';
             webhookUrl: string;
@@ -2261,6 +2277,10 @@ export type CreateNotificationDestinationResponses = {
             shoutrrrUrl: string;
             type: 'custom';
         } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
+        } | {
             type: 'discord';
             webhookUrl: string;
             avatarUrl?: string;
@@ -2277,7 +2297,7 @@ export type CreateNotificationDestinationResponses = {
         enabled: boolean;
         id: number;
         name: string;
-        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
         updatedAt: number;
     };
 };
@@ -2364,6 +2384,10 @@ export type GetNotificationDestinationResponses = {
             shoutrrrUrl: string;
             type: 'custom';
         } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
+        } | {
             type: 'discord';
             webhookUrl: string;
             avatarUrl?: string;
@@ -2380,7 +2404,7 @@ export type GetNotificationDestinationResponses = {
         enabled: boolean;
         id: number;
         name: string;
-        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
         updatedAt: number;
     };
 };
@@ -2420,6 +2444,10 @@ export type UpdateNotificationDestinationData = {
         } | {
             shoutrrrUrl: string;
             type: 'custom';
+        } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
         } | {
             type: 'discord';
             webhookUrl: string;
@@ -2487,6 +2515,10 @@ export type UpdateNotificationDestinationResponses = {
             shoutrrrUrl: string;
             type: 'custom';
         } | {
+            type: 'telegram';
+            botToken: string;
+            chatId: string;
+        } | {
             type: 'discord';
             webhookUrl: string;
             avatarUrl?: string;
@@ -2503,7 +2535,7 @@ export type UpdateNotificationDestinationResponses = {
         enabled: boolean;
         id: number;
         name: string;
-        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack';
+        type: 'custom' | 'discord' | 'email' | 'gotify' | 'ntfy' | 'pushover' | 'slack' | 'telegram';
         updatedAt: number;
     };
 };

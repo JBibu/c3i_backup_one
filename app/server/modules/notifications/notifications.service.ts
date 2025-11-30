@@ -65,6 +65,11 @@ async function encryptSensitiveFields(config: NotificationConfig): Promise<Notif
 				...config,
 				apiToken: await cryptoUtils.encrypt(config.apiToken),
 			};
+		case "telegram":
+			return {
+				...config,
+				botToken: await cryptoUtils.encrypt(config.botToken),
+			};
 		case "custom":
 			return {
 				...config,
@@ -106,6 +111,11 @@ async function decryptSensitiveFields(config: NotificationConfig): Promise<Notif
 			return {
 				...config,
 				apiToken: await cryptoUtils.decrypt(config.apiToken),
+			};
+		case "telegram":
+			return {
+				...config,
+				botToken: await cryptoUtils.decrypt(config.botToken),
 			};
 		case "custom":
 			return {

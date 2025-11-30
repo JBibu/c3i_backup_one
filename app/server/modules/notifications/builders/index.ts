@@ -5,6 +5,7 @@ import { buildDiscordShoutrrrUrl } from "./discord";
 import { buildGotifyShoutrrrUrl } from "./gotify";
 import { buildNtfyShoutrrrUrl } from "./ntfy";
 import { buildPushoverShoutrrrUrl } from "./pushover";
+import { buildTelegramShoutrrrUrl } from "./telegram";
 import { buildCustomShoutrrrUrl } from "./custom";
 
 export function buildShoutrrrUrl(config: NotificationConfig): string {
@@ -21,6 +22,8 @@ export function buildShoutrrrUrl(config: NotificationConfig): string {
 			return buildNtfyShoutrrrUrl(config);
 		case "pushover":
 			return buildPushoverShoutrrrUrl(config);
+		case "telegram":
+			return buildTelegramShoutrrrUrl(config);
 		case "custom":
 			return buildCustomShoutrrrUrl(config);
 		default: {

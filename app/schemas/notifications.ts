@@ -7,6 +7,7 @@ export const NOTIFICATION_TYPES = {
 	gotify: "gotify",
 	ntfy: "ntfy",
 	pushover: "pushover",
+	telegram: "telegram",
 	custom: "custom",
 } as const;
 
@@ -64,6 +65,12 @@ export const pushoverNotificationConfigSchema = type({
 	priority: "-1 | 0 | 1",
 });
 
+export const telegramNotificationConfigSchema = type({
+	type: "'telegram'",
+	botToken: "string",
+	chatId: "string",
+});
+
 export const customNotificationConfigSchema = type({
 	type: "'custom'",
 	shoutrrrUrl: "string",
@@ -75,6 +82,7 @@ export const notificationConfigSchema = emailNotificationConfigSchema
 	.or(gotifyNotificationConfigSchema)
 	.or(ntfyNotificationConfigSchema)
 	.or(pushoverNotificationConfigSchema)
+	.or(telegramNotificationConfigSchema)
 	.or(customNotificationConfigSchema);
 
 export type NotificationConfig = typeof notificationConfigSchema.infer;
