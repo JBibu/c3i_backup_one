@@ -58,7 +58,7 @@ export const RcloneForm = ({ form }: Props) => {
 				render={({ field }) => (
 					<FormItem>
 						<FormLabel>Remote</FormLabel>
-						<Select onValueChange={(v) => field.onChange(v)}>
+						<Select onValueChange={(v) => field.onChange(v)} value={field.value}>
 							<FormControl>
 								<SelectTrigger>
 									<SelectValue placeholder="Select an rclone remote" />

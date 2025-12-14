@@ -45,7 +45,7 @@ const defaultValuesForType = {
 	nfs: { backend: "nfs" as const, port: 2049, version: "4.1" as const },
 	smb: { backend: "smb" as const, port: 445, vers: "3.0" as const },
 	webdav: { backend: "webdav" as const, port: 80, ssl: false },
-	rclone: { backend: "rclone" as const, remote: "", path: "" },
+	rclone: { backend: "rclone" as const },
 };
 
 export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, formId, loading, className }: Props) => {
