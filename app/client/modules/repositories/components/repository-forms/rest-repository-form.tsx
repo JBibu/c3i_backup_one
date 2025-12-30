@@ -1,4 +1,3 @@
-import { useState, useRef } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
 	FormControl,
@@ -22,10 +21,6 @@ type Props = {
 export const RestRepositoryForm = ({ form }: Props) => {
 	const insecureTls = form.watch("insecureTls");
 	const cacert = form.watch("cacert");
-	const [showCertTooltip, setShowCertTooltip] = useState(false);
-	const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-	const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const tooltipHideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	return (
 		<>
@@ -91,81 +86,33 @@ export const RestRepositoryForm = ({ form }: Props) => {
 					<FormItem>
 						<FormLabel>CA Certificate (Optional)</FormLabel>
 						<FormControl>
-							<div className="relative">
-								<Textarea
-									placeholder="-----BEGIN CERTIFICATE-----&#10;...&#10;-----END CERTIFICATE-----"
-									rows={6}
-									disabled={insecureTls}
-									{...field}
-									value={insecureTls ? "" : field.value}
-									onChange={(e) => {
-										field.onChange(e);
-										if (e.target.value) {
-											form.setValue("insecureTls", false);
-										}
-									}}
-									onPointerEnter={(e) => {
-										if (insecureTls && !showCertTooltip) {
-											const rect = e.currentTarget.getBoundingClientRect();
-											setTooltipPos({
-												x: e.clientX - rect.left,
-												y: e.clientY - rect.top,
-											});
-
-											// Clear any existing timeout
-											if (tooltipTimeoutRef.current) {
-												clearTimeout(tooltipTimeoutRef.current);
-											}
-
-											// Set new timeout to show tooltip after 500ms
-											tooltipTimeoutRef.current = setTimeout(() => {
-												setShowCertTooltip(true);
-											}, 500);
-										}
-									}}
-									onPointerMove={(e) => {
-										if (insecureTls && !showCertTooltip) {
-											const rect = e.currentTarget.getBoundingClientRect();
-											setTooltipPos({
-												x: e.clientX - rect.left,
-												y: e.clientY - rect.top,
-											});
-										}
-									}}
-									onPointerLeave={() => {
-										// Clear show timeout if still waiting
-										if (tooltipTimeoutRef.current) {
-											clearTimeout(tooltipTimeoutRef.current);
-											tooltipTimeoutRef.current = null;
-										}
-
-										// Clear any existing hide timeout
-										if (tooltipHideTimeoutRef.current) {
-											clearTimeout(tooltipHideTimeoutRef.current);
-										}
-
-										// Set timeout to hide tooltip after 500ms
-										tooltipHideTimeoutRef.current = setTimeout(() => {
-											setShowCertTooltip(false);
-										}, 500);
-									}}
-								/>
-								{insecureTls && showCertTooltip && (
-									<div
-										className="pointer-events-none absolute z-50 rounded-md bg-foreground px-3 py-1.5 text-xs text-background shadow-md"
-										style={{
-											left: `${tooltipPos.x}px`,
-											top: `${tooltipPos.y - 40}px`,
-											transform: "translateX(-50%)",
-										}}
-									>
-										<p className="max-w-xs text-balance">
+							<Tooltip delayDuration={500}>
+								<TooltipTrigger asChild>
+									<div>
+										<Textarea
+											placeholder="-----BEGIN CERTIFICATE-----&#10;...&#10;-----END CERTIFICATE-----"
+											rows={6}
+											disabled={insecureTls}
+											{...field}
+											value={insecureTls ? "" : field.value}
+											onChange={(e) => {
+												field.onChange(e);
+												if (e.target.value) {
+													form.setValue("insecureTls", false);
+												}
+											}}
+										/>
+									</div>
+								</TooltipTrigger>
+								{insecureTls && (
+									<TooltipContent>
+										<p className="max-w-xs">
 											CA certificate is disabled because TLS validation is being skipped. Uncheck "Skip TLS Certificate
 											Verification" to provide a custom CA certificate.
 										</p>
-									</div>
+									</TooltipContent>
 								)}
-							</div>
+							</Tooltip>
 						</FormControl>
 						<FormDescription>
 							Custom CA certificate for self-signed certificates (PEM format).{" "}

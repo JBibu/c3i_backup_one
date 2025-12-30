@@ -886,7 +886,7 @@ export const cleanupTemporaryKeys = async (config: RepositoryConfig, env: Record
 		await fs.unlink(env.GOOGLE_APPLICATION_CREDENTIALS).catch(() => {});
 	}
 
-	if (config.backend === "rest" && env.RESTIC_CACERT) {
+	if (env.RESTIC_CACERT) {
 		await fs.unlink(env.RESTIC_CACERT).catch(() => {});
 	}
 };

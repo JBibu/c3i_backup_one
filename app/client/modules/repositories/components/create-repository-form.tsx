@@ -72,7 +72,6 @@ export const CreateRepositoryForm = ({
 	const form = useForm<RepositoryFormValues>({
 		resolver: arktypeResolver(cleanSchema as unknown as typeof formSchema),
 		defaultValues: initialValues,
-		mode: "onTouched",
 		resetOptions: {
 			keepDefaultValues: true,
 			keepDirtyValues: false,
