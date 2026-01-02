@@ -1195,6 +1195,28 @@ export type UpdateRepositoryResponses = {
 
 export type UpdateRepositoryResponse = UpdateRepositoryResponses[keyof UpdateRepositoryResponses];
 
+export type DeleteSnapshotsData = {
+    body?: {
+        snapshotIds: Array<string>;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/repositories/{id}/snapshots';
+};
+
+export type DeleteSnapshotsResponses = {
+    /**
+     * Snapshots deleted successfully
+     */
+    200: {
+        message: string;
+    };
+};
+
+export type DeleteSnapshotsResponse = DeleteSnapshotsResponses[keyof DeleteSnapshotsResponses];
+
 export type ListSnapshotsData = {
     body?: never;
     path: {
@@ -1366,6 +1388,31 @@ export type DoctorRepositoryResponses = {
 };
 
 export type DoctorRepositoryResponse = DoctorRepositoryResponses[keyof DoctorRepositoryResponses];
+
+export type TagSnapshotsData = {
+    body?: {
+        snapshotIds: Array<string>;
+        add?: Array<string>;
+        remove?: Array<string>;
+        set?: Array<string>;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/v1/repositories/{id}/snapshots/tag';
+};
+
+export type TagSnapshotsResponses = {
+    /**
+     * Snapshots tagged successfully
+     */
+    200: {
+        message: string;
+    };
+};
+
+export type TagSnapshotsResponse = TagSnapshotsResponses[keyof TagSnapshotsResponses];
 
 export type ListBackupSchedulesData = {
     body?: never;

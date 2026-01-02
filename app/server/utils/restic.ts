@@ -567,11 +567,15 @@ const forget = async (config: RepositoryConfig, options: RetentionPolicy, extra:
 	return { success: true };
 };
 
-const deleteSnapshot = async (config: RepositoryConfig, snapshotId: string) => {
+const deleteSnapshots = async (config: RepositoryConfig, snapshotIds: string[]) => {
 	const repoUrl = buildRepoUrl(config);
 	const env = await buildEnv(config);
 
-	const args: string[] = ["--repo", repoUrl, "forget", snapshotId, "--prune"];
+	if (snapshotIds.length === 0) {
+		throw new Error("No snapshot IDs provided for deletion.");
+	}
+
+	const args: string[] = ["--repo", repoUrl, "forget", ...snapshotIds, "--prune"];
 	addCommonArgs(args, env);
 
 	const res = await safeSpawn({ command: "restic", args, env });
@@ -579,6 +583,55 @@ const deleteSnapshot = async (config: RepositoryConfig, snapshotId: string) => {
 
 	if (res.exitCode !== 0) {
 		logger.error(`Restic snapshot deletion failed: ${res.stderr}`);
+		throw new ResticError(res.exitCode, res.stderr);
+	}
+
+	return { success: true };
+};
+
+const deleteSnapshot = async (config: RepositoryConfig, snapshotId: string) => {
+	return deleteSnapshots(config, [snapshotId]);
+};
+
+const tagSnapshots = async (
+	config: RepositoryConfig,
+	snapshotIds: string[],
+	tags: { add?: string[]; remove?: string[]; set?: string[] },
+) => {
+	const repoUrl = buildRepoUrl(config);
+	const env = await buildEnv(config);
+
+	if (snapshotIds.length === 0) {
+		throw new Error("No snapshot IDs provided for tagging.");
+	}
+
+	const args: string[] = ["--repo", repoUrl, "tag", ...snapshotIds];
+
+	if (tags.add) {
+		for (const tag of tags.add) {
+			args.push("--add", tag);
+		}
+	}
+
+	if (tags.remove) {
+		for (const tag of tags.remove) {
+			args.push("--remove", tag);
+		}
+	}
+
+	if (tags.set) {
+		for (const tag of tags.set) {
+			args.push("--set", tag);
+		}
+	}
+
+	addCommonArgs(args, env);
+
+	const res = await safeSpawn({ command: "restic", args, env });
+	await cleanupTemporaryKeys(config, env);
+
+	if (res.exitCode !== 0) {
+		logger.error(`Restic snapshot tagging failed: ${res.stderr}`);
 		throw new ResticError(res.exitCode, res.stderr);
 	}
 
@@ -841,6 +894,8 @@ export const restic = {
 	snapshots,
 	forget,
 	deleteSnapshot,
+	deleteSnapshots,
+	tagSnapshots,
 	unlock,
 	ls,
 	check,

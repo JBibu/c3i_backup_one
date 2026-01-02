@@ -389,6 +389,40 @@ const deleteSnapshot = async (id: string, snapshotId: string) => {
 	}
 };
 
+const deleteSnapshots = async (id: string, snapshotIds: string[]) => {
+	const repository = await findRepository(id);
+
+	if (!repository) {
+		throw new NotFoundError("Repository not found");
+	}
+
+	const releaseLock = await repoMutex.acquireExclusive(repository.id, `delete:bulk`);
+	try {
+		await restic.deleteSnapshots(repository.config, snapshotIds);
+	} finally {
+		releaseLock();
+	}
+};
+
+const tagSnapshots = async (
+	id: string,
+	snapshotIds: string[],
+	tags: { add?: string[]; remove?: string[]; set?: string[] },
+) => {
+	const repository = await findRepository(id);
+
+	if (!repository) {
+		throw new NotFoundError("Repository not found");
+	}
+
+	const releaseLock = await repoMutex.acquireExclusive(repository.id, `tag:bulk`);
+	try {
+		await restic.tagSnapshots(repository.config, snapshotIds, tags);
+	} finally {
+		releaseLock();
+	}
+};
+
 const updateRepository = async (id: string, updates: { name?: string; compressionMode?: CompressionMode }) => {
 	const existing = await findRepository(id);
 
@@ -439,4 +473,6 @@ export const repositoriesService = {
 	checkHealth,
 	doctorRepository,
 	deleteSnapshot,
+	deleteSnapshots,
+	tagSnapshots,
 };
