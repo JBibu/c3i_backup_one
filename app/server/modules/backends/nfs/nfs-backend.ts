@@ -54,10 +54,13 @@ const mount = async (config: BackendConfig, path: string) => {
 		logger.debug(`Mounting volume ${path}...`);
 		logger.info(`Executing mount: mount ${args.join(" ")}`);
 
-		await executeMount(args);
-
-		// Fallback with -i flag if the first mount fails using the mount helper
-		await executeMount(["-i", ...args]);
+		try {
+			await executeMount(args);
+		} catch (error) {
+			logger.warn(`Initial NFS mount failed, retrying with -i flag: ${toMessage(error)}`);
+			// Fallback with -i flag if the first mount fails using the mount helper
+			await executeMount(["-i", ...args]);
+		}
 
 		logger.info(`NFS volume at ${path} mounted successfully.`);
 		return { status: BACKEND_STATUS.mounted };

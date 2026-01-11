@@ -40,14 +40,11 @@ const mount = async (config: BackendConfig, path: string) => {
 
 		const source = `//${config.server}/${config.share}`;
 		const { uid, gid } = os.userInfo();
-		const options = [
-			`user=${config.username}`,
-			`pass=${password}`,
-			`vers=${config.vers}`,
-			`port=${config.port}`,
-			`uid=${uid}`,
-			`gid=${gid}`,
-		];
+		const options = [`user=${config.username}`, `pass=${password}`, `port=${config.port}`, `uid=${uid}`, `gid=${gid}`];
+
+		if (config.vers && config.vers !== "auto") {
+			options.push(`vers=${config.vers}`);
+		}
 
 		if (config.domain) {
 			options.push(`domain=${config.domain}`);
@@ -62,10 +59,13 @@ const mount = async (config: BackendConfig, path: string) => {
 		logger.debug(`Mounting SMB volume ${path}...`);
 		logger.info(`Executing mount: mount ${args.join(" ")}`);
 
-		await executeMount(args);
-
-		// Fallback with -i flag if the first mount fails using the mount helper
-		await executeMount(["-i", ...args]);
+		try {
+			await executeMount(args);
+		} catch (error) {
+			logger.warn(`Initial SMB mount failed, retrying with -i flag: ${toMessage(error)}`);
+			// Fallback with -i flag if the first mount fails using the mount helper
+			await executeMount(["-i", ...args]);
+		}
 
 		logger.info(`SMB volume at ${path} mounted successfully.`);
 		return { status: BACKEND_STATUS.mounted };

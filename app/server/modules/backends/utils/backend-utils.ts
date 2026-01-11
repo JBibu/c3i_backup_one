@@ -7,10 +7,10 @@ import { logger } from "../../../utils/logger";
 export const executeMount = async (args: string[]): Promise<void> => {
 	const shouldBeVerbose = process.env.LOG_LEVEL === "debug" || process.env.NODE_ENV !== "production";
 	const hasVerboseFlag = args.some((arg) => arg === "-v" || arg.startsWith("-vv"));
-	const effectiveArgs = shouldBeVerbose && !hasVerboseFlag ? ["-vvv", ...args] : args;
+	const effectiveArgs = shouldBeVerbose && !hasVerboseFlag ? ["-v", ...args] : args;
 
 	logger.debug(`Executing mount ${effectiveArgs.join(" ")}`);
-	const result = await $`mount ${effectiveArgs}`.nothrow();
+	let result = await $`mount ${effectiveArgs}`.nothrow();
 
 	const stdout = result.stdout.toString().trim();
 	const stderr = result.stderr.toString().trim();

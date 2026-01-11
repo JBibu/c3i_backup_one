@@ -58,10 +58,14 @@ const mount = async (config: BackendConfig, path: string) => {
 		logger.debug(`Mounting WebDAV volume ${path}...`);
 
 		const args = ["-t", "davfs", "-o", options.join(","), source, path];
-		await executeMount(args);
 
-		// Fallback with -i flag if the first mount fails using the mount helper
-		await executeMount(["-i", ...args]);
+		try {
+			await executeMount(args);
+		} catch (error) {
+			logger.warn(`Initial WebDAV mount failed, retrying with -i flag: ${toMessage(error)}`);
+			// Fallback with -i flag if the first mount fails using the mount helper
+			await executeMount(["-i", ...args]);
+		}
 
 		logger.info(`WebDAV volume at ${path} mounted successfully.`);
 		return { status: BACKEND_STATUS.mounted };
