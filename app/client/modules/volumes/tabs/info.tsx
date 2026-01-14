@@ -32,7 +32,7 @@ export const VolumeInfoTabContent = ({ volume, statfs }: Props) => {
 	const updateMutation = useMutation({
 		...updateVolumeMutation(),
 		onSuccess: (data: UpdateVolumeResponse) => {
-			toast.success("Volume updated successfully");
+			toast.success("Volume actualizado correctamente");
 			setOpen(false);
 			setPendingValues(null);
 
@@ -41,7 +41,7 @@ export const VolumeInfoTabContent = ({ volume, statfs }: Props) => {
 			}
 		},
 		onError: (error) => {
-			toast.error("Failed to update volume", { description: error.message });
+			toast.error("Error al actualizar el volume", { description: error.message });
 			setOpen(false);
 			setPendingValues(null);
 		},
@@ -87,17 +87,17 @@ export const VolumeInfoTabContent = ({ volume, statfs }: Props) => {
 			<AlertDialog open={open} onOpenChange={setOpen}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Update Volume Configuration</AlertDialogTitle>
+						<AlertDialogTitle>Actualizar configuración del Volume</AlertDialogTitle>
 						<AlertDialogDescription>
-							Editing the volume will remount it with the new config immediately. This may temporarily disrupt access to
-							the volume. Continue?
+							Al editar el volume se remontará inmediatamente con la nueva configuración. Esto puede interrumpir temporalmente el acceso al
+							volume. ¿Desea continuar?
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction onClick={confirmUpdate}>
 							<Check className="h-4 w-4" />
-							Update
+							Actualizar
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

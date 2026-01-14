@@ -41,9 +41,9 @@ ${body}`;
 
 	return (
 		<div className="space-y-2 pt-4 border-t">
-			<Label>Request Preview</Label>
+			<Label>Vista previa de la solicitud</Label>
 			<CodeBlock code={previewCode} filename="HTTP Request" />
-			<p className="text-[0.8rem] text-muted-foreground">This is a preview of the HTTP request that will be sent.</p>
+			<p className="text-[0.8rem] text-muted-foreground">Esta es una vista previa de la solicitud HTTP que se enviará.</p>
 		</div>
 	);
 };
@@ -58,11 +58,11 @@ export const GenericForm = ({ form }: Props) => {
 				name="url"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Webhook URL</FormLabel>
+						<FormLabel>URL del Webhook</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="https://api.example.com/webhook" />
 						</FormControl>
-						<FormDescription>The target URL for the webhook.</FormDescription>
+						<FormDescription>La URL de destino para el webhook.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -72,11 +72,11 @@ export const GenericForm = ({ form }: Props) => {
 				name="method"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Method</FormLabel>
+						<FormLabel>Método</FormLabel>
 						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select method" />
+									<SelectValue placeholder="Seleccione el método" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
@@ -93,7 +93,7 @@ export const GenericForm = ({ form }: Props) => {
 				name="contentType"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Content Type</FormLabel>
+						<FormLabel>Tipo de contenido</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="application/json" />
 						</FormControl>
@@ -106,7 +106,7 @@ export const GenericForm = ({ form }: Props) => {
 				name="headers"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Headers</FormLabel>
+						<FormLabel>Cabeceras</FormLabel>
 						<FormControl>
 							<Textarea
 								{...field}
@@ -115,7 +115,7 @@ export const GenericForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(e.target.value.split("\n"))}
 							/>
 						</FormControl>
-						<FormDescription>One header per line in Key: Value format.</FormDescription>
+						<FormDescription>Una cabecera por línea en formato Clave: Valor.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -129,8 +129,8 @@ export const GenericForm = ({ form }: Props) => {
 							<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 						</FormControl>
 						<div className="space-y-1 leading-none">
-							<FormLabel>Use JSON Template</FormLabel>
-							<FormDescription>Send the message as a JSON object.</FormDescription>
+							<FormLabel>Usar plantilla JSON</FormLabel>
+							<FormDescription>Enviar el mensaje como un objeto JSON.</FormDescription>
 						</div>
 					</FormItem>
 				)}
@@ -142,11 +142,11 @@ export const GenericForm = ({ form }: Props) => {
 						name="titleKey"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Title Key</FormLabel>
+								<FormLabel>Clave del título</FormLabel>
 								<FormControl>
 									<Input {...field} placeholder="title" />
 								</FormControl>
-								<FormDescription>The JSON key for the notification title.</FormDescription>
+								<FormDescription>La clave JSON para el título de la notificación.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -156,11 +156,11 @@ export const GenericForm = ({ form }: Props) => {
 						name="messageKey"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Message Key</FormLabel>
+								<FormLabel>Clave del mensaje</FormLabel>
 								<FormControl>
 									<Input {...field} placeholder="message" />
 								</FormControl>
-								<FormDescription>The JSON key for the notification message.</FormDescription>
+								<FormDescription>La clave JSON para el mensaje de la notificación.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}

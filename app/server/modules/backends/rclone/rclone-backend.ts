@@ -15,12 +15,12 @@ const mount = async (config: BackendConfig, path: string) => {
 
 	if (config.backend !== "rclone") {
 		logger.error("Provided config is not for rclone backend");
-		return { status: BACKEND_STATUS.error, error: "Provided config is not for rclone backend" };
+		return { status: BACKEND_STATUS.error, error: "La configuración proporcionada no es para el backend Rclone" };
 	}
 
 	if (os.platform() !== "linux") {
 		logger.error("Rclone mounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "Rclone mounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El montaje de Rclone solo es compatible con hosts Linux." };
 	}
 
 	const { status } = await checkHealth(path);
@@ -53,8 +53,8 @@ const mount = async (config: BackendConfig, path: string) => {
 		const result = await $`rclone ${args}`.nothrow();
 
 		if (result.exitCode !== 0) {
-			const errorMsg = result.stderr.toString() || result.stdout.toString() || "Unknown error";
-			throw new Error(`Failed to mount rclone volume: ${errorMsg}`);
+			const errorMsg = result.stderr.toString() || result.stdout.toString() || "Error desconocido";
+			throw new Error(`Error al montar el volumen Rclone: ${errorMsg}`);
 		}
 
 		logger.info(`Rclone volume at ${path} mounted successfully.`);
@@ -74,7 +74,7 @@ const mount = async (config: BackendConfig, path: string) => {
 const unmount = async (path: string) => {
 	if (os.platform() !== "linux") {
 		logger.error("Rclone unmounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "Rclone unmounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El desmontaje de Rclone solo es compatible con hosts Linux." };
 	}
 
 	const run = async () => {
@@ -104,17 +104,17 @@ const checkHealth = async (path: string) => {
 		try {
 			await fs.access(path);
 		} catch {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		const mount = await getMountForPath(path);
 
 		if (!mount || mount.mountPoint !== path) {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		if (!mount.fstype.includes("rclone")) {
-			throw new Error(`Path ${path} is not mounted as rclone (found ${mount.fstype}).`);
+			throw new Error(`La ruta ${path} no está montada como Rclone (se encontró ${mount.fstype}).`);
 		}
 
 		logger.debug(`Rclone volume at ${path} is healthy and mounted.`);
@@ -125,7 +125,7 @@ const checkHealth = async (path: string) => {
 		return await withTimeout(run(), OPERATION_TIMEOUT, "Rclone health check");
 	} catch (error) {
 		const message = toMessage(error);
-		if (message !== "Volume is not mounted") {
+		if (message !== "El volumen no está montado") {
 			logger.error("Rclone volume health check failed:", message);
 		}
 		return { status: BACKEND_STATUS.error, error: message };

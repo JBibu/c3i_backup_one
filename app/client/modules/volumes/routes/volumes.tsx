@@ -25,16 +25,26 @@ const getVolumeStatusVariant = (status: VolumeStatus): "success" | "neutral" | "
 	return statusMap[status];
 };
 
+const getVolumeStatusLabel = (status: VolumeStatus): string => {
+	const labelMap = {
+		mounted: "Montado",
+		unmounted: "Desmontado",
+		error: "Error",
+		unknown: "Desconocido",
+	};
+	return labelMap[status];
+};
+
 export const handle = {
-	breadcrumb: () => [{ label: "Volumes" }],
+	breadcrumb: () => [{ label: "Volúmenes" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Volumes" },
+		{ title: "C3i Backup ONE - Volúmenes" },
 		{
 			name: "description",
-			content: "Create, manage, monitor, and automate your Docker volumes with ease.",
+			content: "Cree, gestione, supervise y automatice sus volúmenes Docker con facilidad.",
 		},
 	];
 }
@@ -78,12 +88,12 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 		return (
 			<EmptyState
 				icon={HardDrive}
-				title="No volume"
-				description="Manage and monitor all your storage backends in one place with advanced features like automatic mounting and health checks."
+				title="Sin volúmenes"
+				description="Gestione y supervise todos sus backends de almacenamiento en un solo lugar con características avanzadas como montaje automático y comprobaciones de estado."
 				button={
 					<Button onClick={() => navigate("/volumes/create")}>
 						<Plus size={16} className="mr-2" />
-						Create Volume
+						Crear volumen
 					</Button>
 				}
 			/>
@@ -96,26 +106,26 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 				<span className="flex flex-col sm:flex-row items-stretch md:items-center gap-0 flex-wrap ">
 					<Input
 						className="w-full lg:w-[180px] min-w-[180px] -mr-px -mt-px"
-						placeholder="Search volumes…"
+						placeholder="Buscar volúmenes…"
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 					/>
 					<Select value={statusFilter} onValueChange={setStatusFilter}>
 						<SelectTrigger className="w-full lg:w-[180px] min-w-[180px] -mr-px -mt-px">
-							<SelectValue placeholder="All status" />
+							<SelectValue placeholder="Todos los estados" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="mounted">Mounted</SelectItem>
-							<SelectItem value="unmounted">Unmounted</SelectItem>
+							<SelectItem value="mounted">Montado</SelectItem>
+							<SelectItem value="unmounted">Desmontado</SelectItem>
 							<SelectItem value="error">Error</SelectItem>
 						</SelectContent>
 					</Select>
 					<Select value={backendFilter} onValueChange={setBackendFilter}>
 						<SelectTrigger className="w-full lg:w-[180px] min-w-[180px] -mt-px">
-							<SelectValue placeholder="All backends" />
+							<SelectValue placeholder="Todos los backends" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="directory">Directory</SelectItem>
+							<SelectItem value="directory">Directorio</SelectItem>
 							<SelectItem value="nfs">NFS</SelectItem>
 							<SelectItem value="smb">SMB</SelectItem>
 						</SelectContent>
@@ -123,22 +133,22 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 					{(searchQuery || statusFilter || backendFilter) && (
 						<Button onClick={clearFilters} className="w-full lg:w-auto mt-2 lg:mt-0 lg:ml-2">
 							<RotateCcw className="h-4 w-4 mr-2" />
-							Clear filters
+							Limpiar filtros
 						</Button>
 					)}
 				</span>
 				<Button onClick={() => navigate("/volumes/create")}>
 					<Plus size={16} className="mr-2" />
-					Create Volume
+					Crear volumen
 				</Button>
 			</div>
 			<div className="overflow-x-auto">
 				<Table className="border-t">
 					<TableHeader className="bg-card-header">
 						<TableRow>
-							<TableHead className="w-[100px] uppercase">Name</TableHead>
+							<TableHead className="w-[100px] uppercase">Nombre</TableHead>
 							<TableHead className="uppercase text-left">Backend</TableHead>
-							<TableHead className="uppercase text-center">Status</TableHead>
+							<TableHead className="uppercase text-center">Estado</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -146,10 +156,10 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 							<TableRow>
 								<TableCell colSpan={4} className="text-center py-12">
 									<div className="flex flex-col items-center gap-3">
-										<p className="text-muted-foreground">No volumes match your filters.</p>
+										<p className="text-muted-foreground">Ningún volumen coincide con sus filtros.</p>
 										<Button onClick={clearFilters} variant="outline" size="sm">
 											<RotateCcw className="h-4 w-4 mr-2" />
-											Clear filters
+											Limpiar filtros
 										</Button>
 									</div>
 								</TableCell>
@@ -168,7 +178,7 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 									<TableCell className="text-center">
 										<StatusDot
 											variant={getVolumeStatusVariant(volume.status)}
-											label={volume.status[0].toUpperCase() + volume.status.slice(1)}
+											label={getVolumeStatusLabel(volume.status)}
 										/>
 									</TableCell>
 								</TableRow>
@@ -179,11 +189,11 @@ export default function Volumes({ loaderData }: Route.ComponentProps) {
 			</div>
 			<div className="px-4 py-2 text-sm text-muted-foreground bg-card-header flex justify-end border-t">
 				{hasNoFilteredVolumes ? (
-					"No volumes match filters."
+					"Ningún volumen coincide con los filtros."
 				) : (
 					<span>
-						<span className="text-strong-accent">{filteredVolumes.length}</span> volume
-						{filteredVolumes.length > 1 ? "s" : ""}
+						<span className="text-strong-accent">{filteredVolumes.length}</span> volúmen
+						{filteredVolumes.length > 1 ? "es" : ""}
 					</span>
 				)}
 			</div>

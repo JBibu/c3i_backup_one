@@ -23,11 +23,11 @@ export const RestRepositoryForm = ({ form }: Props) => {
 				name="url"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>REST Server URL</FormLabel>
+						<FormLabel>URL del Servidor REST</FormLabel>
 						<FormControl>
 							<Input placeholder="http://192.168.1.30:8000" {...field} />
 						</FormControl>
-						<FormDescription>URL of the REST server.</FormDescription>
+						<FormDescription>URL del servidor REST.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -37,11 +37,11 @@ export const RestRepositoryForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Repository Path (Optional)</FormLabel>
+						<FormLabel>Ruta del Repositorio (Opcional)</FormLabel>
 						<FormControl>
 							<Input placeholder="my-backup-repo" {...field} />
 						</FormControl>
-						<FormDescription>Path to the repository on the REST server (leave empty for root).</FormDescription>
+						<FormDescription>Ruta del repositorio en el servidor REST (deje vacío para raíz).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -51,11 +51,11 @@ export const RestRepositoryForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Username (Optional)</FormLabel>
+						<FormLabel>Nombre de Usuario (Opcional)</FormLabel>
 						<FormControl>
-							<Input placeholder="username" {...field} />
+							<Input placeholder="nombre-de-usuario" {...field} />
 						</FormControl>
-						<FormDescription>Username for REST server authentication.</FormDescription>
+						<FormDescription>Nombre de usuario para autenticación en el servidor REST.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -65,11 +65,11 @@ export const RestRepositoryForm = ({ form }: Props) => {
 				name="password"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Password (Optional)</FormLabel>
+						<FormLabel>Contraseña (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>Password for REST server authentication.</FormDescription>
+						<FormDescription>Contraseña para autenticación en el servidor REST.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

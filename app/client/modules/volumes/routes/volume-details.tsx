@@ -40,8 +40,18 @@ const getVolumeStatusVariant = (status: VolumeStatus): "success" | "neutral" | "
 	return statusMap[status];
 };
 
+const getVolumeStatusLabel = (status: VolumeStatus): string => {
+	const labelMap = {
+		mounted: "Montado",
+		unmounted: "Desmontado",
+		error: "Error",
+		unknown: "Desconocido",
+	};
+	return labelMap[status];
+};
+
 export const handle = {
-	breadcrumb: (match: Route.MetaArgs) => [{ label: "Volumes", href: "/volumes" }, { label: match.params.name }],
+	breadcrumb: (match: Route.MetaArgs) => [{ label: "Volúmenes", href: "/volumes" }, { label: match.params.name }],
 };
 
 export function meta({ params }: Route.MetaArgs) {
@@ -49,7 +59,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{ title: `C3i Backup ONE - ${params.name}` },
 		{
 			name: "description",
-			content: "View and manage volume details, configuration, and files.",
+			content: "Vea y gestione los detalles del volume, configuración y archivos.",
 		},
 	];
 }
@@ -74,11 +84,11 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 	const deleteVol = useMutation({
 		...deleteVolumeMutation(),
 		onSuccess: () => {
-			toast.success("Volume deleted successfully");
+			toast.success("Volume eliminado correctamente");
 			void navigate("/volumes");
 		},
 		onError: (error) => {
-			toast.error("Failed to delete volume", {
+			toast.error("Error al eliminar el volume", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -87,10 +97,10 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 	const mountVol = useMutation({
 		...mountVolumeMutation(),
 		onSuccess: () => {
-			toast.success("Volume mounted successfully");
+			toast.success("Volume montado correctamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to mount volume", {
+			toast.error("Error al montar el volume", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -99,10 +109,10 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 	const unmountVol = useMutation({
 		...unmountVolumeMutation(),
 		onSuccess: () => {
-			toast.success("Volume unmounted successfully");
+			toast.success("Volume desmontado correctamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to unmount volume", {
+			toast.error("Error al desmontar el volume", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -114,11 +124,11 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 	};
 
 	if (!name) {
-		return <div>Volume not found</div>;
+		return <div>Volume no encontrado</div>;
 	}
 
 	if (!data) {
-		return <div>Loading...</div>;
+		return <div>Cargando...</div>;
 	}
 
 	const { volume, statfs } = data;
@@ -130,10 +140,10 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 					<span className="flex items-center gap-2">
 						<StatusDot
 							variant={getVolumeStatusVariant(volume.status)}
-							label={volume.status[0].toUpperCase() + volume.status.slice(1)}
+							label={getVolumeStatusLabel(volume.status)}
 						/>
 						&nbsp;
-						{volume.status[0].toUpperCase() + volume.status.slice(1)}
+						{getVolumeStatusLabel(volume.status)}
 					</span>
 					<VolumeIcon backend={volume?.config.backend} />
 				</div>
@@ -144,7 +154,7 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 						className={cn({ hidden: volume.status === "mounted" })}
 					>
 						<Plug className="h-4 w-4 mr-2" />
-						Mount
+						Montar
 					</Button>
 					<Button
 						variant="secondary"
@@ -153,17 +163,17 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 						className={cn({ hidden: volume.status !== "mounted" })}
 					>
 						<Unplug className="h-4 w-4 mr-2" />
-						Unmount
+						Desmontar
 					</Button>
 					<Button variant="destructive" onClick={() => setShowDeleteConfirm(true)} disabled={deleteVol.isPending}>
-						Delete
+						Eliminar
 					</Button>
 				</div>
 			</div>
 			<Tabs value={activeTab} onValueChange={(value) => setSearchParams({ tab: value })} className="mt-4">
 				<TabsList className="mb-2">
-					<TabsTrigger value="info">Configuration</TabsTrigger>
-					<TabsTrigger value="files">Files</TabsTrigger>
+					<TabsTrigger value="info">Configuración</TabsTrigger>
+					<TabsTrigger value="files">Archivos</TabsTrigger>
 				</TabsList>
 				<TabsContent value="info">
 					<VolumeInfoTabContent volume={volume} statfs={statfs} />
@@ -176,18 +186,18 @@ export default function VolumeDetails({ loaderData }: Route.ComponentProps) {
 			<AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete volume?</AlertDialogTitle>
+						<AlertDialogTitle>¿Eliminar volume?</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete the volume <strong>{name}</strong>? This action cannot be undone.
+							¿Está seguro de que desea eliminar el volume <strong>{name}</strong>? Esta acción no se puede deshacer.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<div className="flex gap-3 justify-end">
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleConfirmDelete}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
-							Delete volume
+							Eliminar volume
 						</AlertDialogAction>
 					</div>
 				</AlertDialogContent>

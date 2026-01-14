@@ -10,7 +10,7 @@ import { Suspense } from "react";
 
 export const handle = {
 	breadcrumb: (match: Route.MetaArgs) => [
-		{ label: "Repositories", href: "/repositories" },
+		{ label: "Repositorios", href: "/repositories" },
 		{ label: match.loaderData?.repository.name || match.params.id, href: `/repositories/${match.params.id}` },
 		{ label: match.params.snapshotId },
 	],
@@ -21,7 +21,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{ title: `C3i Backup ONE - Snapshot ${params.snapshotId}` },
 		{
 			name: "description",
-			content: "Browse and restore files from a backup snapshot.",
+			content: "Explorar y restaurar archivos de un snapshot de backup.",
 		},
 	];
 }
@@ -61,7 +61,7 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 	if (!id || !snapshotId) {
 		return (
 			<div className="flex items-center justify-center h-full">
-				<p className="text-destructive">Invalid snapshot reference</p>
+				<p className="text-destructive">Referencia de snapshot inválida</p>
 			</div>
 		);
 	}
@@ -85,7 +85,7 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 			>
 				<Await resolve={loaderData.snapshot}>
 					{(value) => {
-						if (!value.data) return <div className="text-destructive">Snapshot data not found.</div>;
+						if (!value.data) return <div className="text-destructive">Datos del snapshot no encontrados.</div>;
 
 						return <SnapshotFileBrowser repositoryId={id} snapshot={value.data} />;
 					}}
@@ -95,7 +95,7 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 			{data?.snapshot && (
 				<Card>
 					<CardHeader>
-						<CardTitle>Snapshot Information</CardTitle>
+						<CardTitle>Información del Snapshot</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-2 text-sm">
 						<div className="grid grid-cols-2 gap-4">
@@ -112,10 +112,10 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 								<p>{data.snapshot.hostname}</p>
 							</div>
 							<div>
-								<span className="text-muted-foreground">Time:</span>
+								<span className="text-muted-foreground">Hora:</span>
 								<p>{formatDateTime(data.snapshot.time)}</p>
 							</div>
-							<Suspense fallback={<div>Loading...</div>}>
+							<Suspense fallback={<div>Cargando...</div>}>
 								<Await resolve={loaderData.snapshot}>
 									{(value) => {
 										if (!value.data) return null;
@@ -133,7 +133,7 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 													</p>
 												</div>
 												<div>
-													<span className="text-muted-foreground">Volume:</span>
+													<span className="text-muted-foreground">Volumen:</span>
 													<p>
 														<Link
 															to={`/volumes/${backupSchedule?.volume.name}`}
@@ -150,7 +150,7 @@ export default function SnapshotDetailsPage({ loaderData }: Route.ComponentProps
 							</Suspense>
 
 							<div className="col-span-2">
-								<span className="text-muted-foreground">Paths:</span>
+								<span className="text-muted-foreground">Rutas:</span>
 								<div className="space-y-1 mt-1">
 									{data.snapshot.paths.map((path) => (
 										<p key={path} className="font-mono text-xs bg-muted px-2 py-1 rounded break-all">

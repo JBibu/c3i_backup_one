@@ -26,9 +26,9 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 		return (
 			<Alert>
 				<AlertDescription className="space-y-2">
-					<p className="font-medium">No rclone remotes configured</p>
+					<p className="font-medium">No hay remotos Rclone configurados</p>
 					<p className="text-sm text-muted-foreground">
-						To use rclone, you need to configure remotes on your host system
+						Para usar Rclone, necesita configurar remotos en su sistema host
 					</p>
 					<a
 						href="https://rclone.org/docs/"
@@ -36,7 +36,7 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 						rel="noopener noreferrer"
 						className="text-sm text-strong-accent inline-flex items-center gap-1"
 					>
-						View rclone documentation
+						Ver documentación de Rclone
 						<ExternalLink className="w-3 h-3" />
 					</a>
 				</AlertDescription>
@@ -51,17 +51,17 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 				name="remote"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Remote</FormLabel>
+						<FormLabel>Remoto</FormLabel>
 						<Select onValueChange={(v) => field.onChange(v)} defaultValue={field.value} value={field.value}>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select an rclone remote" />
+									<SelectValue placeholder="Seleccione un remoto Rclone" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
 								{isLoadingRemotes ? (
 									<SelectItem value="loading" disabled>
-										Loading remotes...
+										Cargando remotos...
 									</SelectItem>
 								) : (
 									rcloneRemotes?.map((remote: { name: string; type: string }) => (
@@ -72,7 +72,7 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 								)}
 							</SelectContent>
 						</Select>
-						<FormDescription>Select the rclone remote configured on your host system.</FormDescription>
+						<FormDescription>Seleccione el remoto Rclone configurado en su sistema host.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -82,11 +82,11 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path</FormLabel>
+						<FormLabel>Ruta</FormLabel>
 						<FormControl>
 							<Input placeholder="backups/c3i-backup-one" {...field} />
 						</FormControl>
-						<FormDescription>Path within the remote where backups will be stored.</FormDescription>
+						<FormDescription>Ruta dentro del remoto donde se almacenarán las copias de seguridad.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

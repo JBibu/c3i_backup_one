@@ -92,7 +92,7 @@ const createRepository = async (name: string, config: RepositoryConfig, compress
 		.returning();
 
 	if (!created) {
-		throw new InternalServerError("Failed to create repository");
+		throw new InternalServerError("Error al crear Repository");
 	}
 
 	let error: string | null = null;
@@ -121,14 +121,14 @@ const createRepository = async (name: string, config: RepositoryConfig, compress
 	const errorMessage = toMessage(error);
 	await db.delete(repositoriesTable).where(eq(repositoriesTable.id, id));
 
-	throw new InternalServerError(`Failed to initialize repository: ${errorMessage}`);
+	throw new InternalServerError(`Error al inicializar Repository: ${errorMessage}`);
 };
 
 const getRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	return { repository };
@@ -138,7 +138,7 @@ const deleteRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	// TODO: Add cleanup logic for the actual restic repository files
@@ -161,7 +161,7 @@ const listSnapshots = async (id: string, backupId?: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const cacheKey = `snapshots:${repository.id}:${backupId || "all"}`;
@@ -192,7 +192,7 @@ const listSnapshotFiles = async (id: string, snapshotId: string, path?: string) 
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const cacheKey = `ls:${repository.id}:${snapshotId}:${path || "root"}`;
@@ -209,7 +209,7 @@ const listSnapshotFiles = async (id: string, snapshotId: string, path?: string) 
 		const result = await restic.ls(repository.config, snapshotId, path);
 
 		if (!result.snapshot) {
-			throw new NotFoundError("Snapshot not found or empty");
+			throw new NotFoundError("Snapshot no encontrado o vacío");
 		}
 
 		const response = {
@@ -246,7 +246,7 @@ const restoreSnapshot = async (
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const target = options?.targetPath || "/";
@@ -257,7 +257,7 @@ const restoreSnapshot = async (
 
 		return {
 			success: true,
-			message: "Snapshot restored successfully",
+			message: "Snapshot restaurado exitosamente",
 			filesRestored: result.files_restored,
 			filesSkipped: result.files_skipped,
 		};
@@ -270,7 +270,7 @@ const getSnapshotDetails = async (id: string, snapshotId: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const cacheKey = `snapshots:${repository.id}:all`;
@@ -289,7 +289,7 @@ const getSnapshotDetails = async (id: string, snapshotId: string) => {
 	const snapshot = snapshots.find((snap) => snap.id === snapshotId || snap.short_id === snapshotId);
 
 	if (!snapshot) {
-		throw new NotFoundError("Snapshot not found");
+		throw new NotFoundError("Snapshot no encontrado");
 	}
 
 	return snapshot;
@@ -299,7 +299,7 @@ const checkHealth = async (repositoryId: string) => {
 	const repository = await findRepository(repositoryId);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, "check");
@@ -325,7 +325,7 @@ const doctorRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const steps: Array<{ step: string; success: boolean; output: string | null; error: string | null }> = [];
@@ -414,7 +414,7 @@ const deleteSnapshot = async (id: string, snapshotId: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `delete:${snapshotId}`);
@@ -431,7 +431,7 @@ const deleteSnapshots = async (id: string, snapshotIds: string[]) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `delete:bulk`);
@@ -454,7 +454,7 @@ const tagSnapshots = async (
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `tag:bulk`);
@@ -473,12 +473,12 @@ const updateRepository = async (id: string, updates: { name?: string; compressio
 	const existing = await findRepository(id);
 
 	if (!existing) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const newConfig = repositoryConfigSchema(existing.config);
 	if (newConfig instanceof type.errors) {
-		throw new InternalServerError("Invalid repository configuration");
+		throw new InternalServerError("Configuración de Repository inválida");
 	}
 
 	const encryptedConfig = await encryptConfig(newConfig);
@@ -500,7 +500,7 @@ const updateRepository = async (id: string, updates: { name?: string; compressio
 		.returning();
 
 	if (!updated) {
-		throw new InternalServerError("Failed to update repository");
+		throw new InternalServerError("Error al actualizar Repository");
 	}
 
 	return { repository: updated };

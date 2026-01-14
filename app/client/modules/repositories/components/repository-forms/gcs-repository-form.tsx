@@ -27,7 +27,7 @@ export const GCSRepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="my-backup-bucket" {...field} />
 						</FormControl>
-						<FormDescription>GCS bucket name for storing backups.</FormDescription>
+						<FormDescription>Nombre del bucket GCS para almacenar las copias de seguridad.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -37,11 +37,11 @@ export const GCSRepositoryForm = ({ form }: Props) => {
 				name="projectId"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Project ID</FormLabel>
+						<FormLabel>ID de Proyecto</FormLabel>
 						<FormControl>
 							<Input placeholder="my-gcp-project-123" {...field} />
 						</FormControl>
-						<FormDescription>Google Cloud project ID.</FormDescription>
+						<FormDescription>ID del proyecto de Google Cloud.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -51,11 +51,11 @@ export const GCSRepositoryForm = ({ form }: Props) => {
 				name="credentialsJson"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Service Account JSON</FormLabel>
+						<FormLabel>JSON de Cuenta de Servicio</FormLabel>
 						<FormControl>
-							<Textarea placeholder="Paste service account JSON key..." {...field} />
+							<Textarea placeholder="Pegue la clave JSON de la cuenta de servicio..." {...field} />
 						</FormControl>
-						<FormDescription>Service account JSON credentials for authentication.</FormDescription>
+						<FormDescription>Credenciales JSON de la cuenta de servicio para autenticación.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

@@ -15,12 +15,12 @@ const mount = async (config: BackendConfig, path: string) => {
 
 	if (config.backend !== "webdav") {
 		logger.error("Provided config is not for WebDAV backend");
-		return { status: BACKEND_STATUS.error, error: "Provided config is not for WebDAV backend" };
+		return { status: BACKEND_STATUS.error, error: "La configuración proporcionada no es para el backend WebDAV" };
 	}
 
 	if (os.platform() !== "linux") {
 		logger.error("WebDAV mounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "WebDAV mounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El montaje de WebDAV solo es compatible con hosts Linux." };
 	}
 
 	const { status } = await checkHealth(path);
@@ -85,17 +85,17 @@ const mount = async (config: BackendConfig, path: string) => {
 		if (errorMsg.includes("option") && errorMsg.includes("requires argument")) {
 			return {
 				status: BACKEND_STATUS.error,
-				error: "Invalid mount options. Please check your WebDAV server configuration.",
+				error: "Opciones de montaje no válidas. Por favor, verifique la configuración de su servidor WebDAV.",
 			};
 		} else if (errorMsg.includes("connection refused") || errorMsg.includes("Connection refused")) {
 			return {
 				status: BACKEND_STATUS.error,
-				error: "Cannot connect to WebDAV server. Please check the server address and port.",
+				error: "No se puede conectar al servidor WebDAV. Por favor, verifique la dirección del servidor y el puerto.",
 			};
 		} else if (errorMsg.includes("unauthorized") || errorMsg.includes("Unauthorized")) {
 			return {
 				status: BACKEND_STATUS.error,
-				error: "Authentication failed. Please check your username and password.",
+				error: "Error de autenticación. Por favor, verifique su nombre de usuario y contraseña.",
 			};
 		}
 
@@ -106,7 +106,7 @@ const mount = async (config: BackendConfig, path: string) => {
 const unmount = async (path: string) => {
 	if (os.platform() !== "linux") {
 		logger.error("WebDAV unmounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "WebDAV unmounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El desmontaje de WebDAV solo es compatible con hosts Linux." };
 	}
 
 	const run = async () => {
@@ -137,17 +137,17 @@ const checkHealth = async (path: string) => {
 		try {
 			await fs.access(path);
 		} catch {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		const mount = await getMountForPath(path);
 
 		if (!mount || mount.mountPoint !== path) {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		if (mount.fstype !== "fuse" && mount.fstype !== "davfs") {
-			throw new Error(`Path ${path} is not mounted as WebDAV (found ${mount.fstype}).`);
+			throw new Error(`La ruta ${path} no está montada como WebDAV (se encontró ${mount.fstype}).`);
 		}
 
 		logger.debug(`WebDAV volume at ${path} is healthy and mounted.`);
@@ -158,7 +158,7 @@ const checkHealth = async (path: string) => {
 		return await withTimeout(run(), OPERATION_TIMEOUT, "WebDAV health check");
 	} catch (error) {
 		const message = toMessage(error);
-		if (message !== "Volume is not mounted") {
+		if (message !== "El volumen no está montado") {
 			logger.error("WebDAV volume health check failed:", message);
 		}
 		return { status: BACKEND_STATUS.error, error: message };

@@ -128,9 +128,9 @@ export const createSseClient = <TData = unknown>({
 				const _fetch = options.fetch ?? globalThis.fetch;
 				const response = await _fetch(request);
 
-				if (!response.ok) throw new Error(`SSE failed: ${response.status} ${response.statusText}`);
+				if (!response.ok) throw new Error(`SSE falló: ${response.status} ${response.statusText}`);
 
-				if (!response.body) throw new Error("No body in SSE response");
+				if (!response.body) throw new Error("No hay cuerpo en la respuesta SSE");
 
 				const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
 

@@ -49,7 +49,7 @@ export const SecretInput = ({ className, value, ...props }: SecretInputProps) =>
 					size="icon"
 					className="absolute right-1 top-1/2 size-7 -translate-y-1/2"
 					onClick={() => setRevealed((v) => !v)}
-					aria-label={revealed ? "Hide secret" : "Show secret"}
+					aria-label={revealed ? "Ocultar secreto" : "Mostrar secreto"}
 				>
 					{revealed ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
 				</Button>

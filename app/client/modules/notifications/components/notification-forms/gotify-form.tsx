@@ -16,11 +16,11 @@ export const GotifyForm = ({ form }: Props) => {
 				name="serverUrl"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Server URL</FormLabel>
+						<FormLabel>URL del servidor</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="https://gotify.example.com" />
 						</FormControl>
-						<FormDescription>Your self-hosted Gotify server URL.</FormDescription>
+						<FormDescription>URL de su servidor Gotify autoalojado.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -30,11 +30,11 @@ export const GotifyForm = ({ form }: Props) => {
 				name="token"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>App Token</FormLabel>
+						<FormLabel>Token de la aplicación</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="••••••••" />
 						</FormControl>
-						<FormDescription>Application token from Gotify.</FormDescription>
+						<FormDescription>Token de aplicación de Gotify.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -44,7 +44,7 @@ export const GotifyForm = ({ form }: Props) => {
 				name="priority"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Priority</FormLabel>
+						<FormLabel>Prioridad</FormLabel>
 						<FormControl>
 							<Input
 								{...field}
@@ -54,7 +54,7 @@ export const GotifyForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(Number(e.target.value))}
 							/>
 						</FormControl>
-						<FormDescription>Priority level (0-10, where 10 is highest).</FormDescription>
+						<FormDescription>Nivel de prioridad (0-10, donde 10 es el más alto).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -64,11 +64,11 @@ export const GotifyForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path (Optional)</FormLabel>
+						<FormLabel>Ruta (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="/custom/path" />
 						</FormControl>
-						<FormDescription>Custom path on the Gotify server, if applicable.</FormDescription>
+						<FormDescription>Ruta personalizada en el servidor Gotify, si aplica.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

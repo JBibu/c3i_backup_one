@@ -23,15 +23,15 @@ import { SortableCard } from "~/client/components/sortable-card";
 import { BackupCard } from "../components/backup-card";
 
 export const handle = {
-	breadcrumb: () => [{ label: "Backups" }],
+	breadcrumb: () => [{ label: "Copias de seguridad" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Backup Jobs" },
+		{ title: "C3i Backup ONE - Trabajos de copias de seguridad" },
 		{
 			name: "description",
-			content: "Automate volume backups with scheduled jobs and retention policies.",
+			content: "Automatice las copias de seguridad de volúmenes con trabajos programados y políticas de retención.",
 		},
 	];
 }
@@ -86,7 +86,7 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 	if (isLoading) {
 		return (
 			<div className="flex items-center justify-center h-full">
-				<p className="text-muted-foreground">Loading backup schedules...</p>
+				<p className="text-muted-foreground">Cargando programaciones de copias de seguridad...</p>
 			</div>
 		);
 	}
@@ -95,12 +95,12 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 		return (
 			<EmptyState
 				icon={CalendarClock}
-				title="No backup job"
-				description="Backup jobs help you automate the process of backing up your volumes on a regular schedule to ensure your data is safe and secure."
+				title="Sin trabajos de copias de seguridad"
+				description="Los trabajos de copias de seguridad le ayudan a automatizar el proceso de realizar copias de seguridad de sus volúmenes según una programación regular para garantizar que sus datos estén seguros y protegidos."
 				button={
 					<Button onClick={() => (window.location.href = "/backups/create")}>
 						<Plus className="h-4 w-4 mr-2" />
-						Create a backup job
+						Crear un trabajo de copia de seguridad
 					</Button>
 				}
 			/>
@@ -114,7 +114,7 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 			<div className="flex justify-end">
 				<Button onClick={() => (window.location.href = "/backups/create")}>
 					<Plus className="h-4 w-4 mr-2" />
-					Create backup job
+					Crear trabajo de copia de seguridad
 				</Button>
 			</div>
 			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>

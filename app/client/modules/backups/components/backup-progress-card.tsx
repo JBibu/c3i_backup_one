@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ByteSize, formatBytes } from "~/client/components/bytes-size";
 import { Card } from "~/client/components/ui/card";
 import { Progress } from "~/client/components/ui/progress";
-import { type BackupProgressEvent, useServerEvents } from "~/client/hooks/use-server-events";
+import { type BackupProgressEvent, useServerEvents } from "~/client/contexts/server-events-context";
 import { formatDuration } from "~/utils/utils";
 
 type Props = {
@@ -39,7 +39,7 @@ export const BackupProgressCard = ({ scheduleId }: Props) => {
 			<Card className="p-4">
 				<div className="flex items-center gap-2">
 					<div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-					<span className="font-medium">Backup in progress</span>
+					<span className="font-medium">Backup en ejecución</span>
 				</div>
 			</Card>
 		);
@@ -55,7 +55,7 @@ export const BackupProgressCard = ({ scheduleId }: Props) => {
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-2">
 					<div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-					<span className="font-medium">Backup in progress</span>
+					<span className="font-medium">Backup en ejecución</span>
 				</div>
 				<span className="text-sm font-medium text-primary">{percentDone}%</span>
 			</div>
@@ -64,32 +64,32 @@ export const BackupProgressCard = ({ scheduleId }: Props) => {
 
 			<div className="grid grid-cols-2 gap-4 text-sm">
 				<div>
-					<p className="text-xs uppercase text-muted-foreground">Files</p>
+					<p className="text-xs uppercase text-muted-foreground">Archivos</p>
 					<p className="font-medium">
 						{progress.files_done.toLocaleString()} / {progress.total_files.toLocaleString()}
 					</p>
 				</div>
 				<div>
-					<p className="text-xs uppercase text-muted-foreground">Data</p>
+					<p className="text-xs uppercase text-muted-foreground">Datos</p>
 					<p className="font-medium">
 						<ByteSize bytes={progress.bytes_done} /> / <ByteSize bytes={progress.total_bytes} />
 					</p>
 				</div>
 				<div>
-					<p className="text-xs uppercase text-muted-foreground">Elapsed</p>
+					<p className="text-xs uppercase text-muted-foreground">Transcurrido</p>
 					<p className="font-medium">{formatDuration(progress.seconds_elapsed)}</p>
 				</div>
 				<div>
-					<p className="text-xs uppercase text-muted-foreground">Speed</p>
+					<p className="text-xs uppercase text-muted-foreground">Velocidad</p>
 					<p className="font-medium">
-						{progress.seconds_elapsed > 0 ? `${speed.text} ${speed.unit}/s` : "Calculating..."}
+						{progress.seconds_elapsed > 0 ? `${speed.text} ${speed.unit}/s` : "Calculando..."}
 					</p>
 				</div>
 			</div>
 
 			{fileName && (
 				<div className="pt-2 border-t border-border">
-					<p className="text-xs uppercase text-muted-foreground mb-1">Current file</p>
+					<p className="text-xs uppercase text-muted-foreground mb-1">Archivo actual</p>
 					<p className="text-xs font-mono text-muted-foreground truncate" title={currentFile}>
 						{fileName}
 					</p>

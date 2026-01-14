@@ -24,7 +24,7 @@ export function CronInput({ value, onChange, error }: CronInputProps) {
 			return {
 				isValid: false,
 				nextRuns: [],
-				parseError: "Expression must have exactly 5 fields (minute, hour, day, month, day-of-week)",
+				parseError: "La expresión debe tener exactamente 5 campos (minuto, hora, día, mes, día-de-semana)",
 			};
 		}
 
@@ -44,7 +44,7 @@ export function CronInput({ value, onChange, error }: CronInputProps) {
 
 	return (
 		<FormItem className="md:col-span-2">
-			<FormLabel>Cron expression</FormLabel>
+			<FormLabel>Expresión Cron</FormLabel>
 			<FormControl>
 				<div className="relative">
 					<Input
@@ -69,12 +69,12 @@ export function CronInput({ value, onChange, error }: CronInputProps) {
 				</div>
 			</FormControl>
 			<FormDescription>
-				Standard cron format: <code className="bg-muted px-1 rounded">minute hour day month day-of-week</code>.
+				Formato cron estándar: <code className="bg-muted px-1 rounded">minuto hora día mes día-de-semana</code>.
 			</FormDescription>
 			{value && !isValid && parseError && <p className="text-xs text-destructive mt-1">{parseError}</p>}
 			{isValid && nextRuns.length > 0 && (
 				<div className="mt-2 p-3 rounded-md bg-muted/50 border border-border">
-					<p className="text-xs font-medium mb-2 text-muted-foreground uppercase tracking-wider">Next 5 executions:</p>
+					<p className="text-xs font-medium mb-2 text-muted-foreground uppercase tracking-wider">Próximas 5 ejecuciones:</p>
 					<ul className="space-y-1">
 						{nextRuns.map((date, i) => (
 							<li key={date.toISOString()} className="text-xs font-mono flex items-center gap-2">

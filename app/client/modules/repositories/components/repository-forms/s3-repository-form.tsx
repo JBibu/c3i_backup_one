@@ -27,7 +27,7 @@ export const S3RepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="s3.amazonaws.com" {...field} />
 						</FormControl>
-						<FormDescription>S3-compatible endpoint URL.</FormDescription>
+						<FormDescription>URL del endpoint compatible con S3.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -41,7 +41,7 @@ export const S3RepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="my-backup-bucket" {...field} />
 						</FormControl>
-						<FormDescription>S3 bucket name for storing backups.</FormDescription>
+						<FormDescription>Nombre del bucket S3 para almacenar las copias de seguridad.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -51,11 +51,11 @@ export const S3RepositoryForm = ({ form }: Props) => {
 				name="accessKeyId"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Access Key ID</FormLabel>
+						<FormLabel>ID de Clave de Acceso</FormLabel>
 						<FormControl>
 							<Input placeholder="AKIAIOSFODNN7EXAMPLE" {...field} />
 						</FormControl>
-						<FormDescription>S3 access key ID for authentication.</FormDescription>
+						<FormDescription>ID de clave de acceso S3 para autenticación.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -65,11 +65,11 @@ export const S3RepositoryForm = ({ form }: Props) => {
 				name="secretAccessKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Secret Access Key</FormLabel>
+						<FormLabel>Clave de Acceso Secreta</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>S3 secret access key for authentication.</FormDescription>
+						<FormDescription>Clave de acceso secreta S3 para autenticación.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

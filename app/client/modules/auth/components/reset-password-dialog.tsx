@@ -12,15 +12,15 @@ export const ResetPasswordDialog = ({ open, onOpenChange }: ResetPasswordDialogP
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="sm:max-w-xl">
 				<DialogHeader>
-					<DialogTitle>Reset your password</DialogTitle>
+					<DialogTitle>Restablecer su contraseña</DialogTitle>
 					<DialogDescription>
-						To reset your password, run the following command on the server where C3i Backup ONE is installed.
+						Para restablecer su contraseña, ejecute el siguiente comando en el servidor donde está instalado C3i Backup ONE.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-4">
 					<div className="rounded-md bg-muted p-4 font-mono text-sm break-all select-all">{RESET_PASSWORD_COMMAND}</div>
 					<p className="text-sm text-muted-foreground">
-						This command will start an interactive session where you can enter a new password for your account.
+						Este comando iniciará una sesión interactiva donde podrá introducir una nueva contraseña para su cuenta.
 					</p>
 				</div>
 			</DialogContent>

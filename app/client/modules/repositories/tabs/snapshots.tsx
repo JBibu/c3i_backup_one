@@ -46,9 +46,9 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 			<Card>
 				<CardContent className="flex flex-col items-center justify-center text-center py-12">
 					<Database className="mb-4 h-12 w-12 text-destructive" />
-					<p className="text-destructive font-semibold">Repository error</p>
+					<p className="text-destructive font-semibold">Error en el repository</p>
 					<p className="text-sm text-muted-foreground mt-2">
-						This repository is in an error state and cannot be accessed.
+						Este repository está en estado de error y no se puede acceder.
 					</p>
 					{repository.lastError && (
 						<div className="mt-4 w-full max-w-md bg-destructive/10 border border-destructive/20 rounded-md p-3">
@@ -65,7 +65,7 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 			<Card>
 				<CardContent className="flex flex-col items-center justify-center text-center py-12">
 					<Database className="mb-4 h-12 w-12 text-destructive" />
-					<p className="text-destructive font-semibold">Failed to Load Snapshots</p>
+					<p className="text-destructive font-semibold">Error al cargar los snapshots</p>
 					<p className="text-sm text-muted-foreground mt-2">{failureReason.message}</p>
 				</CardContent>
 			</Card>
@@ -76,7 +76,7 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 		return (
 			<Card>
 				<CardContent className="flex items-center justify-center py-12">
-					<p className="text-muted-foreground">Loading snapshots</p>
+					<p className="text-muted-foreground">Cargando snapshots</p>
 				</CardContent>
 			</Card>
 		);
@@ -95,9 +95,9 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 						</div>
 					</div>
 					<div className="max-w-md space-y-3">
-						<h3 className="text-2xl font-semibold text-foreground">No snapshots yet</h3>
+						<h3 className="text-2xl font-semibold text-foreground">Aún no hay snapshots</h3>
 						<p className="text-muted-foreground text-sm">
-							Snapshots are point-in-time backups of your data. Create your first backup to see it here.
+							Los snapshots son copias de seguridad puntuales de sus datos. Cree su primera copia de seguridad para verla aquí.
 						</p>
 					</div>
 				</CardContent>
@@ -112,13 +112,13 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 					<div className="flex-1">
 						<CardTitle>Snapshots</CardTitle>
 						<CardDescription className="mt-1">
-							Backup snapshots stored in this repository. Total: {data.length}
+							Snapshots de copia de seguridad almacenados en este repository. Total: {data.length}
 						</CardDescription>
 					</div>
 					<div className="flex gap-2 items-center">
 						<Input
 							className="w-full lg:w-60"
-							placeholder="Search snapshots..."
+							placeholder="Buscar snapshots..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 						/>
@@ -131,10 +131,10 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 						<TableRow>
 							<TableCell colSpan={5} className="text-center py-12">
 								<div className="flex flex-col items-center gap-3">
-									<p className="text-muted-foreground">No snapshots match your search.</p>
+									<p className="text-muted-foreground">No hay snapshots que coincidan con su búsqueda.</p>
 									<Button onClick={() => setSearchQuery("")} variant="outline" size="sm">
 										<X className="h-4 w-4 mr-2" />
-										Clear search
+										Limpiar búsqueda
 									</Button>
 								</div>
 							</TableCell>
@@ -151,8 +151,8 @@ export const RepositorySnapshotsTabContent = ({ repository }: Props) => {
 			<div className="px-4 py-2 text-sm text-muted-foreground bg-card-header flex justify-between border-t">
 				<span>
 					{hasNoFilteredSnapshots
-						? "No snapshots match filters."
-						: `Showing ${filteredSnapshots.length} of ${data.length}`}
+						? "No hay snapshots que coincidan con los filtros."
+						: `Mostrando ${filteredSnapshots.length} de ${data.length}`}
 				</span>
 			</div>
 		</Card>

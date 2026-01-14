@@ -24,36 +24,36 @@ export const TwoFactorSection = ({ twoFactorEnabled }: TwoFactorSectionProps) =>
 			<div className="border-t border-border/50 bg-card-header p-6">
 				<CardTitle className="flex items-center gap-2">
 					<Shield className="size-5" />
-					Two-Factor Authentication
+					Autenticación de dos factores
 				</CardTitle>
-				<CardDescription className="mt-1.5">Add an extra layer of security to your account</CardDescription>
+				<CardDescription className="mt-1.5">Añada una capa adicional de seguridad a su cuenta</CardDescription>
 			</div>
 			<CardContent className="p-6 space-y-4">
 				<div className="flex items-center justify-between">
 					<div className="space-y-1">
 						<p className="text-sm font-medium">
-							Status:&nbsp;
+							Estado:&nbsp;
 							{twoFactorEnabled ? (
-								<span className="text-green-500">Enabled</span>
+								<span className="text-green-500">Habilitada</span>
 							) : (
-								<span className="text-muted-foreground">Disabled</span>
+								<span className="text-muted-foreground">Deshabilitada</span>
 							)}
 						</p>
 						<p className="text-xs text-muted-foreground max-w-xl">
-							Two-factor authentication adds an extra layer of security by requiring a code from your authenticator app
-							in addition to your password.
+							La autenticación de dos factores añade una capa adicional de seguridad al requerir un código de su aplicación de autenticación
+							además de su contraseña.
 						</p>
 					</div>
 					<div className="flex gap-2">
 						{!twoFactorEnabled ? (
-							<Button onClick={() => setSetupDialogOpen(true)}>Enable 2FA</Button>
+							<Button onClick={() => setSetupDialogOpen(true)}>Habilitar 2FA</Button>
 						) : (
 							<div className="ml-2 flex flex-col @xl:flex-row gap-2">
 								<Button variant="outline" onClick={() => setBackupCodesDialogOpen(true)}>
-									Backup Codes
+									Códigos de recuperación
 								</Button>
 								<Button variant="destructive" onClick={() => setDisableDialogOpen(true)}>
-									Disable 2FA
+									Deshabilitar 2FA
 								</Button>
 							</div>
 						)}

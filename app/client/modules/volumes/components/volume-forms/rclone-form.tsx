@@ -32,9 +32,9 @@ export const RcloneForm = ({ form }: Props) => {
 		return (
 			<Alert>
 				<AlertDescription className="space-y-2">
-					<p className="font-medium">No rclone remotes configured</p>
+					<p className="font-medium">No hay remotos de Rclone configurados</p>
 					<p className="text-sm text-muted-foreground">
-						To use rclone, you need to configure remotes on your host system
+						Para utilizar Rclone, necesita configurar remotos en su sistema host
 					</p>
 					<a
 						href="https://rclone.org/docs/"
@@ -42,7 +42,7 @@ export const RcloneForm = ({ form }: Props) => {
 						rel="noopener noreferrer"
 						className="text-sm text-strong-accent inline-flex items-center gap-1"
 					>
-						View rclone documentation
+						Ver documentación de Rclone
 						<ExternalLink className="w-3 h-3" />
 					</a>
 				</AlertDescription>
@@ -57,17 +57,17 @@ export const RcloneForm = ({ form }: Props) => {
 				name="remote"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Remote</FormLabel>
+						<FormLabel>Remoto</FormLabel>
 						<Select onValueChange={(v) => field.onChange(v)} value={field.value}>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select an rclone remote" />
+									<SelectValue placeholder="Seleccione un remoto de Rclone" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
 								{isPending ? (
 									<SelectItem value="loading" disabled>
-										Loading remotes...
+										Cargando remotos...
 									</SelectItem>
 								) : (
 									rcloneRemotes?.map((remote) => (
@@ -78,7 +78,7 @@ export const RcloneForm = ({ form }: Props) => {
 								)}
 							</SelectContent>
 						</Select>
-						<FormDescription>Select the rclone remote configured on your host system.</FormDescription>
+						<FormDescription>Seleccione el remoto de Rclone configurado en su sistema host.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -88,11 +88,11 @@ export const RcloneForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path</FormLabel>
+						<FormLabel>Ruta</FormLabel>
 						<FormControl>
 							<Input placeholder="/" {...field} />
 						</FormControl>
-						<FormDescription>Path on the remote to mount. Use "/" for the root.</FormDescription>
+						<FormDescription>Ruta en el remoto a montar. Utilice "/" para la raíz.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -103,7 +103,7 @@ export const RcloneForm = ({ form }: Props) => {
 				defaultValue={false}
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Read-only Mode</FormLabel>
+						<FormLabel>Modo de Solo Lectura</FormLabel>
 						<FormControl>
 							<div className="flex items-center space-x-2">
 								<input
@@ -112,11 +112,11 @@ export const RcloneForm = ({ form }: Props) => {
 									onChange={(e) => field.onChange(e.target.checked)}
 									className="rounded border-gray-300"
 								/>
-								<span className="text-sm">Mount volume as read-only</span>
+								<span className="text-sm">Montar volumen como solo lectura</span>
 							</div>
 						</FormControl>
 						<FormDescription>
-							Prevent any modifications to the volume. Recommended for backup sources and sensitive data.
+							Evita cualquier modificación al volumen. Recomendado para orígenes de copias de seguridad y datos sensibles.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>

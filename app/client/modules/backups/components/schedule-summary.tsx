@@ -39,10 +39,10 @@ export const ScheduleSummary = (props: Props) => {
 	const runForget = useMutation({
 		...runForgetMutation(),
 		onSuccess: () => {
-			toast.success("Retention policy applied successfully");
+			toast.success("Política de retención aplicada correctamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to apply retention policy", { description: parseError(error)?.message });
+			toast.error("Error al aplicar la política de retención", { description: parseError(error)?.message });
 		},
 	});
 
@@ -52,19 +52,19 @@ export const ScheduleSummary = (props: Props) => {
 		const retentionParts: string[] = [];
 		if (schedule?.retentionPolicy) {
 			const rp = schedule.retentionPolicy;
-			if (rp.keepLast) retentionParts.push(`${rp.keepLast} last`);
-			if (rp.keepHourly) retentionParts.push(`${rp.keepHourly} hourly`);
-			if (rp.keepDaily) retentionParts.push(`${rp.keepDaily} daily`);
-			if (rp.keepWeekly) retentionParts.push(`${rp.keepWeekly} weekly`);
-			if (rp.keepMonthly) retentionParts.push(`${rp.keepMonthly} monthly`);
-			if (rp.keepYearly) retentionParts.push(`${rp.keepYearly} yearly`);
+			if (rp.keepLast) retentionParts.push(`${rp.keepLast} últimos`);
+			if (rp.keepHourly) retentionParts.push(`${rp.keepHourly} por hora`);
+			if (rp.keepDaily) retentionParts.push(`${rp.keepDaily} diarios`);
+			if (rp.keepWeekly) retentionParts.push(`${rp.keepWeekly} semanales`);
+			if (rp.keepMonthly) retentionParts.push(`${rp.keepMonthly} mensuales`);
+			if (rp.keepYearly) retentionParts.push(`${rp.keepYearly} anuales`);
 		}
 
 		return {
 			vol: schedule.volume.name,
 			scheduleLabel,
-			repositoryLabel: schedule.repositoryId || "No repository selected",
-			retentionLabel: retentionParts.length > 0 ? retentionParts.join(" • ") : "No retention policy",
+			repositoryLabel: schedule.repositoryId || "Ningún Repository seleccionado",
+			retentionLabel: retentionParts.length > 0 ? retentionParts.join(" • ") : "Sin política de retención",
 		};
 	}, [schedule]);
 
@@ -101,8 +101,8 @@ export const ScheduleSummary = (props: Props) => {
 							<OnOff
 								isOn={schedule.enabled}
 								toggle={handleToggleEnabled}
-								enabledLabel="Enabled"
-								disabledLabel="Paused"
+								enabledLabel="Activado"
+								disabledLabel="Pausado"
 							/>
 						</div>
 					</div>
@@ -110,12 +110,12 @@ export const ScheduleSummary = (props: Props) => {
 						{schedule.lastBackupStatus === "in_progress" ? (
 							<Button variant="destructive" size="sm" onClick={handleStopBackup} className="w-full @md:w-auto">
 								<Square className="h-4 w-4 mr-2" />
-								<span>Stop backup</span>
+								<span>Detener backup</span>
 							</Button>
 						) : (
 							<Button variant="default" size="sm" onClick={handleRunBackupNow} className="w-full @md:w-auto">
 								<Play className="h-4 w-4 mr-2" />
-								<span>Backup now</span>
+								<span>Ejecutar backup ahora</span>
 							</Button>
 						)}
 						{schedule.retentionPolicy && (
@@ -127,12 +127,12 @@ export const ScheduleSummary = (props: Props) => {
 								className="w-full @md:w-auto"
 							>
 								<Eraser className="h-4 w-4 mr-2" />
-								<span>Run cleanup</span>
+								<span>Ejecutar limpieza</span>
 							</Button>
 						)}
 						<Button variant="outline" size="sm" onClick={() => setIsEditMode(true)} className="w-full @md:w-auto">
 							<Pencil className="h-4 w-4 mr-2" />
-							<span>Edit schedule</span>
+							<span>Editar programación</span>
 						</Button>
 						<Button
 							variant="outline"
@@ -141,13 +141,13 @@ export const ScheduleSummary = (props: Props) => {
 							className="text-destructive hover:text-destructive w-full @md:w-auto"
 						>
 							<Trash2 className="h-4 w-4 mr-2" />
-							<span>Delete</span>
+							<span>Eliminar</span>
 						</Button>
 					</div>
 				</CardHeader>
 				<CardContent className="grid gap-4 grid-cols-1 @md:grid-cols-2 @lg:grid-cols-4">
 					<div>
-						<p className="text-xs uppercase text-muted-foreground">Schedule</p>
+						<p className="text-xs uppercase text-muted-foreground">Programación</p>
 						<p className="font-medium">{summary.scheduleLabel}</p>
 					</div>
 					<div>
@@ -155,38 +155,38 @@ export const ScheduleSummary = (props: Props) => {
 						<p className="font-medium">{schedule.repository.name}</p>
 					</div>
 					<div>
-						<p className="text-xs uppercase text-muted-foreground">Last backup</p>
+						<p className="text-xs uppercase text-muted-foreground">Último backup</p>
 						<p className="font-medium">{formatTimeAgo(schedule.lastBackupAt)}</p>
 					</div>
 					<div>
-						<p className="text-xs uppercase text-muted-foreground">Next backup</p>
+						<p className="text-xs uppercase text-muted-foreground">Próximo backup</p>
 						<p className="font-medium">{formatShortDateTime(schedule.nextBackupAt)}</p>
 					</div>
 
 					<div>
-						<p className="text-xs uppercase text-muted-foreground">Status</p>
+						<p className="text-xs uppercase text-muted-foreground">Estado</p>
 						<p className="font-medium">
-							{schedule.lastBackupStatus === "success" && "✓ Success"}
-							{schedule.lastBackupStatus === "error" && "✗ Error"}
-							{schedule.lastBackupStatus === "in_progress" && "⟳  in progress..."}
-							{schedule.lastBackupStatus === "warning" && "! Warning"}
+							{schedule.lastBackupStatus === "success" && "✓ Completado"}
+							{schedule.lastBackupStatus === "error" && "✗ Fallido"}
+							{schedule.lastBackupStatus === "in_progress" && "⟳  en ejecución..."}
+							{schedule.lastBackupStatus === "warning" && "! Advertencia"}
 							{!schedule.lastBackupStatus && "—"}
 						</p>
 					</div>
 
 					{schedule.lastBackupStatus === "warning" && (
 						<div className="@md:col-span-2 @lg:col-span-4">
-							<p className="text-xs uppercase text-muted-foreground">Warning Details</p>
+							<p className="text-xs uppercase text-muted-foreground">Detalles de advertencia</p>
 							<p className="font-mono text-sm text-yellow-600 whitespace-pre-wrap wrap-break-word">
 								{schedule.lastBackupError ??
-									"Last backup completed with warnings. Check your container logs for more details."}
+									"El último backup se completó con advertencias. Revise los logs del contenedor para obtener más detalles."}
 							</p>
 						</div>
 					)}
 
 					{schedule.lastBackupError && schedule.lastBackupStatus === "error" && (
 						<div className="@md:col-span-2 @lg:col-span-4">
-							<p className="text-xs uppercase text-muted-foreground">Error details</p>
+							<p className="text-xs uppercase text-muted-foreground">Detalles del error</p>
 							<p className="font-mono text-sm text-red-600 whitespace-pre-wrap wrap-break-word">
 								{schedule.lastBackupError}
 							</p>
@@ -200,19 +200,19 @@ export const ScheduleSummary = (props: Props) => {
 			<AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete backup schedule?</AlertDialogTitle>
+						<AlertDialogTitle>¿Eliminar programación de backup?</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete this backup schedule for <strong>{schedule.volume.name}</strong>? This
-							action cannot be undone. Existing snapshots will not be deleted.
+							¿Está seguro de que desea eliminar esta programación de backup para <strong>{schedule.volume.name}</strong>? Esta
+							acción no se puede deshacer. Los Snapshots existentes no se eliminarán.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<div className="flex gap-3 justify-end">
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleConfirmDelete}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
-							Delete schedule
+							Eliminar programación
 						</AlertDialogAction>
 					</div>
 				</AlertDialogContent>
@@ -221,20 +221,20 @@ export const ScheduleSummary = (props: Props) => {
 			<AlertDialog open={showForgetConfirm} onOpenChange={setShowForgetConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Run retention policy cleanup?</AlertDialogTitle>
+						<AlertDialogTitle>¿Ejecutar limpieza de política de retención?</AlertDialogTitle>
 						<AlertDialogDescription>
-							This will apply the retention policy and permanently delete old snapshots according to the configured
-							rules ({summary.retentionLabel}). This action cannot be undone.
+							Esto aplicará la política de retención y eliminará permanentemente los Snapshots antiguos según las
+							reglas configuradas ({summary.retentionLabel}). Esta acción no se puede deshacer.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<div className="flex gap-3 justify-end">
 						<AlertDialogCancel>
 							<X className="h-4 w-4 mr-2" />
-							Cancel
+							Cancelar
 						</AlertDialogCancel>
 						<AlertDialogAction onClick={handleConfirmForget}>
 							<Check className="h-4 w-4 mr-2" />
-							Run cleanup
+							Ejecutar limpieza
 						</AlertDialogAction>
 					</div>
 				</AlertDialogContent>

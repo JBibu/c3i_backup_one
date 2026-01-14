@@ -99,11 +99,11 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 	const { mutate: restoreSnapshot, isPending: isRestoring } = useMutation({
 		...restoreSnapshotMutation(),
 		onSuccess: () => {
-			toast.success("Restore completed");
+			toast.success("Restauración completada");
 			void navigate(returnPath);
 		},
 		onError: (error) => {
-			toast.error("Restore failed", { description: error.message || "Failed to restore snapshot" });
+			toast.error("Restauración fallida", { description: error.message || "Error al restaurar el snapshot" });
 		},
 	});
 
@@ -149,22 +149,22 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-2xl font-bold">Restore Snapshot</h1>
+					<h1 className="text-2xl font-bold">Restaurar Snapshot</h1>
 					<p className="text-sm text-muted-foreground">
 						{repository.name} / {snapshotId}
 					</p>
 				</div>
 				<div className="flex gap-2">
 					<Button variant="outline" onClick={() => navigate(returnPath)}>
-						Cancel
+						Cancelar
 					</Button>
 					<Button variant="primary" onClick={handleRestore} disabled={isRestoring || !canRestore}>
 						<RotateCcw className="h-4 w-4 mr-2" />
 						{isRestoring
-							? "Restoring..."
+							? "Restaurando..."
 							: selectedPaths.size > 0
-								? `Restore ${selectedPaths.size} ${selectedPaths.size === 1 ? "item" : "items"}`
-								: "Restore All"}
+								? `Restaurar ${selectedPaths.size} ${selectedPaths.size === 1 ? "elemento" : "elementos"}`
+								: "Restaurar todo"}
 					</Button>
 				</div>
 			</div>
@@ -173,8 +173,8 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 				<div className="space-y-6">
 					<Card>
 						<CardHeader>
-							<CardTitle>Restore Location</CardTitle>
-							<CardDescription>Choose where to restore the files</CardDescription>
+							<CardTitle>Ubicación de restauración</CardTitle>
+							<CardDescription>Elija dónde restaurar los archivos</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div className="grid grid-cols-1 gap-2">
@@ -186,7 +186,7 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 									onClick={() => setRestoreLocation("original")}
 								>
 									<RotateCcw size={16} className="mr-1" />
-									Original location
+									Ubicación original
 								</Button>
 								<Button
 									type="button"
@@ -196,13 +196,13 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 									onClick={() => setRestoreLocation("custom")}
 								>
 									<FolderOpen size={16} className="mr-1" />
-									Custom location
+									Ubicación personalizada
 								</Button>
 							</div>
 							{restoreLocation === "custom" && (
 								<div className="space-y-2">
 									<PathSelector value={customTargetPath || "/"} onChange={setCustomTargetPath} />
-									<p className="text-xs text-muted-foreground">Files will be restored directly to this path</p>
+									<p className="text-xs text-muted-foreground">Los archivos se restaurarán directamente en esta ruta</p>
 								</div>
 							)}
 						</CardContent>
@@ -210,30 +210,30 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Overwrite Mode</CardTitle>
-							<CardDescription>How to handle existing files</CardDescription>
+							<CardTitle>Modo de sobrescritura</CardTitle>
+							<CardDescription>Cómo manejar los archivos existentes</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<Select value={overwriteMode} onValueChange={(value) => setOverwriteMode(value as OverwriteMode)}>
 								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Select overwrite behavior" />
+									<SelectValue placeholder="Seleccione el comportamiento de sobrescritura" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value={OVERWRITE_MODES.always}>Always overwrite</SelectItem>
-									<SelectItem value={OVERWRITE_MODES.ifChanged}>Only if content changed</SelectItem>
-									<SelectItem value={OVERWRITE_MODES.ifNewer}>Only if snapshot is newer</SelectItem>
-									<SelectItem value={OVERWRITE_MODES.never}>Never overwrite</SelectItem>
+									<SelectItem value={OVERWRITE_MODES.always}>Siempre sobrescribir</SelectItem>
+									<SelectItem value={OVERWRITE_MODES.ifChanged}>Solo si el contenido cambió</SelectItem>
+									<SelectItem value={OVERWRITE_MODES.ifNewer}>Solo si el snapshot es más reciente</SelectItem>
+									<SelectItem value={OVERWRITE_MODES.never}>Nunca sobrescribir</SelectItem>
 								</SelectContent>
 							</Select>
 							<p className="text-xs text-muted-foreground">
 								{overwriteMode === OVERWRITE_MODES.always &&
-									"Existing files will always be replaced with the snapshot version."}
+									"Los archivos existentes siempre serán reemplazados con la versión del snapshot."}
 								{overwriteMode === OVERWRITE_MODES.ifChanged &&
-									"Files are only replaced if their content differs from the snapshot."}
+									"Los archivos solo se reemplazan si su contenido difiere del snapshot."}
 								{overwriteMode === OVERWRITE_MODES.ifNewer &&
-									"Files are only replaced if the snapshot version has a newer modification time."}
+									"Los archivos solo se reemplazan si la versión del snapshot tiene una fecha de modificación más reciente."}
 								{overwriteMode === OVERWRITE_MODES.never &&
-									"Existing files will never be replaced, only missing files are restored."}
+									"Los archivos existentes nunca serán reemplazados, solo se restauran los archivos faltantes."}
 							</p>
 						</CardContent>
 					</Card>
@@ -241,7 +241,7 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 					<Card>
 						<CardHeader className="cursor-pointer" onClick={() => setShowAdvanced(!showAdvanced)}>
 							<div className="flex items-center justify-between">
-								<CardTitle className="text-base">Advanced options</CardTitle>
+								<CardTitle className="text-base">Opciones avanzadas</CardTitle>
 								<ChevronDown size={16} className={`transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
 							</div>
 						</CardHeader>
@@ -249,7 +249,7 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 							<CardContent className="space-y-4">
 								<div className="space-y-2">
 									<Label htmlFor="exclude-xattr" className="text-sm">
-										Exclude extended attributes
+										Excluir atributos extendidos
 									</Label>
 									<Input
 										id="exclude-xattr"
@@ -258,7 +258,7 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 										onChange={(e) => setExcludeXattr(e.target.value)}
 									/>
 									<p className="text-xs text-muted-foreground">
-										Exclude specific extended attributes during restore (comma-separated)
+										Excluir atributos extendidos específicos durante la restauración (separados por comas)
 									</p>
 								</div>
 								<div className="flex items-center space-x-2">
@@ -268,7 +268,7 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 										onCheckedChange={(checked) => setDeleteExtraFiles(checked === true)}
 									/>
 									<Label htmlFor="delete-extra" className="text-sm font-normal cursor-pointer">
-										Delete files not present in the snapshot
+										Eliminar archivos no presentes en el snapshot
 									</Label>
 								</div>
 							</CardContent>
@@ -277,24 +277,24 @@ export function RestoreForm({ snapshot, repository, snapshotId, returnPath }: Re
 				</div>
 				<Card className="lg:col-span-2 flex flex-col">
 					<CardHeader>
-						<CardTitle>Select Files to Restore</CardTitle>
+						<CardTitle>Seleccionar archivos a restaurar</CardTitle>
 						<CardDescription>
 							{selectedPaths.size > 0
-								? `${selectedPaths.size} ${selectedPaths.size === 1 ? "item" : "items"} selected`
-								: "Select specific files or folders, or leave empty to restore everything"}
+								? `${selectedPaths.size} ${selectedPaths.size === 1 ? "elemento" : "elementos"} seleccionado${selectedPaths.size === 1 ? "" : "s"}`
+								: "Seleccione archivos o carpetas específicos, o deje vacío para restaurar todo"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="flex-1 overflow-hidden flex flex-col p-0">
 						{fileBrowser.isLoading && (
 							<div className="flex items-center justify-center flex-1">
-								<p className="text-muted-foreground">Loading files...</p>
+								<p className="text-muted-foreground">Cargando archivos...</p>
 							</div>
 						)}
 
 						{fileBrowser.isEmpty && (
 							<div className="flex flex-col items-center justify-center flex-1 text-center p-8">
 								<FileIcon className="w-12 h-12 text-muted-foreground/50 mb-4" />
-								<p className="text-muted-foreground">No files in this snapshot</p>
+								<p className="text-muted-foreground">No hay archivos en este snapshot</p>
 							</div>
 						)}
 

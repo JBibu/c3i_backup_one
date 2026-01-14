@@ -36,7 +36,7 @@ export const SnapshotTimeline = (props: Props) => {
 		return (
 			<Card>
 				<div className="flex items-center justify-center h-24">
-					<p className="text-muted-foreground">Loading snapshots...</p>
+					<p className="text-muted-foreground">Cargando Snapshots...</p>
 				</div>
 			</Card>
 		);
@@ -46,7 +46,7 @@ export const SnapshotTimeline = (props: Props) => {
 		return (
 			<Card>
 				<div className="flex items-center justify-center h-24">
-					<p className="text-muted-foreground">No snapshots available</p>
+					<p className="text-muted-foreground">No hay Snapshots disponibles</p>
 				</div>
 			</Card>
 		);
@@ -88,7 +88,7 @@ export const SnapshotTimeline = (props: Props) => {
 												invisible: !isLatest,
 											})}
 										>
-											Latest
+											Más reciente
 										</div>
 									</button>
 								);
@@ -98,7 +98,7 @@ export const SnapshotTimeline = (props: Props) => {
 				</div>
 
 				<div className="px-4 py-2 text-xs text-muted-foreground bg-card-header border-t border-border flex justify-between">
-					<span>{snapshots.length} snapshots</span>
+					<span>{snapshots.length} Snapshots</span>
 					<span>
 						{formatDateWithMonth(snapshots[0].time)}&nbsp;-&nbsp;{formatDateWithMonth(snapshots.at(-1)?.time)}
 					</span>

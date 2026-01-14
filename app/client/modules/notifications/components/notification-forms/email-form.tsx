@@ -17,7 +17,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="smtpHost"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>SMTP Host</FormLabel>
+						<FormLabel>Servidor SMTP</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="smtp.example.com" />
 						</FormControl>
@@ -30,7 +30,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="smtpPort"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>SMTP Port</FormLabel>
+						<FormLabel>Puerto SMTP</FormLabel>
 						<FormControl>
 							<Input
 								{...field}
@@ -48,7 +48,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Username (Optional)</FormLabel>
+						<FormLabel>Nombre de usuario (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="user@example.com" />
 						</FormControl>
@@ -61,7 +61,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="password"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Password (Optional)</FormLabel>
+						<FormLabel>Contraseña (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="••••••••" />
 						</FormControl>
@@ -74,7 +74,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="from"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>From Address</FormLabel>
+						<FormLabel>Dirección de origen</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="noreply@example.com" />
 						</FormControl>
@@ -87,7 +87,7 @@ export const EmailForm = ({ form }: Props) => {
 				name="to"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>To Addresses</FormLabel>
+						<FormLabel>Direcciones de destino</FormLabel>
 						<FormControl>
 							<Input
 								{...field}
@@ -103,7 +103,7 @@ export const EmailForm = ({ form }: Props) => {
 								}
 							/>
 						</FormControl>
-						<FormDescription>Comma-separated list of recipient email addresses.</FormDescription>
+						<FormDescription>Lista de direcciones de correo electrónico de los destinatarios separadas por comas.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -117,8 +117,8 @@ export const EmailForm = ({ form }: Props) => {
 							<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 						</FormControl>
 						<div className="space-y-1 leading-none">
-							<FormLabel>Use TLS</FormLabel>
-							<FormDescription>Enable TLS encryption for SMTP connection.</FormDescription>
+							<FormLabel>Usar TLS</FormLabel>
+							<FormDescription>Habilitar cifrado TLS para la conexión SMTP.</FormDescription>
 						</div>
 					</FormItem>
 				)}

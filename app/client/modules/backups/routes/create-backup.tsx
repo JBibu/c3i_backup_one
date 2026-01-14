@@ -19,15 +19,15 @@ import type { Route } from "./+types/create-backup";
 import { listRepositories, listVolumes } from "~/client/api-client";
 
 export const handle = {
-	breadcrumb: () => [{ label: "Backups", href: "/backups" }, { label: "Create" }],
+	breadcrumb: () => [{ label: "Copias de seguridad", href: "/backups" }, { label: "Crear" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Create Backup Job" },
+		{ title: "C3i Backup ONE - Crear copia de seguridad" },
 		{
 			name: "description",
-			content: "Create a new automated backup job for your volumes.",
+			content: "Cree un nuevo trabajo de copia de seguridad automatizado para sus volumes.",
 		},
 	];
 }
@@ -65,11 +65,11 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 	const createSchedule = useMutation({
 		...createBackupScheduleMutation(),
 		onSuccess: (data) => {
-			toast.success("Backup job created successfully");
+			toast.success("Copia de seguridad creada correctamente");
 			void navigate(`/backups/${data.id}`);
 		},
 		onError: (error) => {
-			toast.error("Failed to create backup job", {
+			toast.error("Error al crear la copia de seguridad", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -115,7 +115,7 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 	if (loadingVolumes) {
 		return (
 			<div className="flex items-center justify-center h-full">
-				<p className="text-muted-foreground">Loading...</p>
+				<p className="text-muted-foreground">Cargando...</p>
 			</div>
 		);
 	}
@@ -124,11 +124,11 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 		return (
 			<EmptyState
 				icon={HardDrive}
-				title="No volume to backup"
-				description="To create a backup job, you need to create a volume first. Volumes are the data sources that will be backed up."
+				title="No hay ningún volume para respaldar"
+				description="Para crear una copia de seguridad, necesita crear un volume primero. Los volumes son las fuentes de datos que se respaldarán."
 				button={
 					<Button>
-						<Link to="/volumes">Go to volumes</Link>
+						<Link to="/volumes">Ir a volumes</Link>
 					</Button>
 				}
 			/>
@@ -139,11 +139,11 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 		return (
 			<EmptyState
 				icon={Database}
-				title="No repository"
-				description="To create a backup job, you need to set up a backup repository first. Backup repositories are the destinations where your backups will be stored."
+				title="No hay ningún repository"
+				description="Para crear una copia de seguridad, necesita configurar un repository primero. Los repositories son los destinos donde se almacenarán sus copias de seguridad."
 				button={
 					<Button>
-						<Link to="/repositories">Go to repositories</Link>
+						<Link to="/repositories">Ir a repositories</Link>
 					</Button>
 				}
 			/>
@@ -156,7 +156,7 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 				<CardContent>
 					<Select value={selectedVolumeId?.toString()} onValueChange={(v) => setSelectedVolumeId(Number(v))}>
 						<SelectTrigger id="volume-select">
-							<SelectValue placeholder="Choose a volume to backup" />
+							<SelectValue placeholder="Elija un volume para respaldar" />
 						</SelectTrigger>
 						<SelectContent>
 							{volumesData.map((volume) => (
@@ -177,7 +177,7 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 					<div className="flex justify-end mt-4 gap-2">
 						<Button type="submit" variant="primary" form={formId} loading={createSchedule.isPending}>
 							<Plus className="h-4 w-4 mr-2" />
-							Create
+							Crear
 						</Button>
 					</div>
 				</>
@@ -193,9 +193,9 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 									<Database className="w-12 h-12 text-primary/70" strokeWidth={1.5} />
 								</div>
 							</div>
-							<h3 className="text-xl font-semibold mb-2">Select a volume</h3>
+							<h3 className="text-xl font-semibold mb-2">Seleccione un volume</h3>
 							<p className="text-muted-foreground text-sm max-w-md">
-								Choose a volume from the dropdown above to configure its backup schedule.
+								Elija un volume del menú desplegable superior para configurar su programación de copia de seguridad.
 							</p>
 						</div>
 					</CardContent>

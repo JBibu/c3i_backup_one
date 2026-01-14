@@ -19,10 +19,10 @@ export const clientMiddleware = [authMiddleware];
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Login" },
+		{ title: "C3i Backup ONE - Iniciar sesión" },
 		{
 			name: "description",
-			content: "Sign in to your C3i Backup ONE account.",
+			content: "Inicie sesión en su cuenta de C3i Backup ONE.",
 		},
 	];
 }
@@ -67,7 +67,7 @@ export default function LoginPage() {
 
 		if (error) {
 			console.error(error);
-			toast.error("Login failed", { description: error.message });
+			toast.error("Error al iniciar sesión", { description: error.message });
 			return;
 		}
 
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
 	const handleVerify2FA = async () => {
 		if (totpCode.length !== 6) {
-			toast.error("Please enter a 6-digit code");
+			toast.error("Por favor, introduzca un código de 6 dígitos");
 			return;
 		}
 
@@ -105,13 +105,13 @@ export default function LoginPage() {
 
 		if (error) {
 			console.error(error);
-			toast.error("Verification failed", { description: error.message });
+			toast.error("Error en la verificación", { description: error.message });
 			setTotpCode("");
 			return;
 		}
 
 		if (data) {
-			toast.success("Login successful");
+			toast.success("Inicio de sesión exitoso");
 			const session = await authClient.getSession();
 			if (session.data?.user && !session.data.user.hasDownloadedResticPassword) {
 				void navigate("/download-recovery-key");
@@ -130,10 +130,10 @@ export default function LoginPage() {
 
 	if (requires2FA) {
 		return (
-			<AuthLayout title="Two-Factor Authentication" description="Enter the 6-digit code from your authenticator app">
+			<AuthLayout title="Autenticación de dos factores" description="Introduzca el código de 6 dígitos de su aplicación de autenticación">
 				<div className="space-y-6">
 					<div className="space-y-4 flex flex-col items-center">
-						<Label htmlFor="totp-code">Authentication code</Label>
+						<Label htmlFor="totp-code">Código de autenticación</Label>
 						<div>
 							<InputOTP
 								maxLength={6}
@@ -166,7 +166,7 @@ export default function LoginPage() {
 							className="h-4 w-4"
 						/>
 						<label htmlFor="trust-device" className="text-sm text-muted-foreground cursor-pointer">
-							Trust this device for 30 days
+							Confiar en este dispositivo durante 30 días
 						</label>
 					</div>
 
@@ -178,7 +178,7 @@ export default function LoginPage() {
 							onClick={handleVerify2FA}
 							disabled={totpCode.length !== 6}
 						>
-							Verify
+							Verificar
 						</Button>
 						<Button
 							type="button"
@@ -187,7 +187,7 @@ export default function LoginPage() {
 							onClick={handleBackToLogin}
 							disabled={isVerifying2FA}
 						>
-							Back to Login
+							Volver al inicio de sesión
 						</Button>
 					</div>
 				</div>
@@ -196,7 +196,7 @@ export default function LoginPage() {
 	}
 
 	return (
-		<AuthLayout title="Login to your account" description="Enter your credentials below to login to your account">
+		<AuthLayout title="Iniciar sesión en su cuenta" description="Introduzca sus credenciales a continuación para iniciar sesión">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 					<FormField
@@ -204,7 +204,7 @@ export default function LoginPage() {
 						name="username"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Username</FormLabel>
+								<FormLabel>Nombre de usuario</FormLabel>
 								<FormControl>
 									<Input {...field} type="text" placeholder="admin" disabled={isLoggingIn} />
 								</FormControl>
@@ -218,13 +218,13 @@ export default function LoginPage() {
 						render={({ field }) => (
 							<FormItem>
 								<div className="flex items-center justify-between">
-									<FormLabel>Password</FormLabel>
+									<FormLabel>Contraseña</FormLabel>
 									<button
 										type="button"
 										className="text-xs text-muted-foreground hover:underline"
 										onClick={() => setShowResetDialog(true)}
 									>
-										Forgot your password?
+										¿Olvidó su contraseña?
 									</button>
 								</div>
 								<FormControl>
@@ -235,7 +235,7 @@ export default function LoginPage() {
 						)}
 					/>
 					<Button type="submit" className="w-full" loading={isLoggingIn}>
-						Login
+						Iniciar sesión
 					</Button>
 				</form>
 			</Form>

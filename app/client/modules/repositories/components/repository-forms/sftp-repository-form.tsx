@@ -28,7 +28,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="192.168.1.100" {...field} />
 						</FormControl>
-						<FormDescription>SFTP server hostname or IP address.</FormDescription>
+						<FormDescription>Nombre de host o dirección IP del servidor SFTP.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -38,7 +38,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 				name="port"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Port</FormLabel>
+						<FormLabel>Puerto</FormLabel>
 						<FormControl>
 							<Input
 								type="number"
@@ -47,7 +47,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
 							/>
 						</FormControl>
-						<FormDescription>SSH port (default: 22).</FormDescription>
+						<FormDescription>Puerto SSH (predeterminado: 22).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -57,11 +57,11 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 				name="user"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>User</FormLabel>
+						<FormLabel>Usuario</FormLabel>
 						<FormControl>
 							<Input placeholder="backup-user" {...field} />
 						</FormControl>
-						<FormDescription>SSH username for authentication.</FormDescription>
+						<FormDescription>Nombre de usuario SSH para autenticación.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -71,11 +71,11 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path</FormLabel>
+						<FormLabel>Ruta</FormLabel>
 						<FormControl>
 							<Input placeholder="backups/c3i-backup-one" {...field} />
 						</FormControl>
-						<FormDescription>Repository path on the SFTP server. </FormDescription>
+						<FormDescription>Ruta del repositorio en el servidor SFTP. </FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -85,14 +85,14 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 				name="privateKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>SSH Private Key</FormLabel>
+						<FormLabel>Clave Privada SSH</FormLabel>
 						<FormControl>
 							<Textarea
 								{...field}
 								placeholder="-----BEGIN OPENSSH PRIVATE KEY-----&#10;...&#10;-----END OPENSSH PRIVATE KEY-----"
 							/>
 						</FormControl>
-						<FormDescription>Paste the contents of your SSH private key.</FormDescription>
+						<FormDescription>Pegue el contenido de su clave privada SSH.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -103,9 +103,9 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 				render={({ field }) => (
 					<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
 						<div className="space-y-0.5">
-							<FormLabel>Skip Host Key Verification</FormLabel>
+							<FormLabel>Omitir Verificación de Clave de Host</FormLabel>
 							<FormDescription>
-								Disable SSH host key checking. Useful for servers with dynamic IPs or self-signed keys.
+								Deshabilitar la verificación de clave de host SSH. Útil para servidores con IPs dinámicas o claves autofirmadas.
 							</FormDescription>
 						</div>
 						<FormControl>
@@ -120,7 +120,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 					name="knownHosts"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Known Hosts</FormLabel>
+							<FormLabel>Hosts Conocidos</FormLabel>
 							<FormControl>
 								<Textarea
 									placeholder="example.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ..."
@@ -131,7 +131,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 								/>
 							</FormControl>
 							<FormDescription>
-								The contents of the <code>known_hosts</code> file for this server.
+								El contenido del archivo <code>known_hosts</code> para este servidor.
 							</FormDescription>
 							<FormMessage />
 						</FormItem>

@@ -14,7 +14,7 @@ export const CustomForm = ({ form }: Props) => {
 			name="shoutrrrUrl"
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>Shoutrrr URL</FormLabel>
+					<FormLabel>URL de Shoutrrr</FormLabel>
 					<FormControl>
 						<Input
 							{...field}
@@ -22,16 +22,16 @@ export const CustomForm = ({ form }: Props) => {
 						/>
 					</FormControl>
 					<FormDescription>
-						Direct Shoutrrr URL for power users. See&nbsp;
+						URL directa de Shoutrrr para usuarios avanzados. Consulte la&nbsp;
 						<a
 							href="https://shoutrrr.nickfedor.com/latest/services/overview/"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-strong-accent hover:underline"
 						>
-							Shoutrrr documentation
+							documentación de Shoutrrr
 						</a>
-						&nbsp;for supported services and URL formats.
+						&nbsp;para conocer los servicios compatibles y los formatos de URL.
 					</FormDescription>
 					<FormMessage />
 				</FormItem>

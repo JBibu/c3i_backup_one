@@ -1,6 +1,10 @@
 use std::process::{Child, Command, Stdio};
 use std::sync::Mutex;
 use tauri::{AppHandle, Manager, State};
+use tauri::menu::{MenuBuilder, MenuItemBuilder};
+use tauri::tray::{TrayIconBuilder, TrayIconEvent};
+use tauri::image::Image;
+use tauri_plugin_autostart::ManagerExt;
 
 struct AppState {
     backend_port: Mutex<Option<u16>>,
@@ -59,6 +63,35 @@ fn open_data_dir(app: AppHandle) -> Result<(), String> {
 #[tauri::command]
 fn is_backend_ready(state: State<AppState>) -> bool {
     *state.sidecar_running.lock().unwrap_or_else(|e| e.into_inner())
+}
+
+#[tauri::command]
+async fn get_autostart_enabled(app: tauri::AppHandle) -> Result<bool, String> {
+    let autostart_manager = app.autolaunch();
+    autostart_manager.is_enabled().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn set_autostart_enabled(app: tauri::AppHandle, enable: bool) -> Result<(), String> {
+    let autostart_manager = app.autolaunch();
+
+    if enable {
+        autostart_manager.enable().map_err(|e| e.to_string())
+    } else {
+        autostart_manager.disable().map_err(|e| e.to_string())
+    }
+}
+
+#[tauri::command]
+async fn send_notification(app: tauri::AppHandle, title: String, body: String) -> Result<(), String> {
+    use tauri_plugin_notification::NotificationExt;
+
+    app.notification()
+        .builder()
+        .title(title)
+        .body(body)
+        .show()
+        .map_err(|e| e.to_string())
 }
 
 fn get_sidecar_path(app: &AppHandle) -> Option<std::path::PathBuf> {
@@ -240,10 +273,23 @@ fn stop_sidecar(state: &AppState) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            // When another instance tries to start, show and focus the existing window
+            log::info!("Another instance attempted to start, focusing existing window");
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.set_focus();
+            }
+        }))
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec!["--minimized"]),
+        ))
         .manage(AppState {
             backend_port: Mutex::new(None),
             sidecar_running: Mutex::new(false),
@@ -258,6 +304,96 @@ pub fn run() {
                 )?;
             }
 
+            // Create system tray (ordered same as sidebar)
+            let show = MenuItemBuilder::with_id("show", "Mostrar App").build(app)?;
+            let volumes = MenuItemBuilder::with_id("volumes", "Volúmenes").build(app)?;
+            let repositories = MenuItemBuilder::with_id("repositories", "Repositorios").build(app)?;
+            let backups = MenuItemBuilder::with_id("backups", "Copias de seguridad").build(app)?;
+            let notifications = MenuItemBuilder::with_id("notifications", "Notificaciones").build(app)?;
+            let settings = MenuItemBuilder::with_id("settings", "Configuración").build(app)?;
+            let quit = MenuItemBuilder::with_id("quit", "Salir").build(app)?;
+
+            let menu = MenuBuilder::new(app)
+                .item(&show)
+                .separator()
+                .item(&volumes)
+                .item(&repositories)
+                .item(&backups)
+                .item(&notifications)
+                .separator()
+                .item(&settings)
+                .separator()
+                .item(&quit)
+                .build()?;
+
+            // Load tray icon from embedded bytes (custom zerobyte logo)
+            let icon = Image::from_bytes(include_bytes!("../../public/images/zerobyte.png"))
+                .expect("Failed to load tray icon");
+
+            let _tray = TrayIconBuilder::new()
+                .icon(icon)
+                .menu(&menu)
+                .show_menu_on_left_click(false)
+                .on_menu_event(move |app, event| {
+                    match event.id().as_ref() {
+                        "show" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                            }
+                        }
+                        "volumes" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                let _ = window.eval("window.location.href = '/volumes'");
+                            }
+                        }
+                        "repositories" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                let _ = window.eval("window.location.href = '/repositories'");
+                            }
+                        }
+                        "backups" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                let _ = window.eval("window.location.href = '/backups'");
+                            }
+                        }
+                        "notifications" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                let _ = window.eval("window.location.href = '/notifications'");
+                            }
+                        }
+                        "settings" => {
+                            if let Some(window) = app.get_webview_window("main") {
+                                let _ = window.show();
+                                let _ = window.set_focus();
+                                let _ = window.eval("window.location.href = '/settings'");
+                            }
+                        }
+                        "quit" => {
+                            app.exit(0);
+                        }
+                        _ => {}
+                    }
+                })
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click { button: tauri::tray::MouseButton::Left, .. } = event {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_webview_window("main") {
+                            let _ = window.show();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
+
             // Start sidecar in background
             let app_handle = app.handle().clone();
 
@@ -270,9 +406,18 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            if let tauri::WindowEvent::CloseRequested { .. } = event {
-                let state: State<AppState> = window.state();
-                stop_sidecar(&*state);
+            match event {
+                tauri::WindowEvent::CloseRequested { api, .. } => {
+                    // Hide window instead of closing (minimize to tray)
+                    window.hide().unwrap();
+                    api.prevent_close();
+                }
+                tauri::WindowEvent::Destroyed => {
+                    // Only stop sidecar when window is actually destroyed
+                    let state: State<AppState> = window.state();
+                    stop_sidecar(&*state);
+                }
+                _ => {}
             }
         })
         .invoke_handler(tauri::generate_handler![
@@ -280,6 +425,9 @@ pub fn run() {
             get_data_dir,
             open_data_dir,
             is_backend_ready,
+            get_autostart_enabled,
+            set_autostart_enabled,
+            send_notification,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "C3i Backup ONE",
   "version": "0.1.0",
-  "identifier": "com.c3i-backup-one.app",
+  "identifier": "com.c3i.backup-one",
   "build": {
     "frontendDist": "../dist/client",
     "devUrl": "http://localhost:4096",
@@ -19,16 +19,31 @@
         "minHeight": 600,
         "resizable": true,
         "fullscreen": false,
-        "center": true
+        "center": true,
+        "decorations": false
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "main-capability",
+          "description": "Main window capabilities",
+          "windows": ["main"],
+          "permissions": [
+            "core:window:allow-close",
+            "core:window:allow-minimize",
+            "core:window:allow-maximize",
+            "core:window:allow-toggle-maximize",
+            "core:window:allow-start-dragging"
+          ]
+        }
+      ]
     }
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["deb", "rpm", "msi", "nsis"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -37,7 +52,7 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "resources/bin/*": "bin/"
+      "resources/bin/**/*": "bin/"
     },
     "category": "Utility",
     "shortDescription": "Backup automation tool powered by Restic",

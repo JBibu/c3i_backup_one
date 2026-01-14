@@ -15,15 +15,15 @@ import type { Route } from "./+types/create-repository";
 import { Alert, AlertDescription } from "~/client/components/ui/alert";
 
 export const handle = {
-	breadcrumb: () => [{ label: "Repositories", href: "/repositories" }, { label: "Create" }],
+	breadcrumb: () => [{ label: "Repositorios", href: "/repositories" }, { label: "Crear" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Create Repository" },
+		{ title: "C3i Backup ONE - Crear Repository" },
 		{
 			name: "description",
-			content: "Create a new backup repository with encryption and compression.",
+			content: "Crear un nuevo repository de copias de seguridad con cifrado y compresión.",
 		},
 	];
 }
@@ -35,7 +35,7 @@ export default function CreateRepository() {
 	const createRepository = useMutation({
 		...createRepositoryMutation(),
 		onSuccess: (data) => {
-			toast.success("Repository created successfully");
+			toast.success("Repository creado correctamente");
 			void navigate(`/repositories/${data.repository.shortId}`);
 		},
 	});
@@ -58,14 +58,14 @@ export default function CreateRepository() {
 						<div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
 							<Database className="w-5 h-5 text-primary" />
 						</div>
-						<CardTitle>Create Repository</CardTitle>
+						<CardTitle>Crear Repository</CardTitle>
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					{createRepository.isError && (
 						<Alert variant="destructive">
 							<AlertDescription>
-								<strong>Failed to create repository:</strong>
+								<strong>Error al crear el repository:</strong>
 								<br />
 								{parseError(createRepository.error)?.message}
 							</AlertDescription>
@@ -79,11 +79,11 @@ export default function CreateRepository() {
 					/>
 					<div className="flex justify-end gap-2 pt-4 border-t">
 						<Button type="button" variant="secondary" onClick={() => navigate("/repositories")}>
-							Cancel
+							Cancelar
 						</Button>
 						<Button type="submit" form={formId} loading={createRepository.isPending}>
 							<Plus className="h-4 w-4 mr-2" />
-							Create repository
+							Crear repository
 						</Button>
 					</div>
 				</CardContent>

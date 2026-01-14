@@ -1,4 +1,6 @@
 import * as fs from "node:fs/promises";
+import * as os from "node:os";
+import * as path from "node:path";
 import { logger } from "../utils/logger";
 
 export type SystemCapabilities = {
@@ -34,14 +36,21 @@ async function detectCapabilities(): Promise<SystemCapabilities> {
 
 /**
  * Checks if rclone is available by:
- * 1. Checking if /root/.config/rclone directory exists and is accessible
+ * 1. Checking if rclone config directory exists and is accessible
+ * 2. In Tauri mode: uses ~/.config/rclone
+ * 3. In Docker mode: uses /root/.config/rclone
  */
 async function detectRclone(): Promise<boolean> {
+	const isTauriMode = process.env.C3I_BACKUP_ONE_TAURI === "1";
+	const rclonePath = isTauriMode
+		? path.join(os.homedir(), ".config", "rclone")
+		: "/root/.config/rclone";
+
 	try {
-		await fs.access("/root/.config/rclone");
+		await fs.access(rclonePath);
 
 		// Make sure the folder is not empty
-		const files = await fs.readdir("/root/.config/rclone");
+		const files = await fs.readdir(rclonePath);
 		if (files.length === 0) {
 			throw new Error("rclone config directory is empty");
 		}
@@ -49,14 +58,28 @@ async function detectRclone(): Promise<boolean> {
 		logger.info("rclone capability: enabled");
 		return true;
 	} catch (_) {
-		logger.warn("rclone capability: disabled. " + "To enable: mount /root/.config/rclone in docker-compose.yml");
+		if (isTauriMode) {
+			logger.warn(
+				`rclone capability: disabled. To enable: configure rclone in ${path.join(os.homedir(), ".config", "rclone")}`,
+			);
+		} else {
+			logger.warn("rclone capability: disabled. " + "To enable: mount /root/.config/rclone in docker-compose.yml");
+		}
 		return false;
 	}
 }
 
 async function detectSysAdmin(): Promise<boolean> {
+	const isTauriMode = process.env.C3I_BACKUP_ONE_TAURI === "1";
+
 	if (process.platform !== "linux") {
-		logger.warn("sysAdmin capability: disabled. Non-Linux platform detected");
+		if (isTauriMode) {
+			logger.info(
+				"sysAdmin capability: disabled. Remote volume mounting (NFS/SMB/SFTP/WebDAV) is not available on non-Linux platforms.",
+			);
+		} else {
+			logger.warn("sysAdmin capability: disabled. Non-Linux platform detected");
+		}
 		return false;
 	}
 
@@ -66,7 +89,13 @@ async function detectSysAdmin(): Promise<boolean> {
 		const capEffLine = procStatus.split("\n").find((line) => line.startsWith("CapEff:"));
 
 		if (!capEffLine) {
-			logger.warn("sysAdmin capability: disabled. Could not read CapEff from /proc/self/status");
+			if (isTauriMode) {
+				logger.info(
+					"sysAdmin capability: disabled. Remote volume mounting (NFS/SMB/SFTP/WebDAV) requires elevated privileges.",
+				);
+			} else {
+				logger.warn("sysAdmin capability: disabled. Could not read CapEff from /proc/self/status");
+			}
 			return false;
 		}
 
@@ -74,7 +103,13 @@ async function detectSysAdmin(): Promise<boolean> {
 		const capEffHex = capEffLine.split(/\s+/)[1];
 
 		if (!capEffHex) {
-			logger.warn("sysAdmin capability: disabled. Could not parse CapEff value");
+			if (isTauriMode) {
+				logger.info(
+					"sysAdmin capability: disabled. Remote volume mounting (NFS/SMB/SFTP/WebDAV) requires elevated privileges.",
+				);
+			} else {
+				logger.warn("sysAdmin capability: disabled. Could not parse CapEff value");
+			}
 			return false;
 		}
 
@@ -86,10 +121,22 @@ async function detectSysAdmin(): Promise<boolean> {
 			return true;
 		}
 
-		logger.warn("sysAdmin capability: disabled. " + "To enable: add 'cap_add: SYS_ADMIN' in docker-compose.yml");
+		if (isTauriMode) {
+			logger.info(
+				"sysAdmin capability: disabled. Remote volume mounting (NFS/SMB/SFTP/WebDAV) requires elevated privileges and is not recommended for desktop use.",
+			);
+		} else {
+			logger.warn("sysAdmin capability: disabled. " + "To enable: add 'cap_add: SYS_ADMIN' in docker-compose.yml");
+		}
 		return false;
 	} catch (_error) {
-		logger.warn("sysAdmin capability: disabled. " + "To enable: add 'cap_add: SYS_ADMIN' in docker-compose.yml");
+		if (isTauriMode) {
+			logger.info(
+				"sysAdmin capability: disabled. Remote volume mounting (NFS/SMB/SFTP/WebDAV) requires elevated privileges.",
+			);
+		} else {
+			logger.warn("sysAdmin capability: disabled. " + "To enable: add 'cap_add: SYS_ADMIN' in docker-compose.yml");
+		}
 		return false;
 	}
 }

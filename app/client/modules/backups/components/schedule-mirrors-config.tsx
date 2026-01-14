@@ -55,11 +55,11 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 	const updateMirrors = useMutation({
 		...updateScheduleMirrorsMutation(),
 		onSuccess: () => {
-			toast.success("Mirror settings saved successfully");
+			toast.success("Configuración de Espejos guardada correctamente");
 			setHasChanges(false);
 		},
 		onError: (error) => {
-			toast.error("Failed to save mirror settings", {
+			toast.error("Error al guardar la configuración de Espejos", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -185,9 +185,9 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 			return assignment.lastCopyError;
 		}
 		if (assignment.lastCopyStatus === "success") {
-			return "Last copy successful";
+			return "Última copia exitosa";
 		}
-		return "Never copied";
+		return "Nunca copiado";
 	};
 
 	return (
@@ -197,16 +197,16 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 					<div>
 						<CardTitle className="flex items-center gap-2">
 							<Copy className="h-5 w-5" />
-							Mirror Repositories
+							Repositories Espejo
 						</CardTitle>
 						<CardDescription className="hidden @md:block mt-1">
-							Configure secondary repositories where snapshots will be automatically copied after each backup
+							Configure Repositories secundarios donde se copiarán automáticamente los Snapshots después de cada backup
 						</CardDescription>
 					</div>
 					{!isAddingNew && selectableRepositories.length > 0 && (
 						<Button variant="outline" size="sm" onClick={() => setIsAddingNew(true)}>
 							<Plus className="h-4 w-4 mr-2" />
-							Add mirror
+							Agregar Espejo
 						</Button>
 					)}
 				</div>
@@ -216,7 +216,7 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 					<div className="mb-6 flex items-center gap-2 max-w-md">
 						<Select onValueChange={addRepository}>
 							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a repository to mirror to..." />
+								<SelectValue placeholder="Seleccione un Repository para replicar..." />
 							</SelectTrigger>
 							<SelectContent>
 								{selectableRepositories.map((repository) => {
@@ -236,9 +236,9 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 												</div>
 											</TooltipTrigger>
 											<TooltipContent side="right" className={cn("max-w-xs", { hidden: compat?.compatible })}>
-												<p>{compat?.reason || "This repository is not compatible for mirroring."}</p>
+												<p>{compat?.reason || "Este Repository no es compatible para replicación."}</p>
 												<p className="mt-1 text-xs text-muted-foreground">
-													Consider creating a new backup scheduler with the desired destination instead.
+													Considere crear una nueva programación de backup con el destino deseado en su lugar.
 												</p>
 											</TooltipContent>
 										</Tooltip>
@@ -246,7 +246,7 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 								})}
 								{!hasAvailableRepositories && selectableRepositories.length > 0 && (
 									<div className="px-2 py-3 text-sm text-muted-foreground text-center">
-										All available repositories have conflicting backends.
+										Todos los Repositories disponibles tienen backends incompatibles.
 										<br />
 										<span className="text-xs">
 											Consider creating a new backup scheduler with the desired destination instead.
@@ -256,7 +256,7 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 							</SelectContent>
 						</Select>
 						<Button variant="ghost" size="sm" onClick={() => setIsAddingNew(false)}>
-							Cancel
+							Cancelar
 						</Button>
 					</div>
 				)}
@@ -264,8 +264,8 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 				{assignedRepositories.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
 						<Copy className="h-8 w-8 mb-2 opacity-20" />
-						<p className="text-sm">No mirror repositories configured for this schedule.</p>
-						<p className="text-xs mt-1">Click "Add mirror" to replicate backups to additional repositories.</p>
+						<p className="text-sm">No hay Repositories Espejo configurados para esta programación.</p>
+						<p className="text-xs mt-1">Haga clic en "Agregar Espejo" para replicar backups en Repositories adicionales.</p>
 					</div>
 				) : (
 					<div className="rounded-md border">
@@ -273,8 +273,8 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 							<TableHeader>
 								<TableRow>
 									<TableHead>Repository</TableHead>
-									<TableHead className="text-center w-25">Enabled</TableHead>
-									<TableHead className="w-45">Last Copy</TableHead>
+									<TableHead className="text-center w-25">Activado</TableHead>
+									<TableHead className="w-45">Última copia</TableHead>
 									<TableHead className="w-12.5"></TableHead>
 								</TableRow>
 							</TableHeader>
@@ -318,7 +318,7 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 														</span>
 													</div>
 												) : (
-													<span className="text-sm text-muted-foreground">Never</span>
+													<span className="text-sm text-muted-foreground">Nunca</span>
 												)}
 											</TableCell>
 											<TableCell>
@@ -342,10 +342,10 @@ export const ScheduleMirrorsConfig = ({ scheduleId, primaryRepositoryId, reposit
 				{hasChanges && (
 					<div className="flex gap-2 justify-end mt-4 pt-4">
 						<Button variant="outline" size="sm" onClick={handleReset}>
-							Cancel
+							Cancelar
 						</Button>
 						<Button variant="default" size="sm" onClick={handleSave} loading={updateMirrors.isPending}>
-							Save changes
+							Guardar cambios
 						</Button>
 					</div>
 				)}

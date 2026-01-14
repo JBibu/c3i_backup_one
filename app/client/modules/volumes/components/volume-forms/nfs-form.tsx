@@ -23,11 +23,11 @@ export const NFSForm = ({ form }: Props) => {
 				name="server"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Server</FormLabel>
+						<FormLabel>Servidor</FormLabel>
 						<FormControl>
 							<Input placeholder="192.168.1.100" {...field} />
 						</FormControl>
-						<FormDescription>NFS server IP address or hostname.</FormDescription>
+						<FormDescription>Dirección IP o nombre del host del servidor NFS.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -37,11 +37,11 @@ export const NFSForm = ({ form }: Props) => {
 				name="exportPath"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Export Path</FormLabel>
+						<FormLabel>Ruta de Exportación</FormLabel>
 						<FormControl>
 							<Input placeholder="/export/data" {...field} />
 						</FormControl>
-						<FormDescription>Path to the NFS export on the server.</FormDescription>
+						<FormDescription>Ruta a la exportación NFS en el servidor.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -61,7 +61,7 @@ export const NFSForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(parseInt(e.target.value, 10) || undefined)}
 							/>
 						</FormControl>
-						<FormDescription>NFS server port (default: 2049).</FormDescription>
+						<FormDescription>Puerto del servidor NFS (predeterminado: 2049).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -72,11 +72,11 @@ export const NFSForm = ({ form }: Props) => {
 				defaultValue="4.1"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Version</FormLabel>
+						<FormLabel>Versión</FormLabel>
 						<Select onValueChange={field.onChange} value={field.value}>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select NFS version" />
+									<SelectValue placeholder="Seleccione la versión de NFS" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
@@ -85,7 +85,7 @@ export const NFSForm = ({ form }: Props) => {
 								<SelectItem value="4.1">NFS v4.1</SelectItem>
 							</SelectContent>
 						</Select>
-						<FormDescription>NFS protocol version to use.</FormDescription>
+						<FormDescription>Versión del protocolo NFS a utilizar.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -96,7 +96,7 @@ export const NFSForm = ({ form }: Props) => {
 				defaultValue={false}
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Read-only Mode</FormLabel>
+						<FormLabel>Modo de Solo Lectura</FormLabel>
 						<FormControl>
 							<div className="flex items-center space-x-2">
 								<input
@@ -105,11 +105,11 @@ export const NFSForm = ({ form }: Props) => {
 									onChange={(e) => field.onChange(e.target.checked)}
 									className="rounded border-gray-300"
 								/>
-								<span className="text-sm">Mount volume as read-only</span>
+								<span className="text-sm">Montar volumen como solo lectura</span>
 							</div>
 						</FormControl>
 						<FormDescription>
-							Prevent any modifications to the volume. Recommended for backup sources and sensitive data.
+							Evita cualquier modificación al volumen. Recomendado para orígenes de copias de seguridad y datos sensibles.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>

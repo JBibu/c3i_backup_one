@@ -5,19 +5,19 @@ import type { Route } from "./+types/restore-snapshot";
 
 export const handle = {
 	breadcrumb: (match: Route.MetaArgs) => [
-		{ label: "Repositories", href: "/repositories" },
+		{ label: "Repositorios", href: "/repositories" },
 		{ label: match.loaderData?.repository.name || match.params.id, href: `/repositories/${match.params.id}` },
 		{ label: match.params.snapshotId, href: `/repositories/${match.params.id}/${match.params.snapshotId}` },
-		{ label: "Restore" },
+		{ label: "Restaurar" },
 	],
 };
 
 export function meta({ params }: Route.MetaArgs) {
 	return [
-		{ title: `C3i Backup ONE - Restore Snapshot ${params.snapshotId}` },
+		{ title: `C3i Backup ONE - Restaurar Snapshot ${params.snapshotId}` },
 		{
 			name: "description",
-			content: "Restore files from a backup snapshot.",
+			content: "Restaurar archivos de un snapshot de backup.",
 		},
 	];
 }

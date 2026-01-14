@@ -19,6 +19,9 @@ export default defineConfig({
 		headers: {
 			"Cache-Control": "no-store",
 		},
+		watch: {
+			ignored: ["**/src-tauri/**"],
+		},
 	},
 	optimizeDeps: {
 		force: true,

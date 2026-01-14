@@ -16,11 +16,11 @@ export const TelegramForm = ({ form }: Props) => {
 				name="botToken"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Bot Token</FormLabel>
+						<FormLabel>Token del bot</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" />
 						</FormControl>
-						<FormDescription>Telegram bot token. Get this from BotFather when you create your bot.</FormDescription>
+						<FormDescription>Token del bot de Telegram. Obtenga esto desde BotFather cuando cree su bot.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -30,11 +30,11 @@ export const TelegramForm = ({ form }: Props) => {
 				name="chatId"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Chat ID</FormLabel>
+						<FormLabel>ID del chat</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="-1231234567890" />
 						</FormControl>
-						<FormDescription>Telegram chat ID to send notifications to.</FormDescription>
+						<FormDescription>ID del chat de Telegram al que enviar notificaciones.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

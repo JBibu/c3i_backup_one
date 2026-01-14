@@ -28,17 +28,17 @@ export const LocalRepositoryForm = ({ form }: Props) => {
 	return (
 		<>
 			<FormItem>
-				<FormLabel>Repository Directory</FormLabel>
+				<FormLabel>Directorio del Repositorio</FormLabel>
 				<div className="flex items-center gap-2">
 					<div className="flex-1 text-sm font-mono bg-muted px-3 py-2 rounded-md border">
 						{form.watch("path") || REPOSITORY_BASE}
 					</div>
 					<Button type="button" variant="outline" onClick={() => setShowPathWarning(true)} size="sm">
 						<Pencil className="h-4 w-4 mr-2" />
-						Change
+						Cambiar
 					</Button>
 				</div>
-				<FormDescription>The directory where the repository will be stored.</FormDescription>
+				<FormDescription>El directorio donde se almacenará el repositorio.</FormDescription>
 			</FormItem>
 
 			<AlertDialog open={showPathWarning} onOpenChange={setShowPathWarning}>
@@ -46,28 +46,27 @@ export const LocalRepositoryForm = ({ form }: Props) => {
 					<AlertDialogHeader>
 						<AlertDialogTitle className="flex items-center gap-2">
 							<AlertTriangle className="h-5 w-5 text-yellow-500" />
-							Important: Host mount required
+							Importante: Se requiere montaje del host
 						</AlertDialogTitle>
 						<AlertDialogDescription className="space-y-3">
-							<p>When selecting a custom path, ensure it is mounted from the host machine into the container.</p>
+							<p>Al seleccionar una ruta personalizada, asegúrese de que esté montada desde la máquina host en el contenedor.</p>
 							<p className="font-medium">
-								If the path is not a host mount, you will lose your repository data when the container restarts.
+								Si la ruta no es un montaje del host, perderá los datos de su repositorio cuando el contenedor se reinicie.
 							</p>
 							<p className="text-sm text-muted-foreground">
-								The default path <code className="bg-muted px-1 rounded">{REPOSITORY_BASE}</code> is safe to use if you
-								followed the recommended Docker Compose setup.
+								La ruta predeterminada <code className="bg-muted px-1 rounded">{REPOSITORY_BASE}</code> es segura de usar si siguió la configuración recomendada de Docker Compose.
 							</p>
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={() => {
 								setShowPathBrowser(true);
 								setShowPathWarning(false);
 							}}
 						>
-							I Understand, Continue
+							Entiendo, Continuar
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -76,9 +75,9 @@ export const LocalRepositoryForm = ({ form }: Props) => {
 			<AlertDialog open={showPathBrowser} onOpenChange={setShowPathBrowser}>
 				<AlertDialogContent className="max-w-2xl">
 					<AlertDialogHeader>
-						<AlertDialogTitle>Select Repository Directory</AlertDialogTitle>
+						<AlertDialogTitle>Seleccionar Directorio del Repositorio</AlertDialogTitle>
 						<AlertDialogDescription>
-							Choose a directory from the filesystem to store the repository.
+							Elija un directorio del sistema de archivos para almacenar el repositorio.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<div className="py-4">
@@ -90,11 +89,11 @@ export const LocalRepositoryForm = ({ form }: Props) => {
 					<AlertDialogFooter>
 						<AlertDialogCancel>
 							<X className="h-4 w-4 mr-2" />
-							Cancel
+							Cancelar
 						</AlertDialogCancel>
 						<AlertDialogAction onClick={() => setShowPathBrowser(false)}>
 							<Check className="h-4 w-4 mr-2" />
-							Done
+							Hecho
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

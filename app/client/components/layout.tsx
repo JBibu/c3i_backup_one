@@ -1,4 +1,3 @@
-import { LifeBuoy } from "lucide-react";
 import { Outlet, redirect, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { appContext } from "~/context";
@@ -10,6 +9,7 @@ import { Button } from "./ui/button";
 import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
 import { authClient } from "../lib/auth-client";
+import { Titlebar } from "./titlebar";
 
 export const clientMiddleware = [authMiddleware];
 
@@ -33,7 +33,7 @@ export default function Layout({ loaderData }: Route.ComponentProps) {
 					void navigate("/login", { replace: true });
 				},
 				onError: ({ error }) => {
-					toast.error("Logout failed", { description: error.message });
+					toast.error("Error al cerrar sesión", { description: error.message });
 				},
 			},
 		});
@@ -41,8 +41,11 @@ export default function Layout({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<SidebarProvider defaultOpen={true}>
+			{/* Custom Titlebar */}
+			<Titlebar />
+
 			<AppSidebar />
-			<div className="w-full relative flex flex-col h-screen overflow-hidden">
+			<div className="w-full relative flex flex-col h-screen overflow-hidden pt-8">
 				<header className="z-50 bg-card-header border-b border-border/50 shrink-0">
 					<div className="flex items-center justify-between py-3 sm:py-4 px-2 sm:px-8 mx-auto container gap-4">
 						<div className="flex items-center gap-4 min-w-0">
@@ -52,24 +55,11 @@ export default function Layout({ loaderData }: Route.ComponentProps) {
 						{loaderData.user && (
 							<div className="flex items-center gap-4">
 								<span className="text-sm text-muted-foreground hidden md:inline-flex">
-									Welcome,&nbsp;
+									Bienvenido/a,&nbsp;
 									<span className="text-strong-accent">{loaderData.user?.username}</span>
 								</span>
 								<Button variant="default" size="sm" onClick={handleLogout}>
-									Logout
-								</Button>
-								<Button variant="default" size="sm" className="relative overflow-hidden hidden lg:inline-flex">
-									<a
-										href="https://github.com/nicotsx/zerobyte/issues/new"
-										target="_blank"
-										rel="noreferrer"
-										className="flex items-center gap-2"
-									>
-										<span className="flex items-center gap-2">
-											<LifeBuoy />
-											<span>Report an issue</span>
-										</span>
-									</a>
+									Cerrar sesión
 								</Button>
 							</div>
 						)}

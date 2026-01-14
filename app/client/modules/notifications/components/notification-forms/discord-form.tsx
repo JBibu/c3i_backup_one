@@ -15,11 +15,11 @@ export const DiscordForm = ({ form }: Props) => {
 				name="webhookUrl"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Webhook URL</FormLabel>
+						<FormLabel>URL del Webhook</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN" />
 						</FormControl>
-						<FormDescription>Get this from your Discord server's Integrations settings.</FormDescription>
+						<FormDescription>Obtenga esto desde la configuración de Integraciones de su servidor Discord.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -29,7 +29,7 @@ export const DiscordForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Bot Username (Optional)</FormLabel>
+						<FormLabel>Nombre de usuario del bot (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="C3i Backup ONE" />
 						</FormControl>
@@ -42,7 +42,7 @@ export const DiscordForm = ({ form }: Props) => {
 				name="avatarUrl"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Avatar URL (Optional)</FormLabel>
+						<FormLabel>URL del avatar (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="https://example.com/avatar.png" />
 						</FormControl>
@@ -55,12 +55,12 @@ export const DiscordForm = ({ form }: Props) => {
 				name="threadId"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Thread ID (Optional)</FormLabel>
+						<FormLabel>ID del hilo (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} />
 						</FormControl>
 						<FormDescription>
-							ID of the thread to post messages in. Leave empty to post in the main channel.
+							ID del hilo en el que publicar mensajes. Déjelo vacío para publicar en el canal principal.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>

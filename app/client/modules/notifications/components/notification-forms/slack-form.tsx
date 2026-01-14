@@ -15,14 +15,14 @@ export const SlackForm = ({ form }: Props) => {
 				name="webhookUrl"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Webhook URL</FormLabel>
+						<FormLabel>URL del Webhook</FormLabel>
 						<FormControl>
 							<Input
 								{...field}
 								placeholder="https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXX"
 							/>
 						</FormControl>
-						<FormDescription>Get this from your Slack app's Incoming Webhooks settings.</FormDescription>
+						<FormDescription>Obtenga esto desde la configuración de Webhooks entrantes de su aplicación Slack.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -32,11 +32,11 @@ export const SlackForm = ({ form }: Props) => {
 				name="channel"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Channel (Optional)</FormLabel>
+						<FormLabel>Canal (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="#backups" />
 						</FormControl>
-						<FormDescription>Override the default channel (use # for channels, @ for users).</FormDescription>
+						<FormDescription>Anule el canal predeterminado (use # para canales, @ para usuarios).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -46,7 +46,7 @@ export const SlackForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Bot Username (Optional)</FormLabel>
+						<FormLabel>Nombre de usuario del bot (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="C3i Backup ONE" />
 						</FormControl>
@@ -59,7 +59,7 @@ export const SlackForm = ({ form }: Props) => {
 				name="iconEmoji"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Icon Emoji (Optional)</FormLabel>
+						<FormLabel>Emoji del icono (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder=":floppy_disk:" />
 						</FormControl>

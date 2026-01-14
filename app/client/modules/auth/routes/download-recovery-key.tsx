@@ -16,10 +16,10 @@ export const clientMiddleware = [authMiddleware];
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Download Recovery Key" },
+		{ title: "C3i Backup ONE - Descargar Clave de Recuperación" },
 		{
 			name: "description",
-			content: "Download your backup recovery key to ensure you can restore your data.",
+			content: "Descargue su clave de recuperación de respaldo para asegurar que pueda restaurar sus datos.",
 		},
 	];
 }
@@ -41,11 +41,11 @@ export default function DownloadRecoveryKeyPage() {
 			document.body.removeChild(a);
 			window.URL.revokeObjectURL(url);
 
-			toast.success("Recovery key downloaded successfully!");
+			toast.success("Clave de recuperación descargada correctamente");
 			void navigate("/volumes", { replace: true });
 		},
 		onError: (error) => {
-			toast.error("Failed to download recovery key", { description: error.message });
+			toast.error("Error al descargar la clave de recuperación", { description: error.message });
 		},
 	});
 
@@ -53,7 +53,7 @@ export default function DownloadRecoveryKeyPage() {
 		e.preventDefault();
 
 		if (!password) {
-			toast.error("Password is required");
+			toast.error("La contraseña es obligatoria");
 			return;
 		}
 
@@ -66,37 +66,37 @@ export default function DownloadRecoveryKeyPage() {
 
 	return (
 		<AuthLayout
-			title="Download Your Recovery Key"
-			description="This is a critical step to ensure you can recover your backups"
+			title="Descargue su Clave de Recuperación"
+			description="Este es un paso crítico para asegurar que pueda recuperar sus respaldos"
 		>
 			<Alert variant="warning" className="mb-6">
 				<AlertTriangle className="size-5" />
-				<AlertTitle>Important: Save This File Securely</AlertTitle>
+				<AlertTitle>Importante: Guarde este archivo de forma segura</AlertTitle>
 				<AlertDescription>
-					Your Restic password is essential for recovering your backup data. If you lose access to this server without
-					this file, your backups will be unrecoverable. Store it in a password manager or encrypted storage.
+					Su contraseña de Restic es esencial para recuperar los datos de sus respaldos. Si pierde el acceso a este servidor sin
+					este archivo, sus respaldos serán irrecuperables. Guárdelo en un gestor de contraseñas o almacenamiento cifrado.
 				</AlertDescription>
 			</Alert>
 
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="password">Confirm Your Password</Label>
+					<Label htmlFor="password">Confirme su contraseña</Label>
 					<Input
 						id="password"
 						type="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						placeholder="Enter your password"
+						placeholder="Introduzca su contraseña"
 						required
 						disabled={downloadResticPassword.isPending}
 					/>
-					<p className="text-xs text-muted-foreground">Enter your account password to download the recovery key</p>
+					<p className="text-xs text-muted-foreground">Introduzca la contraseña de su cuenta para descargar la clave de recuperación</p>
 				</div>
 
 				<div className="flex flex-col gap-2">
 					<Button type="submit" loading={downloadResticPassword.isPending} className="w-full">
 						<Download size={16} className="mr-2" />
-						Download Recovery Key
+						Descargar clave de recuperación
 					</Button>
 				</div>
 			</form>

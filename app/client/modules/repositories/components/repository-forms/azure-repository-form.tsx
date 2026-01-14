@@ -27,7 +27,7 @@ export const AzureRepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="my-backup-container" {...field} />
 						</FormControl>
-						<FormDescription>Azure Blob Storage container name for storing backups.</FormDescription>
+						<FormDescription>Nombre del container de Azure Blob Storage para almacenar las copias de seguridad.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -37,11 +37,11 @@ export const AzureRepositoryForm = ({ form }: Props) => {
 				name="accountName"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Account Name</FormLabel>
+						<FormLabel>Nombre de Cuenta</FormLabel>
 						<FormControl>
 							<Input placeholder="mystorageaccount" {...field} />
 						</FormControl>
-						<FormDescription>Azure Storage account name.</FormDescription>
+						<FormDescription>Nombre de la cuenta de Azure Storage.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -51,11 +51,11 @@ export const AzureRepositoryForm = ({ form }: Props) => {
 				name="accountKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Account Key</FormLabel>
+						<FormLabel>Clave de Cuenta</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>Azure Storage account key for authentication.</FormDescription>
+						<FormDescription>Clave de la cuenta de Azure Storage para autenticación.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -65,11 +65,11 @@ export const AzureRepositoryForm = ({ form }: Props) => {
 				name="endpointSuffix"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Endpoint Suffix (Optional)</FormLabel>
+						<FormLabel>Sufijo de Endpoint (Opcional)</FormLabel>
 						<FormControl>
 							<Input placeholder="core.windows.net" {...field} />
 						</FormControl>
-						<FormDescription>Custom Azure endpoint suffix (defaults to core.windows.net).</FormDescription>
+						<FormDescription>Sufijo de endpoint Azure personalizado (predeterminado: core.windows.net).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

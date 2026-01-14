@@ -28,7 +28,7 @@ export const BackupCodesDialog = ({ open, onOpenChange }: BackupCodesDialogProps
 		e.preventDefault();
 
 		if (!password) {
-			toast.error("Password is required");
+			toast.error("La contraseña es obligatoria");
 			return;
 		}
 
@@ -46,13 +46,13 @@ export const BackupCodesDialog = ({ open, onOpenChange }: BackupCodesDialogProps
 
 		if (error) {
 			console.error(error);
-			toast.error("Failed to generate backup codes", { description: error.message });
+			toast.error("Error al generar códigos de recuperación", { description: error.message });
 			return;
 		}
 
 		setBackupCodes(data.backupCodes);
 		setPassword("");
-		toast.success("New backup codes generated successfully");
+		toast.success("Nuevos códigos de recuperación generados correctamente");
 	};
 
 	const handleClose = () => {
@@ -67,10 +67,10 @@ export const BackupCodesDialog = ({ open, onOpenChange }: BackupCodesDialogProps
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Backup Codes</DialogTitle>
+					<DialogTitle>Códigos de recuperación</DialogTitle>
 					<DialogDescription>
-						Use these codes to access your account if you lose access to your authenticator app. Each code can only be
-						used once.
+						Use estos códigos para acceder a su cuenta si pierde el acceso a su aplicación de autenticación. Cada código solo puede
+						usarse una vez.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-4 py-4">
@@ -87,26 +87,26 @@ export const BackupCodesDialog = ({ open, onOpenChange }: BackupCodesDialogProps
 					) : (
 						<form onSubmit={handleGenerate} className="space-y-4">
 							<div className="space-y-2">
-								<Label htmlFor="backup-codes-password">Your password</Label>
+								<Label htmlFor="backup-codes-password">Su contraseña</Label>
 								<Input
 									id="backup-codes-password"
 									type="password"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									placeholder="Enter your password"
+									placeholder="Introduzca su contraseña"
 									required
 								/>
 							</div>
 							<Button type="submit" loading={isGenerating} className="w-full">
 								<RefreshCw className="h-4 w-4 mr-2" />
-								Generate new codes
+								Generar nuevos códigos
 							</Button>
 						</form>
 					)}
 				</div>
 				<DialogFooter>
 					<Button type="button" onClick={handleClose}>
-						Close
+						Cerrar
 					</Button>
 				</DialogFooter>
 			</DialogContent>

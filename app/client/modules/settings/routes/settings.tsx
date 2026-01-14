@@ -20,18 +20,19 @@ import { Label } from "~/client/components/ui/label";
 import { authClient } from "~/client/lib/auth-client";
 import { appContext } from "~/context";
 import { TwoFactorSection } from "../components/two-factor-section";
+import { AutostartSection } from "../components/autostart-section";
 import type { Route } from "./+types/settings";
 
 export const handle = {
-	breadcrumb: () => [{ label: "Settings" }],
+	breadcrumb: () => [{ label: "Configuración" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Settings" },
+		{ title: "C3i Backup ONE - Configuración" },
 		{
 			name: "description",
-			content: "Manage your account settings and preferences.",
+			content: "Gestione la configuración y preferencias de su cuenta.",
 		},
 	];
 }
@@ -59,7 +60,7 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 				},
 				onError: ({ error }) => {
 					console.error(error);
-					toast.error("Logout failed", { description: error.message });
+					toast.error("Error al cerrar sesión", { description: error.message });
 				},
 			},
 		});
@@ -78,12 +79,12 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			document.body.removeChild(a);
 			window.URL.revokeObjectURL(url);
 
-			toast.success("Restic password file downloaded successfully");
+			toast.success("Archivo de contraseña Restic descargado con éxito");
 			setDownloadDialogOpen(false);
 			setDownloadPassword("");
 		},
 		onError: (error) => {
-			toast.error("Failed to download Restic password", {
+			toast.error("Error al descargar la contraseña Restic", {
 				description: error.message,
 			});
 		},
@@ -93,12 +94,12 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 		e.preventDefault();
 
 		if (newPassword !== confirmPassword) {
-			toast.error("Passwords do not match");
+			toast.error("Las contraseñas no coinciden");
 			return;
 		}
 
 		if (newPassword.length < 8) {
-			toast.error("Password must be at least 8 characters long");
+			toast.error("La contraseña debe tener al menos 8 caracteres");
 			return;
 		}
 
@@ -108,13 +109,13 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			revokeOtherSessions: true,
 			fetchOptions: {
 				onSuccess: () => {
-					toast.success("Password changed successfully. You will be logged out.");
+					toast.success("Contraseña cambiada con éxito. Su sesión se cerrará.");
 					setTimeout(() => {
 						void handleLogout();
 					}, 1500);
 				},
 				onError: ({ error }) => {
-					toast.error("Failed to change password", {
+					toast.error("Error al cambiar la contraseña", {
 						description: error.message,
 					});
 				},
@@ -132,7 +133,7 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 		e.preventDefault();
 
 		if (!downloadPassword) {
-			toast.error("Password is required");
+			toast.error("Se requiere la contraseña");
 			return;
 		}
 
@@ -148,13 +149,13 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			<div className="border-b border-border/50 bg-card-header p-6">
 				<CardTitle className="flex items-center gap-2">
 					<User className="size-5" />
-					Account Information
+					Información de la cuenta
 				</CardTitle>
-				<CardDescription className="mt-1.5">Your account details</CardDescription>
+				<CardDescription className="mt-1.5">Detalles de su cuenta</CardDescription>
 			</div>
 			<CardContent className="p-6 space-y-4">
 				<div className="space-y-2">
-					<Label>Username</Label>
+					<Label>Nombre de usuario</Label>
 					<Input value={loaderData.user?.username || ""} disabled className="max-w-md" />
 				</div>
 				{/* <div className="space-y-2"> */}
@@ -166,14 +167,14 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			<div className="border-t border-border/50 bg-card-header p-6">
 				<CardTitle className="flex items-center gap-2">
 					<KeyRound className="size-5" />
-					Change Password
+					Cambiar contraseña
 				</CardTitle>
-				<CardDescription className="mt-1.5">Update your password to keep your account secure</CardDescription>
+				<CardDescription className="mt-1.5">Actualice su contraseña para mantener su cuenta segura</CardDescription>
 			</div>
 			<CardContent className="p-6">
 				<form onSubmit={handleChangePassword} className="space-y-4">
 					<div className="space-y-2">
-						<Label htmlFor="current-password">Current Password</Label>
+						<Label htmlFor="current-password">Contraseña actual</Label>
 						<Input
 							id="current-password"
 							type="password"
@@ -184,7 +185,7 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="new-password">New Password</Label>
+						<Label htmlFor="new-password">Nueva contraseña</Label>
 						<Input
 							id="new-password"
 							type="password"
@@ -194,10 +195,10 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 							required
 							minLength={8}
 						/>
-						<p className="text-xs text-muted-foreground">Must be at least 8 characters long</p>
+						<p className="text-xs text-muted-foreground">Debe tener al menos 8 caracteres</p>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="confirm-password">Confirm New Password</Label>
+						<Label htmlFor="confirm-password">Confirmar nueva contraseña</Label>
 						<Input
 							id="confirm-password"
 							type="password"
@@ -210,7 +211,7 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 					</div>
 					<Button type="submit" loading={isChangingPassword} className="mt-4">
 						<KeyRound className="h-4 w-4 mr-2" />
-						Change Password
+						Cambiar contraseña
 					</Button>
 				</form>
 			</CardContent>
@@ -218,41 +219,41 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			<div className="border-t border-border/50 bg-card-header p-6">
 				<CardTitle className="flex items-center gap-2">
 					<Download className="size-5" />
-					Backup Recovery Key
+					Clave de recuperación de copias de seguridad
 				</CardTitle>
-				<CardDescription className="mt-1.5">Download your recovery key for Restic backups</CardDescription>
+				<CardDescription className="mt-1.5">Descargue su clave de recuperación para copias de seguridad Restic</CardDescription>
 			</div>
 			<CardContent className="p-6 space-y-4">
 				<p className="text-sm text-muted-foreground max-w-2xl">
-					This file contains the encryption password used by Restic to secure your backups. Store it in a safe place
-					(like a password manager or encrypted storage). If you lose access to this server, you'll need this file to
-					recover your backup data.
+					Este archivo contiene la contraseña de cifrado utilizada por Restic para proteger sus copias de seguridad. Guárdelo en un lugar seguro
+					(como un gestor de contraseñas o almacenamiento cifrado). Si pierde el acceso a este servidor, necesitará este archivo para
+					recuperar sus datos de copias de seguridad.
 				</p>
 
 				<Dialog open={downloadDialogOpen} onOpenChange={setDownloadDialogOpen}>
 					<DialogTrigger asChild>
 						<Button variant="outline">
 							<Download size={16} className="mr-2" />
-							Download recovery key
+							Descargar clave de recuperación
 						</Button>
 					</DialogTrigger>
 					<DialogContent>
 						<form onSubmit={handleDownloadResticPassword}>
 							<DialogHeader>
-								<DialogTitle>Download Recovery Key</DialogTitle>
+								<DialogTitle>Descargar clave de recuperación</DialogTitle>
 								<DialogDescription>
-									For security reasons, please enter your account password to download the recovery key file.
+									Por razones de seguridad, introduzca la contraseña de su cuenta para descargar el archivo de clave de recuperación.
 								</DialogDescription>
 							</DialogHeader>
 							<div className="space-y-4 py-4">
 								<div className="space-y-2">
-									<Label htmlFor="download-password">Your Password</Label>
+									<Label htmlFor="download-password">Su contraseña</Label>
 									<Input
 										id="download-password"
 										type="password"
 										value={downloadPassword}
 										onChange={(e) => setDownloadPassword(e.target.value)}
-										placeholder="Enter your password"
+										placeholder="Introduzca su contraseña"
 										required
 									/>
 								</div>
@@ -267,11 +268,11 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 									}}
 								>
 									<X className="h-4 w-4 mr-2" />
-									Cancel
+									Cancelar
 								</Button>
 								<Button type="submit" loading={downloadResticPassword.isPending}>
 									<Download className="h-4 w-4 mr-2" />
-									Download
+									Descargar
 								</Button>
 							</DialogFooter>
 						</form>
@@ -280,6 +281,8 @@ export default function Settings({ loaderData }: Route.ComponentProps) {
 			</CardContent>
 
 			<TwoFactorSection twoFactorEnabled={loaderData.user?.twoFactorEnabled} />
+
+		<AutostartSection />
 		</Card>
 	);
 }

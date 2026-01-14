@@ -17,11 +17,11 @@ export const NtfyForm = ({ form }: Props) => {
 				name="serverUrl"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Server URL (Optional)</FormLabel>
+						<FormLabel>URL del servidor (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="https://ntfy.example.com" />
 						</FormControl>
-						<FormDescription>Leave empty to use ntfy.sh public service.</FormDescription>
+						<FormDescription>Déjelo vacío para usar el servicio público ntfy.sh.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -31,11 +31,11 @@ export const NtfyForm = ({ form }: Props) => {
 				name="topic"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Topic</FormLabel>
+						<FormLabel>Tema</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="c3i-backup-one-backups" />
 						</FormControl>
-						<FormDescription>The ntfy topic name to publish to.</FormDescription>
+						<FormDescription>El nombre del tema de ntfy en el que publicar.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -45,11 +45,11 @@ export const NtfyForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Username (Optional)</FormLabel>
+						<FormLabel>Nombre de usuario (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="username" />
 						</FormControl>
-						<FormDescription>Username for server authentication, if required.</FormDescription>
+						<FormDescription>Nombre de usuario para la autenticación del servidor, si es necesario.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -59,11 +59,11 @@ export const NtfyForm = ({ form }: Props) => {
 				name="password"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Password (Optional)</FormLabel>
+						<FormLabel>Contraseña (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="••••••••" />
 						</FormControl>
-						<FormDescription>Password for server authentication, if required.</FormDescription>
+						<FormDescription>Contraseña para la autenticación del servidor, si es necesario.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -73,12 +73,12 @@ export const NtfyForm = ({ form }: Props) => {
 				name="accessToken"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Access token (Optional)</FormLabel>
+						<FormLabel>Token de acceso (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="••••••••" />
 						</FormControl>
 						<FormDescription>
-							Access token for server authentication. Will take precedence over username/password if set.
+							Token de acceso para la autenticación del servidor. Tendrá prioridad sobre el nombre de usuario/contraseña si está establecido.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>
@@ -89,19 +89,19 @@ export const NtfyForm = ({ form }: Props) => {
 				name="priority"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Priority</FormLabel>
+						<FormLabel>Prioridad</FormLabel>
 						<Select onValueChange={field.onChange} defaultValue={String(field.value)} value={String(field.value)}>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select priority" />
+									<SelectValue placeholder="Seleccione la prioridad" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="max">Max (5)</SelectItem>
-								<SelectItem value="high">High (4)</SelectItem>
-								<SelectItem value="default">Default (3)</SelectItem>
-								<SelectItem value="low">Low (2)</SelectItem>
-								<SelectItem value="min">Min (1)</SelectItem>
+								<SelectItem value="max">Máxima (5)</SelectItem>
+								<SelectItem value="high">Alta (4)</SelectItem>
+								<SelectItem value="default">Predeterminada (3)</SelectItem>
+								<SelectItem value="low">Baja (2)</SelectItem>
+								<SelectItem value="min">Mínima (1)</SelectItem>
 							</SelectContent>
 						</Select>
 						<FormMessage />

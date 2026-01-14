@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Toaster } from "./client/components/ui/sonner";
-import { useServerEvents } from "./client/hooks/use-server-events";
+import { ServerEventsProvider } from "./client/contexts/server-events-context";
 import { client } from "./client/api-client/client.gen";
 import { isTauri, waitForBackend } from "./client/lib/tauri";
 
@@ -86,8 +86,6 @@ export default function App() {
 		}
 	}, []);
 
-	useServerEvents();
-
 	if (error) {
 		return (
 			<div className="flex items-center justify-center min-h-screen bg-background">
@@ -110,7 +108,11 @@ export default function App() {
 		);
 	}
 
-	return <Outlet />;
+	return (
+		<ServerEventsProvider>
+			<Outlet />
+		</ServerEventsProvider>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

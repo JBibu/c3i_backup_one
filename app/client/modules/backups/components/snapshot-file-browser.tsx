@@ -88,10 +88,10 @@ export const SnapshotFileBrowser = (props: Props) => {
 				<CardHeader>
 					<div className="flex items-start justify-between">
 						<div>
-							<CardTitle>File Browser</CardTitle>
+							<CardTitle>Explorador de archivos</CardTitle>
 							<CardDescription
 								className={cn({ hidden: !snapshot.time })}
-							>{`Viewing snapshot from ${formatDateTime(snapshot?.time)}`}</CardDescription>
+							>{`Visualizando Snapshot del ${formatDateTime(snapshot?.time)}`}</CardDescription>
 						</div>
 						<div className="flex gap-2">
 							<Link
@@ -103,7 +103,7 @@ export const SnapshotFileBrowser = (props: Props) => {
 								className={buttonVariants({ variant: "primary", size: "sm" })}
 							>
 								<RotateCcw className="h-4 w-4" />
-								Restore
+								Restaurar
 							</Link>
 							{onDeleteSnapshot && (
 								<Button
@@ -114,7 +114,7 @@ export const SnapshotFileBrowser = (props: Props) => {
 									loading={isDeletingSnapshot}
 								>
 									<Trash2 className="h-4 w-4 mr-2" />
-									{isDeletingSnapshot ? "Deleting..." : "Delete Snapshot"}
+									{isDeletingSnapshot ? "Eliminando..." : "Eliminar Snapshot"}
 								</Button>
 							)}
 						</div>
@@ -123,14 +123,14 @@ export const SnapshotFileBrowser = (props: Props) => {
 				<CardContent className="flex-1 overflow-hidden flex flex-col p-0">
 					{fileBrowser.isLoading && (
 						<div className="flex items-center justify-center flex-1">
-							<p className="text-muted-foreground">Loading files...</p>
+							<p className="text-muted-foreground">Cargando archivos...</p>
 						</div>
 					)}
 
 					{fileBrowser.isEmpty && (
 						<div className="flex flex-col items-center justify-center flex-1 text-center p-8">
 							<FileIcon className="w-12 h-12 text-muted-foreground/50 mb-4" />
-							<p className="text-muted-foreground">No files in this snapshot</p>
+							<p className="text-muted-foreground">No hay archivos en este Snapshot</p>
 						</div>
 					)}
 

@@ -22,7 +22,7 @@ export const PathSelector = ({ value, onChange }: Props) => {
 					selectedPath={value}
 				/>
 				<Button type="button" variant="ghost" size="sm" onClick={() => setShowBrowser(false)}>
-					Cancel
+					Cancelar
 				</Button>
 			</div>
 		);
@@ -32,7 +32,7 @@ export const PathSelector = ({ value, onChange }: Props) => {
 		<div className="flex items-center gap-2">
 			<div className="flex-1 text-sm font-mono bg-muted px-3 py-2 rounded-md border">{value}</div>
 			<Button type="button" variant="outline" onClick={() => setShowBrowser(true)} size="sm">
-				Change
+				Cambiar
 			</Button>
 		</div>
 	);

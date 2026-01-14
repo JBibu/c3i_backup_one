@@ -12,15 +12,15 @@ import type { Route } from "./+types/create-volume";
 import { Alert, AlertDescription } from "~/client/components/ui/alert";
 
 export const handle = {
-	breadcrumb: () => [{ label: "Volumes", href: "/volumes" }, { label: "Create" }],
+	breadcrumb: () => [{ label: "Volúmenes", href: "/volumes" }, { label: "Crear" }],
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Create Volume" },
+		{ title: "C3i Backup ONE - Crear Volume" },
 		{
 			name: "description",
-			content: "Create a new storage volume with automatic mounting and health checks.",
+			content: "Cree un nuevo volume de almacenamiento con montaje automático y comprobaciones de salud.",
 		},
 	];
 }
@@ -32,7 +32,7 @@ export default function CreateVolume() {
 	const createVolume = useMutation({
 		...createVolumeMutation(),
 		onSuccess: (data) => {
-			toast.success("Volume created successfully");
+			toast.success("Volume creado correctamente");
 			void navigate(`/volumes/${data.name}`);
 		},
 	});
@@ -54,14 +54,14 @@ export default function CreateVolume() {
 						<div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10">
 							<HardDrive className="w-5 h-5 text-primary" />
 						</div>
-						<CardTitle>Create Volume</CardTitle>
+						<CardTitle>Crear Volume</CardTitle>
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-6">
 					{createVolume.isError && (
 						<Alert variant="destructive">
 							<AlertDescription>
-								<strong>Failed to create volume:</strong>
+								<strong>Error al crear el volume:</strong>
 								<br />
 								{parseError(createVolume.error)?.message}
 							</AlertDescription>
@@ -70,11 +70,11 @@ export default function CreateVolume() {
 					<CreateVolumeForm mode="create" formId={formId} onSubmit={handleSubmit} loading={createVolume.isPending} />
 					<div className="flex justify-end gap-2 pt-4 border-t">
 						<Button type="button" variant="secondary" onClick={() => navigate("/volumes")}>
-							Cancel
+							Cancelar
 						</Button>
 						<Button type="submit" form={formId} loading={createVolume.isPending}>
 							<Plus className="h-4 w-4 mr-2" />
-							Create Volume
+							Crear Volume
 						</Button>
 					</div>
 				</CardContent>

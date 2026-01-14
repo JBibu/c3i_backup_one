@@ -29,12 +29,12 @@ const mount = async (config: BackendConfig, mountPath: string) => {
 
 	if (config.backend !== "sftp") {
 		logger.error("Provided config is not for SFTP backend");
-		return { status: BACKEND_STATUS.error, error: "Provided config is not for SFTP backend" };
+		return { status: BACKEND_STATUS.error, error: "La configuración proporcionada no es para el backend SFTP" };
 	}
 
 	if (os.platform() !== "linux") {
 		logger.error("SFTP mounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "SFTP mounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El montaje de SFTP solo es compatible con hosts Linux." };
 	}
 
 	const { status } = await checkHealth(mountPath);
@@ -105,8 +105,8 @@ const mount = async (config: BackendConfig, mountPath: string) => {
 		}
 
 		if (result.exitCode !== 0) {
-			const errorMsg = result.stderr.toString() || result.stdout.toString() || "Unknown error";
-			throw new Error(`Failed to mount SFTP volume: ${errorMsg}`);
+			const errorMsg = result.stderr.toString() || result.stdout.toString() || "Error desconocido";
+			throw new Error(`Error al montar el volumen SFTP: ${errorMsg}`);
 		}
 
 		logger.info(`SFTP volume at ${mountPath} mounted successfully.`);
@@ -125,7 +125,7 @@ const mount = async (config: BackendConfig, mountPath: string) => {
 const unmount = async (mountPath: string) => {
 	if (os.platform() !== "linux") {
 		logger.error("SFTP unmounting is only supported on Linux hosts.");
-		return { status: BACKEND_STATUS.error, error: "SFTP unmounting is only supported on Linux hosts." };
+		return { status: BACKEND_STATUS.error, error: "El desmontaje de SFTP solo es compatible con hosts Linux." };
 	}
 
 	const run = async () => {
@@ -166,7 +166,7 @@ const checkHealth = async (mountPath: string) => {
 	if (mount.fstype !== "fuse.sshfs") {
 		return {
 			status: BACKEND_STATUS.error,
-			error: `Invalid filesystem type: ${mount.fstype} (expected fuse.sshfs)`,
+			error: `Tipo de sistema de archivos no válido: ${mount.fstype} (se esperaba fuse.sshfs)`,
 		};
 	}
 

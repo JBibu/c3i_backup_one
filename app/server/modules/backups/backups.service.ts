@@ -77,7 +77,7 @@ const getSchedule = async (scheduleId: number) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	return schedule;
@@ -85,7 +85,7 @@ const getSchedule = async (scheduleId: number) => {
 
 const createSchedule = async (data: CreateBackupScheduleBody) => {
 	if (!cron.validate(data.cronExpression)) {
-		throw new BadRequestError("Invalid cron expression");
+		throw new BadRequestError("Expresión cron inválida");
 	}
 
 	const existingName = await db.query.backupSchedulesTable.findFirst({
@@ -93,7 +93,7 @@ const createSchedule = async (data: CreateBackupScheduleBody) => {
 	});
 
 	if (existingName) {
-		throw new ConflictError("A backup schedule with this name already exists");
+		throw new ConflictError("Ya existe un backup schedule con este nombre");
 	}
 
 	const volume = await db.query.volumesTable.findFirst({
@@ -101,7 +101,7 @@ const createSchedule = async (data: CreateBackupScheduleBody) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const repository = await db.query.repositoriesTable.findFirst({
@@ -109,7 +109,7 @@ const createSchedule = async (data: CreateBackupScheduleBody) => {
 	});
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const nextBackupAt = calculateNextRun(data.cronExpression);
@@ -133,7 +133,7 @@ const createSchedule = async (data: CreateBackupScheduleBody) => {
 		.returning();
 
 	if (!newSchedule) {
-		throw new Error("Failed to create backup schedule");
+		throw new Error("Error al crear backup schedule");
 	}
 
 	return newSchedule;
@@ -145,11 +145,11 @@ const updateSchedule = async (scheduleId: number, data: UpdateBackupScheduleBody
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	if (data.cronExpression && !cron.validate(data.cronExpression)) {
-		throw new BadRequestError("Invalid cron expression");
+		throw new BadRequestError("Expresión cron inválida");
 	}
 
 	if (data.name) {
@@ -158,7 +158,7 @@ const updateSchedule = async (scheduleId: number, data: UpdateBackupScheduleBody
 		});
 
 		if (existingName) {
-			throw new ConflictError("A backup schedule with this name already exists");
+			throw new ConflictError("Ya existe un backup schedule con este nombre");
 		}
 	}
 
@@ -167,7 +167,7 @@ const updateSchedule = async (scheduleId: number, data: UpdateBackupScheduleBody
 	});
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	const cronExpression = data.cronExpression ?? schedule.cronExpression;
@@ -180,7 +180,7 @@ const updateSchedule = async (scheduleId: number, data: UpdateBackupScheduleBody
 		.returning();
 
 	if (!updated) {
-		throw new Error("Failed to update backup schedule");
+		throw new Error("Error al actualizar backup schedule");
 	}
 
 	return updated;
@@ -192,7 +192,7 @@ const deleteSchedule = async (scheduleId: number) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	await db.delete(backupSchedulesTable).where(eq(backupSchedulesTable.id, scheduleId));
@@ -204,7 +204,7 @@ const executeBackup = async (scheduleId: number, manual = false) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	if (!schedule.enabled && !manual) {
@@ -222,7 +222,7 @@ const executeBackup = async (scheduleId: number, manual = false) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const repository = await db.query.repositoriesTable.findFirst({
@@ -230,11 +230,11 @@ const executeBackup = async (scheduleId: number, manual = false) => {
 	});
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	if (volume.status !== "mounted") {
-		throw new BadRequestError("Volume is not mounted");
+		throw new BadRequestError("El Volume no está montado");
 	}
 
 	logger.info(`Starting backup ${schedule.name} for volume ${volume.name} to repository ${repository.name}`);
@@ -442,13 +442,13 @@ const stopBackup = async (scheduleId: number) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	try {
 		const abortController = runningBackups.get(scheduleId);
 		if (!abortController) {
-			throw new ConflictError("No backup is currently running for this schedule");
+			throw new ConflictError("No hay ningún backup en ejecución para este schedule");
 		}
 
 		logger.info(`Stopping backup for schedule ${scheduleId}`);
@@ -459,7 +459,7 @@ const stopBackup = async (scheduleId: number) => {
 			.update(backupSchedulesTable)
 			.set({
 				lastBackupStatus: "warning",
-				lastBackupError: "Backup was stopped by user",
+				lastBackupError: "El backup fue detenido por el usuario",
 				updatedAt: Date.now(),
 			})
 			.where(eq(backupSchedulesTable.id, scheduleId));
@@ -472,11 +472,11 @@ const runForget = async (scheduleId: number, repositoryId?: string) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	if (!schedule.retentionPolicy) {
-		throw new BadRequestError("No retention policy configured for this schedule");
+		throw new BadRequestError("No hay una política de retención configurada para este schedule");
 	}
 
 	const repository = await db.query.repositoriesTable.findFirst({
@@ -484,7 +484,7 @@ const runForget = async (scheduleId: number, repositoryId?: string) => {
 	});
 
 	if (!repository) {
-		throw new NotFoundError("Repository not found");
+		throw new NotFoundError("Repository no encontrado");
 	}
 
 	logger.info(`running retention policy (forget) for schedule ${scheduleId}`);
@@ -505,7 +505,7 @@ const getMirrors = async (scheduleId: number) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	const mirrors = await db.query.backupScheduleMirrorsTable.findMany({
@@ -523,12 +523,12 @@ const updateMirrors = async (scheduleId: number, data: UpdateScheduleMirrorsBody
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	for (const mirror of data.mirrors) {
 		if (mirror.repositoryId === schedule.repositoryId) {
-			throw new BadRequestError("Cannot add the primary repository as a mirror");
+			throw new BadRequestError("No se puede agregar el Repository principal como mirror");
 		}
 
 		const repo = await db.query.repositoriesTable.findFirst({
@@ -536,7 +536,7 @@ const updateMirrors = async (scheduleId: number, data: UpdateScheduleMirrorsBody
 		});
 
 		if (!repo) {
-			throw new NotFoundError(`Repository ${mirror.repositoryId} not found`);
+			throw new NotFoundError(`Repository ${mirror.repositoryId} no encontrado`);
 		}
 
 		const compatibility = await checkMirrorCompatibility(schedule.repository.config, repo.config, repo.id);
@@ -590,7 +590,7 @@ const copyToMirrors = async (
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	const mirrors = await db.query.backupScheduleMirrorsTable.findMany({
@@ -677,7 +677,7 @@ const getMirrorCompatibility = async (scheduleId: number) => {
 	});
 
 	if (!schedule) {
-		throw new NotFoundError("Backup schedule not found");
+		throw new NotFoundError("Backup schedule no encontrado");
 	}
 
 	const allRepositories = await db.query.repositoriesTable.findMany();
@@ -693,7 +693,7 @@ const getMirrorCompatibility = async (scheduleId: number) => {
 const reorderSchedules = async (scheduleIds: number[]) => {
 	const uniqueIds = new Set(scheduleIds);
 	if (uniqueIds.size !== scheduleIds.length) {
-		throw new BadRequestError("Duplicate schedule IDs in reorder request");
+		throw new BadRequestError("IDs de schedule duplicados en la solicitud de reordenamiento");
 	}
 
 	const existingSchedules = await db.query.backupSchedulesTable.findMany({
@@ -703,7 +703,7 @@ const reorderSchedules = async (scheduleIds: number[]) => {
 
 	for (const id of scheduleIds) {
 		if (!existingIds.has(id)) {
-			throw new NotFoundError(`Backup schedule with ID ${id} not found`);
+			throw new NotFoundError(`Backup schedule con ID ${id} no encontrado`);
 		}
 	}
 

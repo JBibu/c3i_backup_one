@@ -29,7 +29,7 @@ import { Loader2, Stethoscope, Trash2 } from "lucide-react";
 
 export const handle = {
 	breadcrumb: (match: Route.MetaArgs) => [
-		{ label: "Repositories", href: "/repositories" },
+		{ label: "Repositorios", href: "/repositories" },
 		{ label: match.loaderData?.name || match.params.id },
 	],
 };
@@ -39,7 +39,7 @@ export function meta({ params, loaderData }: Route.MetaArgs) {
 		{ title: `C3i Backup ONE - ${loaderData?.name || params.id}` },
 		{
 			name: "description",
-			content: "View repository configuration, status, and snapshots.",
+			content: "Ver configuración del repository, estado y snapshots.",
 		},
 	];
 }
@@ -73,11 +73,11 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 	const deleteRepo = useMutation({
 		...deleteRepositoryMutation(),
 		onSuccess: () => {
-			toast.success("Repository deleted successfully");
+			toast.success("Repository eliminado correctamente");
 			void navigate("/repositories");
 		},
 		onError: (error) => {
-			toast.error("Failed to delete repository", {
+			toast.error("Error al eliminar el repository", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -90,17 +90,17 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 				setShowDoctorResults(true);
 
 				if (data.success) {
-					toast.success("Repository doctor completed successfully");
+					toast.success("Diagnóstico del repository completado correctamente");
 				} else {
-					toast.warning("Doctor completed with some issues", {
-						description: "Check the details for more information",
+					toast.warning("Diagnóstico completado con algunos problemas", {
+						description: "Consulte los detalles para más información",
 						richColors: true,
 					});
 				}
 			}
 		},
 		onError: (error) => {
-			toast.error("Failed to run doctor", {
+			toast.error("Error al ejecutar el diagnóstico", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -114,13 +114,13 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 	const getStepLabel = (step: string) => {
 		switch (step) {
 			case "unlock":
-				return "Unlock Repository";
+				return "Desbloquear Repository";
 			case "check":
-				return "Check Repository";
+				return "Verificar Repository";
 			case "repair_index":
-				return "Repair Index";
+				return "Reparar Índice";
 			case "recheck":
-				return "Re-check Repository";
+				return "Reverificar Repository";
 			default:
 				return step;
 		}
@@ -149,25 +149,25 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 						{doctorMutation.isPending ? (
 							<>
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Running doctor...
+								Ejecutando diagnóstico...
 							</>
 						) : (
 							<>
 								<Stethoscope className="h-4 w-4 mr-2" />
-								Run doctor
+								Ejecutar diagnóstico
 							</>
 						)}
 					</Button>
 					<Button variant="destructive" onClick={() => setShowDeleteConfirm(true)} disabled={deleteRepo.isPending}>
 						<Trash2 className="h-4 w-4 mr-2" />
-						Delete
+						Eliminar
 					</Button>
 				</div>
 			</div>
 
 			<Tabs value={activeTab} onValueChange={(value) => setSearchParams({ tab: value })}>
 				<TabsList className="mb-2">
-					<TabsTrigger value="info">Configuration</TabsTrigger>
+					<TabsTrigger value="info">Configuración</TabsTrigger>
 					<TabsTrigger value="snapshots">Snapshots</TabsTrigger>
 				</TabsList>
 				<TabsContent value="info">
@@ -181,23 +181,23 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 			<AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete repository?</AlertDialogTitle>
+						<AlertDialogTitle>¿Eliminar repository?</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete the repository <strong>{data.name}</strong>? This will not remove the
-							actual data from the backend storage, only the repository configuration will be deleted.
+							¿Está seguro de que desea eliminar el repository <strong>{data.name}</strong>? Esto no eliminará los
+							datos reales del almacenamiento backend, solo se eliminará la configuración del repository.
 							<br />
 							<br />
-							All backup schedules associated with this repository will also be removed.
+							Todos los programas de copia de seguridad asociados con este repository también se eliminarán.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<div className="flex gap-3 justify-end">
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleConfirmDelete}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
 							<Trash2 className="h-4 w-4 mr-2" />
-							Delete repository
+							Eliminar repository
 						</AlertDialogAction>
 					</div>
 				</AlertDialogContent>
@@ -206,8 +206,8 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 			<AlertDialog open={showDoctorResults} onOpenChange={setShowDoctorResults}>
 				<AlertDialogContent className="max-w-2xl">
 					<AlertDialogHeader>
-						<AlertDialogTitle>Doctor results</AlertDialogTitle>
-						<AlertDialogDescription>Repository doctor operation completed</AlertDialogDescription>
+						<AlertDialogTitle>Resultados del diagnóstico</AlertDialogTitle>
+						<AlertDialogDescription>Operación de diagnóstico del repository completada</AlertDialogDescription>
 					</AlertDialogHeader>
 
 					{doctorMutation.data && (
@@ -228,7 +228,7 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 												"bg-yellow-500/20 text-yellow-500": !step.success,
 											})}
 										>
-											{step.success ? "Success" : "Warning"}
+											{step.success ? "Éxito" : "Advertencia"}
 										</span>
 									</div>
 									{step.error && <p className="text-xs text-red-500 mt-1">{step.error}</p>}
@@ -238,7 +238,7 @@ export default function RepositoryDetailsPage({ loaderData }: Route.ComponentPro
 					)}
 
 					<div className="flex justify-end">
-						<Button onClick={() => setShowDoctorResults(false)}>Close</Button>
+						<Button onClick={() => setShowDoctorResults(false)}>Cerrar</Button>
 					</div>
 				</AlertDialogContent>
 			</AlertDialog>

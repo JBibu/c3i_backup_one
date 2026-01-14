@@ -16,12 +16,12 @@ export function StorageChart({ statfs }: Props) {
 	const chartData = React.useMemo(
 		() => [
 			{
-				name: "Used",
+				name: "Usado",
 				value: statfs.used,
 				fill: "#ff543a",
 			},
 			{
-				name: "Free",
+				name: "Libre",
 				value: statfs.free,
 				fill: "lightgray",
 			},
@@ -43,12 +43,12 @@ export function StorageChart({ statfs }: Props) {
 				<CardHeader className="items-center pb-0">
 					<CardTitle className="flex items-center gap-2">
 						<HardDrive className="h-4 w-4" />
-						Storage Usage
+						Uso del almacenamiento
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="flex-1 pb-10 flex flex-col items-center justify-center text-center">
 					<Unplug className="mb-4 h-5 w-5 text-muted-foreground" />
-					<p className="text-muted-foreground">No storage data available. Mount the volume to see usage statistics.</p>
+					<p className="text-muted-foreground">No hay datos de almacenamiento disponibles. Monte el volume para ver las estadísticas de uso.</p>
 				</CardContent>
 			</Card>
 		);
@@ -59,7 +59,7 @@ export function StorageChart({ statfs }: Props) {
 			<CardHeader className="items-center pb-0">
 				<CardTitle className="flex items-center gap-2">
 					<HardDrive className="h-4 w-4" />
-					Storage Usage
+					Uso del almacenamiento
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex-1 pb-0">
@@ -85,7 +85,7 @@ export function StorageChart({ statfs }: Props) {
 														{usagePercentage}%
 													</tspan>
 													<tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
-														Used
+														Usado
 													</tspan>
 												</text>
 											);
@@ -100,7 +100,7 @@ export function StorageChart({ statfs }: Props) {
 							<div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
 								<div className="flex items-center gap-3">
 									<HardDrive className="h-4 w-4 text-muted-foreground" />
-									<span className="font-medium">Total capacity</span>
+									<span className="font-medium">Capacidad total</span>
 								</div>
 								<ByteSize bytes={statfs.total} className="font-mono text-sm" />
 							</div>
@@ -108,7 +108,7 @@ export function StorageChart({ statfs }: Props) {
 							<div className="flex items-center justify-between p-3 rounded-lg bg-strong-accent/10">
 								<div className="flex items-center gap-3">
 									<div className="h-4 w-4 rounded-full bg-strong-accent" />
-									<span className="font-medium">Used space</span>
+									<span className="font-medium">Espacio usado</span>
 								</div>
 								<div className="text-right">
 									<ByteSize bytes={statfs.used} className="font-mono text-sm" />
@@ -118,7 +118,7 @@ export function StorageChart({ statfs }: Props) {
 							<div className="flex items-center justify-between p-3 rounded-lg bg-primary/10">
 								<div className="flex items-center gap-3">
 									<div className="h-4 w-4 rounded-full bg-primary" />
-									<span className="font-medium">Free space</span>
+									<span className="font-medium">Espacio libre</span>
 								</div>
 								<div className="text-right">
 									<ByteSize bytes={statfs.free} className="font-mono text-sm" />

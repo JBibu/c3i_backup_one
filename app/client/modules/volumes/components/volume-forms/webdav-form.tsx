@@ -23,11 +23,11 @@ export const WebDAVForm = ({ form }: Props) => {
 				name="server"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Server</FormLabel>
+						<FormLabel>Servidor</FormLabel>
 						<FormControl>
 							<Input placeholder="example.com" {...field} />
 						</FormControl>
-						<FormDescription>WebDAV server hostname or IP address.</FormDescription>
+						<FormDescription>Nombre del host o dirección IP del servidor WebDAV.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -37,11 +37,11 @@ export const WebDAVForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path</FormLabel>
+						<FormLabel>Ruta</FormLabel>
 						<FormControl>
 							<Input placeholder="/webdav" {...field} />
 						</FormControl>
-						<FormDescription>Path to the WebDAV directory on the server.</FormDescription>
+						<FormDescription>Ruta al directorio WebDAV en el servidor.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -51,11 +51,11 @@ export const WebDAVForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Username (Optional)</FormLabel>
+						<FormLabel>Nombre de usuario (Opcional)</FormLabel>
 						<FormControl>
 							<Input placeholder="admin" {...field} />
 						</FormControl>
-						<FormDescription>Username for WebDAV authentication (optional).</FormDescription>
+						<FormDescription>Nombre de usuario para la autenticación WebDAV (opcional).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -65,11 +65,11 @@ export const WebDAVForm = ({ form }: Props) => {
 				name="password"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Password (Optional)</FormLabel>
+						<FormLabel>Contraseña (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>Password for WebDAV authentication (optional).</FormDescription>
+						<FormDescription>Contraseña para la autenticación WebDAV (opcional).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -89,7 +89,7 @@ export const WebDAVForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(parseInt(e.target.value, 10) || undefined)}
 							/>
 						</FormControl>
-						<FormDescription>WebDAV server port (default: 80 for HTTP, 443 for HTTPS).</FormDescription>
+						<FormDescription>Puerto del servidor WebDAV (predeterminado: 80 para HTTP, 443 para HTTPS).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -100,7 +100,7 @@ export const WebDAVForm = ({ form }: Props) => {
 				defaultValue={false}
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Use SSL/HTTPS</FormLabel>
+						<FormLabel>Utilizar SSL/HTTPS</FormLabel>
 						<FormControl>
 							<div className="flex items-center space-x-2">
 								<input
@@ -109,10 +109,10 @@ export const WebDAVForm = ({ form }: Props) => {
 									onChange={(e) => field.onChange(e.target.checked)}
 									className="rounded border-gray-300"
 								/>
-								<span className="text-sm">Enable HTTPS for secure connections</span>
+								<span className="text-sm">Activar HTTPS para conexiones seguras</span>
 							</div>
 						</FormControl>
-						<FormDescription>Use HTTPS instead of HTTP for secure connections.</FormDescription>
+						<FormDescription>Utilice HTTPS en lugar de HTTP para conexiones seguras.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -123,7 +123,7 @@ export const WebDAVForm = ({ form }: Props) => {
 				defaultValue={false}
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Read-only Mode</FormLabel>
+						<FormLabel>Modo de Solo Lectura</FormLabel>
 						<FormControl>
 							<div className="flex items-center space-x-2">
 								<input
@@ -132,11 +132,11 @@ export const WebDAVForm = ({ form }: Props) => {
 									onChange={(e) => field.onChange(e.target.checked)}
 									className="rounded border-gray-300"
 								/>
-								<span className="text-sm">Mount volume as read-only</span>
+								<span className="text-sm">Montar volumen como solo lectura</span>
 							</div>
 						</FormControl>
 						<FormDescription>
-							Prevent any modifications to the volume. Recommended for backup sources and sensitive data.
+							Evita cualquier modificación al volumen. Recomendado para orígenes de copias de seguridad y datos sensibles.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>

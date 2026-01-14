@@ -31,7 +31,7 @@ export const DirectoryBrowser = ({ onSelectPath, selectedPath }: Props) => {
 		return (
 			<div className="border rounded-lg overflow-hidden">
 				<ScrollArea className="h-64">
-					<div className="text-sm text-gray-500 p-4">Loading directories...</div>
+					<div className="text-sm text-gray-500 p-4">Cargando directorios...</div>
 				</ScrollArea>
 			</div>
 		);
@@ -41,7 +41,7 @@ export const DirectoryBrowser = ({ onSelectPath, selectedPath }: Props) => {
 		return (
 			<div className="border rounded-lg overflow-hidden">
 				<ScrollArea className="h-64">
-					<div className="text-sm text-gray-500 p-4">No subdirectories found</div>
+					<div className="text-sm text-gray-500 p-4">No se encontraron subdirectorios</div>
 				</ScrollArea>
 			</div>
 		);
@@ -65,7 +65,7 @@ export const DirectoryBrowser = ({ onSelectPath, selectedPath }: Props) => {
 
 			{selectedPath && (
 				<div className="bg-muted/50 border-t p-2 text-sm">
-					<div className="font-medium text-muted-foreground">Selected path:</div>
+					<div className="font-medium text-muted-foreground">Ruta seleccionada:</div>
 					<div className="font-mono text-xs break-all">{selectedPath}</div>
 				</div>
 			)}

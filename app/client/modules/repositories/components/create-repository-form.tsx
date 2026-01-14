@@ -105,17 +105,17 @@ export const CreateRepositoryForm = ({
 					name="name"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Name</FormLabel>
+							<FormLabel>Nombre</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="Repository name"
+									placeholder="Nombre del repository"
 									onChange={(e) => field.onChange(e.target.value)}
 									maxLength={32}
 									minLength={2}
 								/>
 							</FormControl>
-							<FormDescription>Unique identifier for the repository.</FormDescription>
+							<FormDescription>Identificador único para el repository.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -129,7 +129,7 @@ export const CreateRepositoryForm = ({
 							<Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Select a backend" />
+										<SelectValue placeholder="Seleccione un backend" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
@@ -143,16 +143,16 @@ export const CreateRepositoryForm = ({
 									<Tooltip>
 										<TooltipTrigger>
 											<SelectItem disabled={!capabilities.rclone} value="rclone">
-												rclone (40+ cloud providers)
+												rclone (40+ proveedores cloud)
 											</SelectItem>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.rclone })}>
-											<p>Setup rclone to use this backend</p>
+											<p>Configure rclone para usar este backend</p>
 										</TooltipContent>
 									</Tooltip>
 								</SelectContent>
 							</Select>
-							<FormDescription>Choose the storage backend for this repository.</FormDescription>
+							<FormDescription>Elija el backend de almacenamiento para este repository.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -163,20 +163,20 @@ export const CreateRepositoryForm = ({
 					name="compressionMode"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Compression Mode</FormLabel>
+							<FormLabel>Modo de Compresión</FormLabel>
 							<Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Select compression mode" />
+										<SelectValue placeholder="Seleccione modo de compresión" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									<SelectItem value="off">Off</SelectItem>
-									<SelectItem value="auto">Auto (fast)</SelectItem>
-									<SelectItem value="max">Max (slower, better compression)</SelectItem>
+									<SelectItem value="off">Desactivado</SelectItem>
+									<SelectItem value="auto">Auto (rápido)</SelectItem>
+									<SelectItem value="max">Máximo (más lento, mejor compresión)</SelectItem>
 								</SelectContent>
 							</Select>
-							<FormDescription>Compression mode for backups stored in this repository.</FormDescription>
+							<FormDescription>Modo de compresión para las copias de seguridad almacenadas en este repository.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -200,8 +200,8 @@ export const CreateRepositoryForm = ({
 								/>
 							</FormControl>
 							<div className="space-y-1">
-								<FormLabel>Import existing repository</FormLabel>
-								<FormDescription>Check this if the repository already exists at the specified location</FormDescription>
+								<FormLabel>Importar repository existente</FormLabel>
+								<FormDescription>Marque esto si el repository ya existe en la ubicación especificada</FormDescription>
 							</div>
 						</FormItem>
 					)}
@@ -209,7 +209,7 @@ export const CreateRepositoryForm = ({
 				{watchedIsExistingRepository && (
 					<>
 						<FormItem>
-							<FormLabel>Repository Password</FormLabel>
+							<FormLabel>Contraseña del Repository</FormLabel>
 							<Select
 								onValueChange={(value) => {
 									setPasswordMode(value as "default" | "custom");
@@ -222,17 +222,17 @@ export const CreateRepositoryForm = ({
 							>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Select password option" />
+										<SelectValue placeholder="Seleccione opción de contraseña" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									<SelectItem value="default">Use the existing recovery key</SelectItem>
-									<SelectItem value="custom">Enter password manually</SelectItem>
+									<SelectItem value="default">Usar la clave de recuperación existente</SelectItem>
+									<SelectItem value="custom">Introducir contraseña manualmente</SelectItem>
 								</SelectContent>
 							</Select>
 							<FormDescription>
-								Choose whether to use C3i Backup ONE's recovery key (which you downloaded when creating your account) or enter
-								a custom password for the existing repository.
+								Elija si desea usar la clave de recuperación de C3i Backup ONE (que descargó al crear su cuenta) o introducir
+								una contraseña personalizada para el repository existente.
 							</FormDescription>
 						</FormItem>
 
@@ -242,16 +242,16 @@ export const CreateRepositoryForm = ({
 								name="customPassword"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Repository Password</FormLabel>
+										<FormLabel>Contraseña del Repository</FormLabel>
 										<FormControl>
 											<SecretInput
-												placeholder="Enter repository password"
+												placeholder="Introduzca la contraseña del repository"
 												value={field.value ?? ""}
 												onChange={field.onChange}
 											/>
 										</FormControl>
 										<FormDescription>
-											The password used to encrypt this repository. It will be stored securely.
+											La contraseña utilizada para cifrar este repository. Se almacenará de forma segura.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -275,7 +275,7 @@ export const CreateRepositoryForm = ({
 				{mode === "update" && (
 					<Button type="submit" className="w-full" loading={loading}>
 						<Save className="h-4 w-4 mr-2" />
-						Save Changes
+						Guardar cambios
 					</Button>
 				)}
 			</form>

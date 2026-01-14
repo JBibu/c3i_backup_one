@@ -43,11 +43,11 @@ export const ScheduleNotificationsConfig = ({ scheduleId, destinations, initialD
 	const updateNotifications = useMutation({
 		...updateScheduleNotificationsMutation(),
 		onSuccess: () => {
-			toast.success("Notification settings saved successfully");
+			toast.success("Configuración de notificaciones guardada correctamente");
 			setHasChanges(false);
 		},
 		onError: (error) => {
-			toast.error("Failed to save notification settings", {
+			toast.error("Error al guardar la configuración de notificaciones", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -153,16 +153,16 @@ export const ScheduleNotificationsConfig = ({ scheduleId, destinations, initialD
 					<div>
 						<CardTitle className="flex items-center gap-2">
 							<Bell className="h-5 w-5" />
-							Notifications
+							Notificaciones
 						</CardTitle>
 						<CardDescription className="hidden @md:block mt-1">
-							Configure which notifications to send for this backup schedule
+							Configure qué notificaciones enviar para esta programación de backup
 						</CardDescription>
 					</div>
 					{!isAddingNew && availableDestinations.length > 0 && (
 						<Button variant="outline" size="sm" onClick={() => setIsAddingNew(true)}>
 							<Plus className="h-4 w-4 mr-2" />
-							Add notification
+							Agregar notificación
 						</Button>
 					)}
 				</div>
@@ -172,7 +172,7 @@ export const ScheduleNotificationsConfig = ({ scheduleId, destinations, initialD
 					<div className="mb-6 flex items-center gap-2 max-w-md">
 						<Select onValueChange={addDestination}>
 							<SelectTrigger className="w-full">
-								<SelectValue placeholder="Select a notification destination..." />
+								<SelectValue placeholder="Seleccione un destino de notificación..." />
 							</SelectTrigger>
 							<SelectContent>
 								{availableDestinations.map((destination) => (
@@ -194,19 +194,19 @@ export const ScheduleNotificationsConfig = ({ scheduleId, destinations, initialD
 				{assignedDestinations.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
 						<Bell className="h-8 w-8 mb-2 opacity-20" />
-						<p className="text-sm">No notifications configured for this schedule.</p>
-						<p className="text-xs mt-1">Click "Add notification" to get started.</p>
+						<p className="text-sm">No hay notificaciones configuradas para esta programación.</p>
+						<p className="text-xs mt-1">Haga clic en "Agregar notificación" para comenzar.</p>
 					</div>
 				) : (
 					<div className="rounded-md border">
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>Destination</TableHead>
-									<TableHead className="text-center w-25">Start</TableHead>
-									<TableHead className="text-center w-25">Success</TableHead>
-									<TableHead className="text-center w-25">Warnings</TableHead>
-									<TableHead className="text-center w-25">Failures</TableHead>
+									<TableHead>Destino</TableHead>
+									<TableHead className="text-center w-25">Inicio</TableHead>
+									<TableHead className="text-center w-25">Éxito</TableHead>
+									<TableHead className="text-center w-25">Advertencias</TableHead>
+									<TableHead className="text-center w-25">Fallos</TableHead>
 									<TableHead className="w-12.5"></TableHead>
 								</TableRow>
 							</TableHeader>

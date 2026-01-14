@@ -14,7 +14,7 @@ const resetPassword = async (username: string, newPassword: string) => {
 	const [user] = await db.select().from(usersTable).where(eq(usersTable.username, username));
 
 	if (!user) {
-		throw new Error(`User "${username}" not found`);
+		throw new Error(`Usuario "${username}" no encontrado`);
 	}
 
 	const newPasswordHash = await hashPassword(newPassword);
@@ -35,11 +35,11 @@ const resetPassword = async (username: string, newPassword: string) => {
 };
 
 export const resetPasswordCommand = new Command("reset-password")
-	.description("Reset password for a user")
-	.option("-u, --username <username>", "Username of the account")
-	.option("-p, --password <password>", "New password for the account")
+	.description("Restablecer contraseña de un usuario")
+	.option("-u, --username <username>", "Nombre de usuario de la cuenta")
+	.option("-p, --password <password>", "Nueva contraseña para la cuenta")
 	.action(async (options) => {
-		console.info("\n🔐 C3i Backup ONE Password Reset\n");
+		console.info("\n🔐 C3i Backup ONE Restablecimiento de Contraseña\n");
 
 		let username = options.username;
 		let newPassword = options.password;
@@ -48,49 +48,49 @@ export const resetPasswordCommand = new Command("reset-password")
 			const users = await listUsers();
 
 			if (users.length === 0) {
-				console.error("❌ No users found in the database.");
-				console.info("   Please create a user first by starting the application.");
+				console.error("❌ No se encontraron usuarios en la base de datos.");
+				console.info("   Por favor, cree un usuario primero iniciando la aplicación.");
 				process.exit(1);
 			}
 
 			username = await select({
-				message: "Select user to reset password for:",
+				message: "Seleccione el usuario para restablecer la contraseña:",
 				choices: users.map((u) => ({ name: u.username, value: u.username })),
 			});
 		}
 
 		if (!newPassword) {
 			newPassword = await password({
-				message: "Enter new password:",
+				message: "Introduzca la nueva contraseña:",
 				mask: "*",
 				validate: (value) => {
 					if (value.length < 8) {
-						return "Password must be at least 8 characters long";
+						return "La contraseña debe tener al menos 8 caracteres";
 					}
 					return true;
 				},
 			});
 
 			const confirmPassword = await password({
-				message: "Confirm new password:",
+				message: "Confirme la nueva contraseña:",
 				mask: "*",
 			});
 
 			if (newPassword !== confirmPassword) {
-				console.error("\n❌ Passwords do not match.");
+				console.error("\n❌ Las contraseñas no coinciden.");
 				process.exit(1);
 			}
 		} else if (newPassword.length < 8) {
-			console.error("\n❌ Password must be at least 8 characters long.");
+			console.error("\n❌ La contraseña debe tener al menos 8 caracteres.");
 			process.exit(1);
 		}
 
 		try {
 			await resetPassword(username, newPassword);
-			console.info(`\n✅ Password for user "${username}" has been reset successfully.`);
-			console.info("   All existing sessions have been invalidated.");
+			console.info(`\n✅ La contraseña del usuario "${username}" ha sido restablecida exitosamente.`);
+			console.info("   Todas las sesiones existentes han sido invalidadas.");
 		} catch (error) {
-			console.error(`\n❌ Failed to reset password: ${toMessage(error)}`);
+			console.error(`\n❌ Error al restablecer la contraseña: ${toMessage(error)}`);
 			process.exit(1);
 		}
 

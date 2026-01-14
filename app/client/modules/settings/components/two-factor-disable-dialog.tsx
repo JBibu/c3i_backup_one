@@ -27,7 +27,7 @@ export const TwoFactorDisableDialog = ({ open, onOpenChange, onSuccess }: TwoFac
 		e.preventDefault();
 
 		if (!password) {
-			toast.error("Password is required");
+			toast.error("La contraseña es obligatoria");
 			return;
 		}
 
@@ -45,11 +45,11 @@ export const TwoFactorDisableDialog = ({ open, onOpenChange, onSuccess }: TwoFac
 
 		if (error) {
 			console.error(error);
-			toast.error("Failed to disable 2FA", { description: error.message });
+			toast.error("Error al deshabilitar 2FA", { description: error.message });
 			return;
 		}
 
-		toast.success("Two-factor authentication disabled successfully");
+		toast.success("Autenticación de dos factores deshabilitada correctamente");
 		handleClose();
 		onSuccess();
 	};
@@ -64,30 +64,30 @@ export const TwoFactorDisableDialog = ({ open, onOpenChange, onSuccess }: TwoFac
 			<DialogContent>
 				<form onSubmit={handleDisable}>
 					<DialogHeader>
-						<DialogTitle>Disable Two-Factor Authentication</DialogTitle>
+						<DialogTitle>Deshabilitar autenticación de dos factores</DialogTitle>
 						<DialogDescription>
-							Are you sure you want to disable 2FA? Your account will be less secure. Enter your password to confirm.
+							¿Está seguro de que desea deshabilitar 2FA? Su cuenta será menos segura. Introduzca su contraseña para confirmar.
 						</DialogDescription>
 					</DialogHeader>
 					<div className="space-y-4 py-4">
 						<div className="space-y-2">
-							<Label htmlFor="disable-password">Your password</Label>
+							<Label htmlFor="disable-password">Su contraseña</Label>
 							<Input
 								id="disable-password"
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								placeholder="Enter your password"
+								placeholder="Introduzca su contraseña"
 								required
 							/>
 						</div>
 					</div>
 					<DialogFooter>
 						<Button type="button" variant="outline" onClick={handleClose}>
-							Cancel
+							Cancelar
 						</Button>
 						<Button type="submit" variant="destructive" loading={isDisabling}>
-							Disable 2FA
+							Deshabilitar 2FA
 						</Button>
 					</DialogFooter>
 				</form>

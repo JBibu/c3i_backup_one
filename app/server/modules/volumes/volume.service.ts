@@ -56,7 +56,7 @@ const createVolume = async (name: string, backendConfig: BackendConfig) => {
 	});
 
 	if (existing) {
-		throw new ConflictError("Volume already exists");
+		throw new ConflictError("El Volume ya existe");
 	}
 
 	const shortId = generateShortId();
@@ -73,7 +73,7 @@ const createVolume = async (name: string, backendConfig: BackendConfig) => {
 		.returning();
 
 	if (!created) {
-		throw new InternalServerError("Failed to create volume");
+		throw new InternalServerError("Error al crear Volume");
 	}
 
 	const backend = createVolumeBackend(created);
@@ -93,7 +93,7 @@ const deleteVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -107,7 +107,7 @@ const mountVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -131,7 +131,7 @@ const unmountVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -152,7 +152,7 @@ const getVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	let statfs: Partial<StatFs> = {};
@@ -172,7 +172,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 	});
 
 	if (!existing) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	let newName = existing.name;
@@ -184,7 +184,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 		});
 
 		if (conflict) {
-			throw new ConflictError("A volume with this name already exists");
+			throw new ConflictError("Ya existe un Volume con este nombre");
 		}
 
 		newName = newSlug;
@@ -201,7 +201,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 
 	const newConfig = volumeConfigSchema(volumeData.config || existing.config);
 	if (newConfig instanceof type.errors) {
-		throw new InternalServerError("Invalid volume configuration");
+		throw new InternalServerError("Configuración de Volume inválida");
 	}
 
 	const encryptedConfig = await encryptSensitiveFields(newConfig);
@@ -219,7 +219,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 		.returning();
 
 	if (!updated) {
-		throw new InternalServerError("Failed to update volume");
+		throw new InternalServerError("Error al actualizar Volume");
 	}
 
 	if (configChanged) {
@@ -264,7 +264,7 @@ const testConnection = async (backendConfig: BackendConfig) => {
 
 	return {
 		success: !error,
-		message: error ? toMessage(error) : "Connection successful",
+		message: error ? toMessage(error) : "Conexión exitosa",
 	};
 };
 
@@ -274,7 +274,7 @@ const checkHealth = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -298,11 +298,11 @@ const listFiles = async (name: string, subPath?: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume not found");
+		throw new NotFoundError("Volume no encontrado");
 	}
 
 	if (volume.status !== "mounted") {
-		throw new InternalServerError("Volume is not mounted");
+		throw new InternalServerError("El Volume no está montado");
 	}
 
 	// For directory volumes, use the configured path directly
@@ -312,7 +312,7 @@ const listFiles = async (name: string, subPath?: string) => {
 
 	const normalizedPath = path.normalize(requestedPath);
 	if (!normalizedPath.startsWith(volumePath)) {
-		throw new InternalServerError("Invalid path");
+		throw new InternalServerError("Ruta inválida");
 	}
 
 	try {
@@ -354,7 +354,7 @@ const listFiles = async (name: string, subPath?: string) => {
 			path: subPath || "/",
 		};
 	} catch (error) {
-		throw new InternalServerError(`Failed to list files: ${toMessage(error)}`);
+		throw new InternalServerError(`Error al listar archivos: ${toMessage(error)}`);
 	}
 };
 
@@ -396,7 +396,7 @@ const browseFilesystem = async (browsePath: string) => {
 			path: normalizedPath,
 		};
 	} catch (error) {
-		throw new InternalServerError(`Failed to browse filesystem: ${toMessage(error)}`);
+		throw new InternalServerError(`Error al explorar sistema de archivos: ${toMessage(error)}`);
 	}
 };
 

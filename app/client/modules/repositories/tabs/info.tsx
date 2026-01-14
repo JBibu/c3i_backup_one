@@ -51,11 +51,11 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 	const updateMutation = useMutation({
 		...updateRepositoryMutation(),
 		onSuccess: () => {
-			toast.success("Repository updated successfully");
+			toast.success("Repository actualizado correctamente");
 			setShowConfirmDialog(false);
 		},
 		onError: (error) => {
-			toast.error("Failed to update repository", { description: error.message, richColors: true });
+			toast.error("Error al actualizar el repository", { description: error.message, richColors: true });
 			setShowConfirmDialog(false);
 		},
 	});
@@ -82,78 +82,83 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 			<Card className="p-6">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Repository Settings</h3>
+						<h3 className="text-lg font-semibold mb-4">Configuración del Repository</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div className="space-y-2">
-								<Label htmlFor="name">Name</Label>
+								<Label htmlFor="name">Nombre</Label>
 								<Input
 									id="name"
 									value={name}
 									onChange={(e) => setName(e.target.value)}
-									placeholder="Repository name"
+									placeholder="Nombre del repository"
 									maxLength={32}
 									minLength={2}
 								/>
-								<p className="text-sm text-muted-foreground">Unique identifier for the repository.</p>
+								<p className="text-sm text-muted-foreground">Identificador único para el repository.</p>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="compressionMode">Compression mode</Label>
+								<Label htmlFor="compressionMode">Modo de compresión</Label>
 								<Select value={compressionMode} onValueChange={(val) => setCompressionMode(val as CompressionMode)}>
 									<SelectTrigger id="compressionMode">
-										<SelectValue placeholder="Select compression mode" />
+										<SelectValue placeholder="Seleccione el modo de compresión" />
 									</SelectTrigger>
 									<SelectContent>
-										<SelectItem value="off">Off</SelectItem>
-										<SelectItem value="auto">Auto</SelectItem>
-										<SelectItem value="max">Max</SelectItem>
+										<SelectItem value="off">Desactivado</SelectItem>
+										<SelectItem value="auto">Automático</SelectItem>
+										<SelectItem value="max">Máximo</SelectItem>
 									</SelectContent>
 								</Select>
-								<p className="text-sm text-muted-foreground">Compression level for new data.</p>
+								<p className="text-sm text-muted-foreground">Nivel de compresión para datos nuevos.</p>
 							</div>
 						</div>
 					</div>
 
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Repository Information</h3>
+						<h3 className="text-lg font-semibold mb-4">Información del Repository</h3>
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div>
 								<div className="text-sm font-medium text-muted-foreground">Backend</div>
 								<p className="mt-1 text-sm">{repository.type}</p>
 							</div>
 							<div>
-								<div className="text-sm font-medium text-muted-foreground">Status</div>
-								<p className="mt-1 text-sm">{repository.status || "unknown"}</p>
+								<div className="text-sm font-medium text-muted-foreground">Estado</div>
+								<p className="mt-1 text-sm">{
+								repository.status === "healthy" ? "Saludable" :
+								repository.status === "error" ? "Error" :
+								repository.status === "unknown" ? "Desconocido" :
+								"desconocido"
+							}</p>
 							</div>
 							{effectiveLocalPath && (
 								<div className="md:col-span-2">
-									<div className="text-sm font-medium text-muted-foreground">Effective Local Path</div>
+									<div className="text-sm font-medium text-muted-foreground">Ruta local efectiva</div>
 									<p className="mt-1 text-sm font-mono">{effectiveLocalPath}</p>
 								</div>
 							)}
 							<div>
-								<div className="text-sm font-medium text-muted-foreground">Created at</div>
+								<div className="text-sm font-medium text-muted-foreground">Creado el</div>
 								<p className="mt-1 text-sm">{formatDateTime(repository.createdAt)}</p>
 							</div>
 							<div>
-								<div className="text-sm font-medium text-muted-foreground">Last checked</div>
+								<div className="text-sm font-medium text-muted-foreground">Última verificación</div>
 								<p className="mt-1 text-sm">{formatTimeAgo(repository.lastChecked)}</p>
 							</div>
 							{config.cacert && (
 								<div>
-									<div className="text-sm font-medium text-muted-foreground">CA Certificate</div>
+									<div className="text-sm font-medium text-muted-foreground">Certificado CA</div>
 									<p className="mt-1 text-sm">
-										<span className="text-green-500">configured</span>
+										<span className="text-green-500">configurado</span>
 									</p>
 								</div>
 							)}
 							{"insecureTls" in config && (
 								<div>
-									<div className="text-sm font-medium text-muted-foreground">TLS Certificate Validation</div>
+									<div className="text-sm font-medium text-muted-foreground">Validación de certificado TLS</div>
 									<p className="mt-1 text-sm">
 										{config.insecureTls ? (
-											<span className="text-red-500">disabled</span>
+											<span className="text-red-500">desactivada</span>
 										) : (
-											<span className="text-green-500">enabled</span>
+											<span className="text-green-500">activada</span>
 										)}
 									</p>
 								</div>
@@ -164,7 +169,7 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 					{repository.lastError && (
 						<div>
 							<div className="flex items-center justify-between mb-4">
-								<h3 className="text-lg font-semibold text-red-500">Last Error</h3>
+								<h3 className="text-lg font-semibold text-red-500">Último error</h3>
 							</div>
 							<div className="bg-red-500/10 border border-red-500/20 rounded-md p-4">
 								<p className="text-sm text-red-500 wrap-break-word">{repository.lastError}</p>
@@ -173,7 +178,7 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 					)}
 
 					<div>
-						<h3 className="text-lg font-semibold mb-4">Configuration</h3>
+						<h3 className="text-lg font-semibold mb-4">Configuración</h3>
 						<div className="bg-muted/50 rounded-md p-4">
 							<pre className="text-sm overflow-auto">{JSON.stringify(repository.config, null, 2)}</pre>
 						</div>
@@ -182,7 +187,7 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 					<div className="flex justify-end pt-4 border-t">
 						<Button type="submit" disabled={!hasChanges || updateMutation.isPending} loading={updateMutation.isPending}>
 							<Save className="h-4 w-4 mr-2" />
-							Save Changes
+							Guardar cambios
 						</Button>
 					</div>
 				</form>
@@ -191,14 +196,14 @@ export const RepositoryInfoTabContent = ({ repository }: Props) => {
 			<AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Update repository</AlertDialogTitle>
-						<AlertDialogDescription>Are you sure you want to update the repository settings?</AlertDialogDescription>
+						<AlertDialogTitle>Actualizar repository</AlertDialogTitle>
+						<AlertDialogDescription>¿Está seguro de que desea actualizar la configuración del repository?</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction onClick={confirmUpdate}>
 							<Check className="h-4 w-4" />
-							Update
+							Actualizar
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

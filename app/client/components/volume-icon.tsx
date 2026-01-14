@@ -10,7 +10,7 @@ const getIconAndLabel = (backend: BackendType) => {
 		case "directory":
 			return {
 				icon: Folder,
-				label: "Directory",
+				label: "Directorio",
 			};
 		case "nfs":
 			return {
@@ -40,7 +40,7 @@ const getIconAndLabel = (backend: BackendType) => {
 		default:
 			return {
 				icon: Folder,
-				label: "Unknown",
+				label: "Desconocido",
 			};
 	}
 };

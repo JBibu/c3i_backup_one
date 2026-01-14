@@ -24,7 +24,7 @@ export const AdvancedForm = ({ form }: Props) => {
 
 	return (
 		<Collapsible>
-			<CollapsibleTrigger className="">Advanced Settings</CollapsibleTrigger>
+			<CollapsibleTrigger className="">Configuración Avanzada</CollapsibleTrigger>
 			<CollapsibleContent className="pb-4 space-y-4">
 				<FormField
 					control={form.control}
@@ -46,17 +46,15 @@ export const AdvancedForm = ({ form }: Props) => {
 									</TooltipTrigger>
 									<TooltipContent className={cn({ hidden: !cacert })}>
 										<p className="max-w-xs">
-											This option is disabled because a CA certificate is provided. Remove the CA certificate to skip
-											TLS validation instead.
+											Esta opción está deshabilitada porque se proporcionó un certificado CA. Elimine el certificado CA para omitir la validación TLS en su lugar.
 										</p>
 									</TooltipContent>
 								</Tooltip>
 							</FormControl>
 							<div className="space-y-1 leading-none">
-								<FormLabel>Skip TLS certificate verification</FormLabel>
+								<FormLabel>Omitir verificación de certificado TLS</FormLabel>
 								<FormDescription>
-									Disable TLS certificate verification for HTTPS connections with self-signed certificates. This is
-									insecure and should only be used for testing.
+									Deshabilitar la verificación de certificado TLS para conexiones HTTPS con certificados autofirmados. Esto es inseguro y solo debe usarse para pruebas.
 								</FormDescription>
 							</div>
 						</FormItem>
@@ -67,7 +65,7 @@ export const AdvancedForm = ({ form }: Props) => {
 					name="cacert"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>CA Certificate (Optional)</FormLabel>
+							<FormLabel>Certificado CA (Opcional)</FormLabel>
 							<FormControl>
 								<Tooltip delayDuration={500}>
 									<TooltipTrigger asChild>
@@ -82,22 +80,20 @@ export const AdvancedForm = ({ form }: Props) => {
 									</TooltipTrigger>
 									<TooltipContent className={cn({ hidden: !insecureTls })}>
 										<p className="max-w-xs">
-											CA certificate is disabled because TLS validation is being skipped. Uncheck "Skip TLS Certificate
-											Verification" to provide a custom CA certificate.
+											El certificado CA está deshabilitado porque se está omitiendo la validación TLS. Desmarque "Omitir verificación de certificado TLS" para proporcionar un certificado CA personalizado.
 										</p>
 									</TooltipContent>
 								</Tooltip>
 							</FormControl>
 							<FormDescription>
-								Custom CA certificate for self-signed certificates (PEM format). This applies to HTTPS
-								connections.&nbsp;
+								Certificado CA personalizado para certificados autofirmados (formato PEM). Esto se aplica a conexiones HTTPS.&nbsp;
 								<a
 									href="https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html#rest-server"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-primary hover:underline"
 								>
-									Learn more
+									Más información
 								</a>
 							</FormDescription>
 							<FormMessage />

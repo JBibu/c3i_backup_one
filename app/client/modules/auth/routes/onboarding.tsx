@@ -24,10 +24,10 @@ export const clientMiddleware = [authMiddleware];
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Onboarding" },
+		{ title: "C3i Backup ONE - Configuración inicial" },
 		{
 			name: "description",
-			content: "Welcome to C3i Backup ONE. Create your admin account to get started.",
+			content: "Bienvenido a C3i Backup ONE. Cree su cuenta de administrador para comenzar.",
 		},
 	];
 }
@@ -59,7 +59,7 @@ export default function OnboardingPage() {
 		if (values.password !== values.confirmPassword) {
 			form.setError("confirmPassword", {
 				type: "manual",
-				message: "Passwords do not match",
+				message: "Las contraseñas no coinciden",
 			});
 			return;
 		}
@@ -82,16 +82,16 @@ export default function OnboardingPage() {
 		});
 
 		if (data?.token) {
-			toast.success("Admin user created successfully!");
+			toast.success("¡Usuario administrador creado con éxito!");
 			void navigate("/download-recovery-key");
 		} else if (error) {
 			console.error(error);
-			toast.error("Failed to create admin user", { description: error.message });
+			toast.error("Error al crear el usuario administrador", { description: error.message });
 		}
 	};
 
 	return (
-		<AuthLayout title="Welcome to C3i Backup ONE" description="Create the admin user to get started">
+		<AuthLayout title="Bienvenido a C3i Backup ONE" description="Cree el usuario administrador para comenzar">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 					<FormField
@@ -99,11 +99,11 @@ export default function OnboardingPage() {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Email</FormLabel>
+								<FormLabel>Correo electrónico</FormLabel>
 								<FormControl>
-									<Input {...field} type="email" placeholder="you@example.com" disabled={submitting} />
+									<Input {...field} type="email" placeholder="usted@ejemplo.com" disabled={submitting} />
 								</FormControl>
-								<FormDescription>Enter your email address</FormDescription>
+								<FormDescription>Introduzca su dirección de correo electrónico</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -113,11 +113,11 @@ export default function OnboardingPage() {
 						name="username"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Username</FormLabel>
+								<FormLabel>Nombre de usuario</FormLabel>
 								<FormControl>
 									<Input {...field} type="text" placeholder="admin" disabled={submitting} />
 								</FormControl>
-								<FormDescription>Choose a username for the admin account</FormDescription>
+								<FormDescription>Elija un nombre de usuario para la cuenta de administrador</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -127,11 +127,11 @@ export default function OnboardingPage() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Password</FormLabel>
+								<FormLabel>Contraseña</FormLabel>
 								<FormControl>
-									<Input {...field} type="password" placeholder="Enter a secure password" disabled={submitting} />
+									<Input {...field} type="password" placeholder="Introduzca una contraseña segura" disabled={submitting} />
 								</FormControl>
-								<FormDescription>Password must be at least 8 characters long.</FormDescription>
+								<FormDescription>La contraseña debe tener al menos 8 caracteres.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -141,16 +141,16 @@ export default function OnboardingPage() {
 						name="confirmPassword"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Confirm Password</FormLabel>
+								<FormLabel>Confirmar contraseña</FormLabel>
 								<FormControl>
-									<Input {...field} type="password" placeholder="Re-enter your password" disabled={submitting} />
+									<Input {...field} type="password" placeholder="Vuelva a introducir su contraseña" disabled={submitting} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					<Button type="submit" className="w-full" loading={submitting}>
-						Create admin user
+						Crear usuario administrador
 					</Button>
 				</form>
 			</Form>

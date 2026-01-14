@@ -135,17 +135,17 @@ export const CreateNotificationForm = ({ onSubmit, mode = "create", initialValue
 					name="name"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Name</FormLabel>
+							<FormLabel>Nombre</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="My notification"
+									placeholder="Mi notificación"
 									onChange={(e) => field.onChange(slugify(e.target.value))}
 									max={32}
 									min={2}
 								/>
 							</FormControl>
-							<FormDescription>Unique identifier for this notification destination.</FormDescription>
+							<FormDescription>Identificador único para este destino de notificación.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -156,7 +156,7 @@ export const CreateNotificationForm = ({ onSubmit, mode = "create", initialValue
 					name="type"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Type</FormLabel>
+							<FormLabel>Tipo</FormLabel>
 							<Select
 								onValueChange={field.onChange}
 								defaultValue={field.value}
@@ -165,7 +165,7 @@ export const CreateNotificationForm = ({ onSubmit, mode = "create", initialValue
 							>
 								<FormControl>
 									<SelectTrigger className={mode === "update" ? "bg-gray-50" : ""}>
-										<SelectValue placeholder="Select notification type" />
+										<SelectValue placeholder="Seleccione el tipo de notificación" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
@@ -176,11 +176,11 @@ export const CreateNotificationForm = ({ onSubmit, mode = "create", initialValue
 									<SelectItem value="ntfy">Ntfy</SelectItem>
 									<SelectItem value="pushover">Pushover</SelectItem>
 									<SelectItem value="telegram">Telegram</SelectItem>
-									<SelectItem value="generic">Generic Webhook</SelectItem>
-									<SelectItem value="custom">Custom (Shoutrrr URL)</SelectItem>
+									<SelectItem value="generic">Webhook Genérico</SelectItem>
+									<SelectItem value="custom">Personalizado (Shoutrrr URL)</SelectItem>
 								</SelectContent>
 							</Select>
-							<FormDescription>Choose the notification delivery method.</FormDescription>
+							<FormDescription>Elija el método de entrega de notificación.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}

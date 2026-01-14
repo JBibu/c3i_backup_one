@@ -28,7 +28,7 @@ export const R2RepositoryForm = ({ form }: Props) => {
 							<Input placeholder="<account-id>.r2.cloudflarestorage.com" {...field} />
 						</FormControl>
 						<FormDescription>
-							R2 endpoint (without https://). Find in R2 dashboard under bucket settings.
+							Endpoint R2 (sin https://). Encuéntrelo en el panel de R2 en la configuración del bucket.
 						</FormDescription>
 						<FormMessage />
 					</FormItem>
@@ -43,7 +43,7 @@ export const R2RepositoryForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="my-backup-bucket" {...field} />
 						</FormControl>
-						<FormDescription>R2 bucket name for storing backups.</FormDescription>
+						<FormDescription>Nombre del bucket R2 para almacenar las copias de seguridad.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -53,11 +53,11 @@ export const R2RepositoryForm = ({ form }: Props) => {
 				name="accessKeyId"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Access Key ID</FormLabel>
+						<FormLabel>ID de Clave de Acceso</FormLabel>
 						<FormControl>
-							<Input placeholder="Access Key ID from R2 API tokens" {...field} />
+							<Input placeholder="ID de clave de acceso de tokens de API R2" {...field} />
 						</FormControl>
-						<FormDescription>R2 API token Access Key ID (create in Cloudflare R2 dashboard).</FormDescription>
+						<FormDescription>ID de clave de acceso del token de API R2 (crear en el panel de Cloudflare R2).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -67,11 +67,11 @@ export const R2RepositoryForm = ({ form }: Props) => {
 				name="secretAccessKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Secret Access Key</FormLabel>
+						<FormLabel>Clave de Acceso Secreta</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>R2 API token Secret Access Key (shown once when creating token).</FormDescription>
+						<FormDescription>Clave de acceso secreta del token de API R2 (se muestra una sola vez al crear el token).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

@@ -14,16 +14,16 @@ export const BackupStatusDot = ({
 
 	if (isInProgress) {
 		variant = "info";
-		label = "Backup in progress";
+		label = "Copia de seguridad en curso";
 	} else if (hasError) {
 		variant = "error";
 		label = "Error";
 	} else if (enabled) {
 		variant = "success";
-		label = "Active";
+		label = "Activo";
 	} else {
 		variant = "neutral";
-		label = "Paused";
+		label = "Pausado";
 	}
 
 	return <StatusDot variant={variant} label={label} />;

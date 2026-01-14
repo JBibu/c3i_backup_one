@@ -44,16 +44,16 @@ import { cn } from "~/client/lib/utils";
 export const handle = {
 	breadcrumb: (match: Route.MetaArgs) => {
 		const data = match.loaderData;
-		return [{ label: "Backups", href: "/backups" }, { label: data.schedule.name }];
+		return [{ label: "Copias de seguridad", href: "/backups" }, { label: data.schedule.name }];
 	},
 };
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Backup Job Details" },
+		{ title: "C3i Backup ONE - Detalles de copia de seguridad" },
 		{
 			name: "description",
-			content: "View and manage backup job configuration, schedule, and snapshots.",
+			content: "Vea y gestione la configuración de copia de seguridad, programación y snapshots.",
 		},
 	];
 }
@@ -102,11 +102,11 @@ export default function ScheduleDetailsPage({ params, loaderData }: Route.Compon
 	const updateSchedule = useMutation({
 		...updateBackupScheduleMutation(),
 		onSuccess: () => {
-			toast.success("Backup schedule saved successfully");
+			toast.success("Programación de copia de seguridad guardada correctamente");
 			setIsEditMode(false);
 		},
 		onError: (error) => {
-			toast.error("Failed to save backup schedule", {
+			toast.error("Error al guardar la programación de copia de seguridad", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -115,31 +115,31 @@ export default function ScheduleDetailsPage({ params, loaderData }: Route.Compon
 	const runBackupNow = useMutation({
 		...runBackupNowMutation(),
 		onSuccess: () => {
-			toast.success("Backup started successfully");
+			toast.success("Copia de seguridad iniciada correctamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to start backup", { description: parseError(error)?.message });
+			toast.error("Error al iniciar la copia de seguridad", { description: parseError(error)?.message });
 		},
 	});
 
 	const stopBackup = useMutation({
 		...stopBackupMutation(),
 		onSuccess: () => {
-			toast.success("Backup stopped successfully");
+			toast.success("Copia de seguridad detenida correctamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to stop backup", { description: parseError(error)?.message });
+			toast.error("Error al detener la copia de seguridad", { description: parseError(error)?.message });
 		},
 	});
 
 	const deleteSchedule = useMutation({
 		...deleteBackupScheduleMutation(),
 		onSuccess: () => {
-			toast.success("Backup schedule deleted successfully");
+			toast.success("Programación de copia de seguridad eliminada correctamente");
 			void navigate("/backups");
 		},
 		onError: (error) => {
-			toast.error("Failed to delete backup schedule", { description: parseError(error)?.message });
+			toast.error("Error al eliminar la programación de copia de seguridad", { description: parseError(error)?.message });
 		},
 	});
 
@@ -217,9 +217,9 @@ export default function ScheduleDetailsPage({ params, loaderData }: Route.Compon
 					path: { id: schedule.repository.shortId, snapshotId: snapshotToDelete },
 				}),
 				{
-					loading: "Deleting snapshot...",
-					success: "Snapshot deleted successfully",
-					error: (error) => parseError(error)?.message || "Failed to delete snapshot",
+					loading: "Eliminando snapshot...",
+					success: "Snapshot eliminado correctamente",
+					error: (error) => parseError(error)?.message || "Error al eliminar el snapshot",
 				},
 			);
 		}
@@ -232,11 +232,11 @@ export default function ScheduleDetailsPage({ params, loaderData }: Route.Compon
 				<div className="flex justify-end mt-4 gap-2">
 					<Button type="submit" className="ml-auto" variant="primary" form={formId} loading={updateSchedule.isPending}>
 						<Save className="h-4 w-4 mr-2" />
-						Update schedule
+						Actualizar programación
 					</Button>
 					<Button variant="outline" onClick={() => setIsEditMode(false)}>
 						<X className="h-4 w-4 mr-2" />
-						Cancel
+						Cancelar
 					</Button>
 				</div>
 			</div>
@@ -291,20 +291,20 @@ export default function ScheduleDetailsPage({ params, loaderData }: Route.Compon
 			<AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete snapshot?</AlertDialogTitle>
+						<AlertDialogTitle>¿Eliminar snapshot?</AlertDialogTitle>
 						<AlertDialogDescription>
-							This action cannot be undone. This will permanently delete the snapshot and all its data from the
+							Esta acción no se puede deshacer. Esto eliminará permanentemente el snapshot y todos sus datos del
 							repository.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleConfirmDelete}
 							disabled={deleteSnapshot.isPending}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
-							Delete snapshot
+							Eliminar snapshot
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

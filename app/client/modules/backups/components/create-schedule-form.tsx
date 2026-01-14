@@ -51,13 +51,13 @@ const internalFormSchema = type({
 const cleanSchema = type.pipe((d) => internalFormSchema(deepClean(d)));
 
 export const weeklyDays = [
-	{ label: "Monday", value: "1" },
-	{ label: "Tuesday", value: "2" },
-	{ label: "Wednesday", value: "3" },
-	{ label: "Thursday", value: "4" },
-	{ label: "Friday", value: "5" },
-	{ label: "Saturday", value: "6" },
-	{ label: "Sunday", value: "0" },
+	{ label: "Lunes", value: "1" },
+	{ label: "Martes", value: "2" },
+	{ label: "Miércoles", value: "3" },
+	{ label: "Jueves", value: "4" },
+	{ label: "Viernes", value: "5" },
+	{ label: "Sábado", value: "6" },
+	{ label: "Domingo", value: "0" },
 ];
 
 type InternalFormValues = typeof internalFormSchema.infer;
@@ -190,9 +190,9 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 				<div className="grid gap-4">
 					<Card>
 						<CardHeader>
-							<CardTitle>Backup automation</CardTitle>
+							<CardTitle>Automatización de copia de seguridad</CardTitle>
 							<CardDescription className="mt-1">
-								Schedule automated backups of <strong>{volume.name}</strong> to a secure repository.
+								Programe copias de seguridad automatizadas de <strong>{volume.name}</strong> a un repository seguro.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="grid gap-6 @md:grid-cols-2">
@@ -201,11 +201,11 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="name"
 								render={({ field }) => (
 									<FormItem className="@md:col-span-2">
-										<FormLabel>Backup name</FormLabel>
+										<FormLabel>Nombre de la copia de seguridad</FormLabel>
 										<FormControl>
-											<Input placeholder="My backup" {...field} />
+											<Input placeholder="Mi copia de seguridad" {...field} />
 										</FormControl>
-										<FormDescription>A unique name to identify this backup schedule.</FormDescription>
+										<FormDescription>Un nombre único para identificar esta programación de copia de seguridad.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -216,11 +216,11 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="repositoryId"
 								render={({ field }) => (
 									<FormItem className="@md:col-span-2">
-										<FormLabel>Backup repository</FormLabel>
+										<FormLabel>Repository de copia de seguridad</FormLabel>
 										<FormControl>
 											<Select {...field} onValueChange={field.onChange}>
 												<SelectTrigger>
-													<SelectValue placeholder="Select a repository" />
+													<SelectValue placeholder="Seleccione un repository" />
 												</SelectTrigger>
 												<SelectContent>
 													{repositoriesData?.map((repo) => (
@@ -235,7 +235,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 											</Select>
 										</FormControl>
 										<FormDescription>
-											Choose where encrypted backups for <strong>{volume.name}</strong> will be stored.
+											Elija dónde se almacenarán las copias de seguridad cifradas de <strong>{volume.name}</strong>.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -247,22 +247,22 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="frequency"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Backup frequency</FormLabel>
+										<FormLabel>Frecuencia de copia de seguridad</FormLabel>
 										<FormControl>
 											<Select {...field} onValueChange={field.onChange}>
 												<SelectTrigger>
-													<SelectValue placeholder="Select frequency" />
+													<SelectValue placeholder="Seleccione la frecuencia" />
 												</SelectTrigger>
 												<SelectContent>
-													<SelectItem value="hourly">Hourly</SelectItem>
-													<SelectItem value="daily">Daily</SelectItem>
-													<SelectItem value="weekly">Weekly</SelectItem>
-													<SelectItem value="monthly">Specific days</SelectItem>
-													<SelectItem value="cron">Custom (Cron)</SelectItem>
+													<SelectItem value="hourly">Cada hora</SelectItem>
+													<SelectItem value="daily">Diaria</SelectItem>
+													<SelectItem value="weekly">Semanal</SelectItem>
+													<SelectItem value="monthly">Días específicos</SelectItem>
+													<SelectItem value="cron">Personalizada (Cron)</SelectItem>
 												</SelectContent>
 											</Select>
 										</FormControl>
-										<FormDescription>Define how often snapshots should be taken.</FormDescription>
+										<FormDescription>Defina con qué frecuencia se deben tomar los snapshots.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -284,11 +284,11 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 									name="dailyTime"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Execution time</FormLabel>
+											<FormLabel>Hora de ejecución</FormLabel>
 											<FormControl>
 												<Input type="time" {...field} />
 											</FormControl>
-											<FormDescription>Time of day when the backup will run.</FormDescription>
+											<FormDescription>Hora del día en que se ejecutará la copia de seguridad.</FormDescription>
 											<FormMessage />
 										</FormItem>
 									)}
@@ -301,11 +301,11 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 									name="weeklyDay"
 									render={({ field }) => (
 										<FormItem className="@md:col-span-2">
-											<FormLabel>Execution day</FormLabel>
+											<FormLabel>Día de ejecución</FormLabel>
 											<FormControl>
 												<Select {...field} onValueChange={field.onChange}>
 													<SelectTrigger>
-														<SelectValue placeholder="Select a day" />
+														<SelectValue placeholder="Seleccione un día" />
 													</SelectTrigger>
 													<SelectContent>
 														{weeklyDays.map((day) => (
@@ -316,7 +316,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 													</SelectContent>
 												</Select>
 											</FormControl>
-											<FormDescription>Choose which day of the week to run the backup.</FormDescription>
+											<FormDescription>Elija qué día de la semana se ejecutará la copia de seguridad.</FormDescription>
 											<FormMessage />
 										</FormItem>
 									)}
@@ -328,7 +328,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 									name="monthlyDays"
 									render={({ field }) => (
 										<FormItem className="@md:col-span-2">
-											<FormLabel>Days of the month</FormLabel>
+											<FormLabel>Días del mes</FormLabel>
 											<FormControl>
 												<div className="grid grid-cols-7 gap-4 w-max">
 													{Array.from({ length: 31 }, (_, i) => {
@@ -352,7 +352,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 													})}
 												</div>
 											</FormControl>
-											<FormDescription>Select one or more days when the backup should run.</FormDescription>
+											<FormDescription>Seleccione uno o más días en los que se ejecutará la copia de seguridad.</FormDescription>
 											<FormMessage />
 										</FormItem>
 									)}
@@ -363,10 +363,9 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Backup paths</CardTitle>
+							<CardTitle>Rutas de copia de seguridad</CardTitle>
 							<CardDescription>
-								Select which folders or files to include in the backup. If no paths are selected, the entire volume will
-								be backed up.
+								Seleccione qué carpetas o archivos incluir en la copia de seguridad. Si no se selecciona ninguna ruta, se respaldará todo el volume.
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
@@ -381,7 +380,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 							/>
 							{selectedPaths.size > 0 && (
 								<div className="mt-4">
-									<p className="text-xs text-muted-foreground mb-2">Selected paths:</p>
+									<p className="text-xs text-muted-foreground mb-2">Rutas seleccionadas:</p>
 									<div className="flex flex-wrap gap-2">
 										{Array.from(selectedPaths).map((path) => (
 											<span
@@ -393,7 +392,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 													type="button"
 													onClick={() => handleRemovePath(path)}
 													className="ml-1 hover:bg-destructive/20 rounded p-0.5 transition-colors"
-													aria-label={`Remove ${path}` as string}
+													aria-label={`Eliminar ${path}` as string}
 												>
 													<X className="h-3 w-3" />
 												</button>
@@ -407,7 +406,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="includePatternsText"
 								render={({ field }) => (
 									<FormItem className="mt-6">
-										<FormLabel>Additional include patterns</FormLabel>
+										<FormLabel>Patrones de inclusión adicionales</FormLabel>
 										<FormControl>
 											<Textarea
 												{...field}
@@ -416,8 +415,8 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 											/>
 										</FormControl>
 										<FormDescription>
-											Optionally add custom include patterns using glob syntax. Enter one pattern per line. These will
-											be combined with the paths selected above.
+											Opcionalmente añada patrones de inclusión personalizados usando sintaxis glob. Introduzca un patrón por línea. Estos se
+											combinarán con las rutas seleccionadas arriba.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -428,9 +427,9 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Exclude patterns</CardTitle>
+							<CardTitle>Patrones de exclusión</CardTitle>
 							<CardDescription>
-								Optionally specify patterns to exclude from backups. Enter one pattern per line (e.g., *.tmp,
+								Opcionalmente especifique patrones para excluir de las copias de seguridad. Introduzca un patrón por línea (ej., *.tmp,
 								node_modules/**, .cache/).
 							</CardDescription>
 						</CardHeader>
@@ -440,7 +439,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="excludePatternsText"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Exclusion patterns</FormLabel>
+										<FormLabel>Patrones de exclusión</FormLabel>
 										<FormControl>
 											<Textarea
 												{...field}
@@ -449,16 +448,16 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 											/>
 										</FormControl>
 										<FormDescription>
-											Patterns support glob syntax. See&nbsp;
+											Los patrones admiten sintaxis glob. Consulte la&nbsp;
 											<a
 												href="https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files"
 												target="_blank"
 												rel="noopener noreferrer"
 												className="underline hover:text-foreground"
 											>
-												Restic documentation
+												documentación de Restic
 											</a>
-											&nbsp;for more details.
+											&nbsp;para más detalles.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -469,7 +468,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="excludeIfPresentText"
 								render={({ field }) => (
 									<FormItem className="mt-6">
-										<FormLabel>Exclude if file present</FormLabel>
+										<FormLabel>Excluir si el archivo está presente</FormLabel>
 										<FormControl>
 											<Textarea
 												{...field}
@@ -478,9 +477,9 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 											/>
 										</FormControl>
 										<FormDescription>
-											Exclude folders containing a file with the specified name. Enter one filename per line. For
-											example, use <code className="bg-muted px-1 rounded">.nobackup</code> to skip any folder
-											containing a <code className="bg-muted px-1 rounded">.nobackup</code> file.
+											Excluya carpetas que contengan un archivo con el nombre especificado. Introduzca un nombre de archivo por línea. Por
+											ejemplo, use <code className="bg-muted px-1 rounded">.nobackup</code> para omitir cualquier carpeta
+											que contenga un archivo <code className="bg-muted px-1 rounded">.nobackup</code>.
 										</FormDescription>
 										<FormMessage />
 									</FormItem>
@@ -495,10 +494,10 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 											<Checkbox checked={field.value} onCheckedChange={field.onChange} />
 										</FormControl>
 										<div className="space-y-1 leading-none">
-											<FormLabel>Stay on one file system</FormLabel>
+											<FormLabel>Permanecer en un sistema de archivos</FormLabel>
 											<FormDescription>
-												Prevent Restic from crossing file system boundaries. This is useful to avoid backing up network
-												mounts or other partitions that might be mounted inside your backup source.
+												Evite que Restic cruce los límites del sistema de archivos. Esto es útil para evitar respaldar montajes
+												de red u otras particiones que puedan estar montadas dentro de su origen de copia de seguridad.
 											</FormDescription>
 										</div>
 									</FormItem>
@@ -509,8 +508,8 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Retention policy</CardTitle>
-							<CardDescription>Define how many snapshots to keep. Leave empty to keep all.</CardDescription>
+							<CardTitle>Política de retención</CardTitle>
+							<CardDescription>Defina cuántos snapshots conservar. Déjelo vacío para conservar todos.</CardDescription>
 						</CardHeader>
 						<CardContent className="grid gap-4 @md:grid-cols-2">
 							<FormField
@@ -518,17 +517,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepLast"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep last N snapshots</FormLabel>
+										<FormLabel>Conservar últimos N snapshots</FormLabel>
 										<FormControl>
 											<Input
 												{...field}
 												type="number"
 												min={0}
-												placeholder="Optional"
+												placeholder="Opcional"
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the N most recent snapshots.</FormDescription>
+										<FormDescription>Conserve los N snapshots más recientes.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -539,17 +538,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepHourly"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep hourly</FormLabel>
+										<FormLabel>Conservar por hora</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												min={0}
-												placeholder="Optional"
+												placeholder="Opcional"
 												{...field}
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the last N hourly snapshots.</FormDescription>
+										<FormDescription>Conserve los últimos N snapshots por hora.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -560,17 +559,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepDaily"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep daily</FormLabel>
+										<FormLabel>Conservar diarios</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												min={0}
-												placeholder="e.g., 7"
+												placeholder="ej., 7"
 												{...field}
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the last N daily snapshots.</FormDescription>
+										<FormDescription>Conserve los últimos N snapshots diarios.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -581,17 +580,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepWeekly"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep weekly</FormLabel>
+										<FormLabel>Conservar semanales</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												min={0}
-												placeholder="e.g., 4"
+												placeholder="ej., 4"
 												{...field}
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the last N weekly snapshots.</FormDescription>
+										<FormDescription>Conserve los últimos N snapshots semanales.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -602,17 +601,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepMonthly"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep monthly</FormLabel>
+										<FormLabel>Conservar mensuales</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												min={0}
-												placeholder="e.g., 6"
+												placeholder="ej., 6"
 												{...field}
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the last N monthly snapshots.</FormDescription>
+										<FormDescription>Conserve los últimos N snapshots mensuales.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -623,17 +622,17 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								name="keepYearly"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Keep yearly</FormLabel>
+										<FormLabel>Conservar anuales</FormLabel>
 										<FormControl>
 											<Input
 												type="number"
 												min={0}
-												placeholder="Optional"
+												placeholder="Opcional"
 												{...field}
 												onChange={(v) => field.onChange(Number(v.target.value))}
 											/>
 										</FormControl>
-										<FormDescription>Keep the last N yearly snapshots.</FormDescription>
+										<FormDescription>Conserve los últimos N snapshots anuales.</FormDescription>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -645,8 +644,8 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between gap-4">
 							<div>
-								<CardTitle>Schedule summary</CardTitle>
-								<CardDescription>Review the backup configuration.</CardDescription>
+								<CardTitle>Resumen de programación</CardTitle>
+								<CardDescription>Revise la configuración de la copia de seguridad.</CardDescription>
 							</div>
 						</CardHeader>
 						<CardContent className="flex flex-col gap-4 text-sm">
@@ -655,7 +654,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								<p className="font-medium">{volume.name}</p>
 							</div>
 							<div>
-								<p className="text-xs uppercase text-muted-foreground">Schedule</p>
+								<p className="text-xs uppercase text-muted-foreground">Programación</p>
 								<p className="font-medium">
 									{frequency ? frequency.charAt(0).toUpperCase() + frequency.slice(1) : "-"}
 								</p>
@@ -669,7 +668,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 							{(formValues.includePatterns && formValues.includePatterns.length > 0) ||
 							formValues.includePatternsText ? (
 								<div>
-									<p className="text-xs uppercase text-muted-foreground">Include paths/patterns</p>
+									<p className="text-xs uppercase text-muted-foreground">Rutas/patrones de inclusión</p>
 									<div className="flex flex-col gap-1">
 										{formValues.includePatterns?.map((path) => (
 											<span key={path} className="text-xs font-mono bg-accent px-1.5 py-0.5 rounded">
@@ -689,7 +688,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 							) : null}
 							{formValues.excludePatternsText && (
 								<div>
-									<p className="text-xs uppercase text-muted-foreground">Exclude patterns</p>
+									<p className="text-xs uppercase text-muted-foreground">Patrones de exclusión</p>
 									<div className="flex flex-col gap-1">
 										{formValues.excludePatternsText
 											.split("\n")
@@ -704,7 +703,7 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 							)}
 							{formValues.excludeIfPresentText && (
 								<div>
-									<p className="text-xs uppercase text-muted-foreground">Exclude if present</p>
+									<p className="text-xs uppercase text-muted-foreground">Excluir si está presente</p>
 									<div className="flex flex-col gap-1">
 										{formValues.excludeIfPresentText
 											.split("\n")
@@ -718,11 +717,11 @@ export const CreateScheduleForm = ({ initialValues, formId, onSubmit, volume }: 
 								</div>
 							)}
 							<div>
-								<p className="text-xs uppercase text-muted-foreground">One file system</p>
-								<p className="font-medium">{formValues.oneFileSystem ? "Enabled" : "Disabled"}</p>
+								<p className="text-xs uppercase text-muted-foreground">Un sistema de archivos</p>
+								<p className="font-medium">{formValues.oneFileSystem ? "Habilitado" : "Deshabilitado"}</p>
 							</div>
 							<div>
-								<p className="text-xs uppercase text-muted-foreground">Retention</p>
+								<p className="text-xs uppercase text-muted-foreground">Retención</p>
 								<p className="font-medium">
 									{Object.entries(formValues)
 										.filter(([key, value]) => key.startsWith("keep") && Boolean(value))

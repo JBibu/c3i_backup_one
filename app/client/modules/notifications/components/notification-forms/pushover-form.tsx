@@ -17,11 +17,11 @@ export const PushoverForm = ({ form }: Props) => {
 				name="userKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>User Key</FormLabel>
+						<FormLabel>Clave de usuario</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="uQiRzpo4DXghDmr9QzzfQu27cmVRsG" />
 						</FormControl>
-						<FormDescription>Your Pushover user key from the dashboard.</FormDescription>
+						<FormDescription>Su clave de usuario de Pushover desde el panel de control.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -31,11 +31,11 @@ export const PushoverForm = ({ form }: Props) => {
 				name="apiToken"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>API Token</FormLabel>
+						<FormLabel>Token API</FormLabel>
 						<FormControl>
 							<SecretInput {...field} placeholder="••••••••" />
 						</FormControl>
-						<FormDescription>Application API token from your Pushover application.</FormDescription>
+						<FormDescription>Token API de la aplicación desde su aplicación Pushover.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -45,11 +45,11 @@ export const PushoverForm = ({ form }: Props) => {
 				name="devices"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Devices (Optional)</FormLabel>
+						<FormLabel>Dispositivos (Opcional)</FormLabel>
 						<FormControl>
 							<Input {...field} placeholder="iphone,android" />
 						</FormControl>
-						<FormDescription>Comma-separated list of device names. Leave empty for all devices.</FormDescription>
+						<FormDescription>Lista de nombres de dispositivos separados por comas. Déjelo vacío para todos los dispositivos.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -59,7 +59,7 @@ export const PushoverForm = ({ form }: Props) => {
 				name="priority"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Priority</FormLabel>
+						<FormLabel>Prioridad</FormLabel>
 						<Select
 							onValueChange={(value) => field.onChange(Number(value))}
 							defaultValue={String(field.value)}
@@ -67,16 +67,16 @@ export const PushoverForm = ({ form }: Props) => {
 						>
 							<FormControl>
 								<SelectTrigger>
-									<SelectValue placeholder="Select priority" />
+									<SelectValue placeholder="Seleccione la prioridad" />
 								</SelectTrigger>
 							</FormControl>
 							<SelectContent>
-								<SelectItem value="-1">Low (-1)</SelectItem>
+								<SelectItem value="-1">Baja (-1)</SelectItem>
 								<SelectItem value="0">Normal (0)</SelectItem>
-								<SelectItem value="1">High (1)</SelectItem>
+								<SelectItem value="1">Alta (1)</SelectItem>
 							</SelectContent>
 						</Select>
-						<FormDescription>Message priority level.</FormDescription>
+						<FormDescription>Nivel de prioridad del mensaje.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}

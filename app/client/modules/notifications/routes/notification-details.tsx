@@ -30,17 +30,17 @@ import { CreateNotificationForm, type NotificationFormValues } from "../componen
 
 export const handle = {
 	breadcrumb: (match: Route.MetaArgs) => [
-		{ label: "Notifications", href: "/notifications" },
+		{ label: "Notificaciones", href: "/notifications" },
 		{ label: match.params.id },
 	],
 };
 
 export function meta({ params }: Route.MetaArgs) {
 	return [
-		{ title: `C3i Backup ONE - Notification ${params.id}` },
+		{ title: `C3i Backup ONE - Notificación ${params.id}` },
 		{
 			name: "description",
-			content: "View and edit notification destination settings.",
+			content: "Ver y editar la configuración del destino de notificación.",
 		},
 	];
 }
@@ -65,11 +65,11 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 	const deleteDestination = useMutation({
 		...deleteNotificationDestinationMutation(),
 		onSuccess: () => {
-			toast.success("Notification destination deleted successfully");
+			toast.success("Destino de notificación eliminado exitosamente");
 			void navigate("/notifications");
 		},
 		onError: (error) => {
-			toast.error("Failed to delete notification destination", {
+			toast.error("Fallo al eliminar el destino de notificación", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -78,10 +78,10 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 	const updateDestination = useMutation({
 		...updateNotificationDestinationMutation(),
 		onSuccess: () => {
-			toast.success("Notification destination updated successfully");
+			toast.success("Destino de notificación actualizado exitosamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to update notification destination", {
+			toast.error("Fallo al actualizar el destino de notificación", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -90,10 +90,10 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 	const testDestination = useMutation({
 		...testNotificationDestinationMutation(),
 		onSuccess: () => {
-			toast.success("Test notification sent successfully");
+			toast.success("Notificación de prueba enviada exitosamente");
 		},
 		onError: (error) => {
-			toast.error("Failed to send test notification", {
+			toast.error("Fallo al enviar la notificación de prueba", {
 				description: parseError(error)?.message,
 			});
 		},
@@ -128,7 +128,7 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 							"bg-red-500/10 text-red-500": !data.enabled,
 						})}
 					>
-						{data.enabled ? "Enabled" : "Disabled"}
+						{data.enabled ? "Habilitado" : "Deshabilitado"}
 					</span>
 					<span className="text-xs bg-primary/10 rounded-md px-2 py-1 capitalize">{data.type}</span>
 				</div>
@@ -140,7 +140,7 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 						loading={testDestination.isPending}
 					>
 						<TestTube2 className="h-4 w-4 mr-2" />
-						Test
+						Probar
 					</Button>
 					<Button
 						onClick={() => setShowDeleteConfirm(true)}
@@ -148,7 +148,7 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 						loading={deleteDestination.isPending}
 					>
 						<Trash2 className="h-4 w-4 mr-2" />
-						Delete
+						Eliminar
 					</Button>
 				</div>
 			</div>
@@ -166,7 +166,7 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 					{updateDestination.isError && (
 						<Alert variant="destructive">
 							<AlertDescription>
-								<strong>Failed to update notification destination:</strong>
+								<strong>Fallo al actualizar el destino de notificación:</strong>
 								<br />
 								{parseError(updateDestination.error)?.message}
 							</AlertDescription>
@@ -184,7 +184,7 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 					<div className="flex justify-end gap-2 pt-4 border-t">
 						<Button type="submit" form={formId} loading={updateDestination.isPending}>
 							<Save className="h-4 w-4 mr-2" />
-							Save Changes
+							Guardar Cambios
 						</Button>
 					</div>
 				</CardContent>
@@ -193,17 +193,17 @@ export default function NotificationDetailsPage({ loaderData }: Route.ComponentP
 			<AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete Notification Destination</AlertDialogTitle>
+						<AlertDialogTitle>Eliminar Destino de Notificación</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete the notification destination "{data.name}"? This action cannot be undone
-							and will remove this destination from all backup schedules.
+							¿Está seguro de que desea eliminar el destino de notificación "{data.name}"? Esta acción no se puede deshacer
+							y eliminará este destino de todos los programas de respaldo.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction onClick={handleConfirmDelete}>
 							<Trash2 className="h-4 w-4 mr-2" />
-							Delete
+							Eliminar
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

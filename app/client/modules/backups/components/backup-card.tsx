@@ -32,15 +32,15 @@ export const BackupCard = ({ schedule }: { schedule: BackupSchedule }) => {
 				<CardContent className="flex-1 space-y-4">
 					<div className="space-y-2">
 						<div className="flex items-center justify-between text-sm">
-							<span className="text-muted-foreground">Schedule</span>
+							<span className="text-muted-foreground">Programación</span>
 							<code className="text-xs bg-muted px-2 py-1 rounded">{schedule.cronExpression}</code>
 						</div>
 						<div className="flex items-center justify-between text-sm">
-							<span className="text-muted-foreground">Last backup</span>
+							<span className="text-muted-foreground">Última copia de seguridad</span>
 							<span className="font-medium">{formatTimeAgo(schedule.lastBackupAt)}</span>
 						</div>
 						<div className="flex items-center justify-between text-sm">
-							<span className="text-muted-foreground">Next backup</span>
+							<span className="text-muted-foreground">Próxima copia de seguridad</span>
 							<span className="font-medium">{formatShortDateTime(schedule.nextBackupAt)}</span>
 						</div>
 					</div>

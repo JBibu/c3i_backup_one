@@ -17,25 +17,25 @@ export const HealthchecksCard = ({ volume }: Props) => {
 		...healthCheckVolumeMutation(),
 		onSuccess: (d) => {
 			if (d.error) {
-				toast.error("Health check failed", { description: d.error });
+				toast.error("Comprobación de estado fallida", { description: d.error });
 				return;
 			}
-			toast.success("Health check completed", { description: "The volume is healthy." });
+			toast.success("Comprobación de estado completada", { description: "El volume está en buen estado." });
 		},
 		onError: (error) => {
-			toast.error("Health check failed", { description: error.message });
+			toast.error("Comprobación de estado fallida", { description: error.message });
 		},
 	});
 
 	const toggleAutoRemount = useMutation({
 		...updateVolumeMutation(),
 		onSuccess: (d) => {
-			toast.success("Volume updated", {
-				description: `Auto remount is now ${d.autoRemount ? "enabled" : "paused"}.`,
+			toast.success("Volume actualizado", {
+				description: `El remontado automático está ahora ${d.autoRemount ? "activado" : "pausado"}.`,
 			});
 		},
 		onError: (error) => {
-			toast.error("Update failed", { description: error.message });
+			toast.error("Error en la actualización", { description: error.message });
 		},
 	});
 
@@ -44,27 +44,27 @@ export const HealthchecksCard = ({ volume }: Props) => {
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<HeartIcon className="h-4 w-4" />
-					Health Checks
+					Comprobaciones de estado
 				</CardTitle>
-				<CardDescription>Monitor and automatically remount volumes on errors to ensure availability.</CardDescription>
+				<CardDescription>Monitorice y remonte automáticamente los volumes ante errores para garantizar la disponibilidad.</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-col flex-1 justify-start">
 					{volume.lastError && <span className="text-sm text-red-500 wrap-break-word">{volume.lastError}</span>}
-					{volume.status === "mounted" && <span className="text-md text-green-500">Healthy</span>}
+					{volume.status === "mounted" && <span className="text-md text-green-500">En buen estado</span>}
 					{volume.status !== "unmounted" && (
-						<span className="text-xs text-muted-foreground mb-4">Checked {formatTimeAgo(volume.lastHealthCheck)}</span>
+						<span className="text-xs text-muted-foreground mb-4">Verificado {formatTimeAgo(volume.lastHealthCheck)}</span>
 					)}
 					<span className="flex justify-between items-center gap-2">
-						<span className="text-sm">Remount on error</span>
+						<span className="text-sm">Remontar ante error</span>
 						<OnOff
 							isOn={volume.autoRemount}
 							toggle={() =>
 								toggleAutoRemount.mutate({ path: { name: volume.name }, body: { autoRemount: !volume.autoRemount } })
 							}
 							disabled={toggleAutoRemount.isPending}
-							enabledLabel="Enabled"
-							disabledLabel="Paused"
+							enabledLabel="Activado"
+							disabledLabel="Pausado"
 						/>
 					</span>
 				</div>
@@ -77,7 +77,7 @@ export const HealthchecksCard = ({ volume }: Props) => {
 							onClick={() => healthcheck.mutate({ path: { name: volume.name } })}
 						>
 							<Activity className="h-4 w-4 mr-2" />
-							Run Health Check
+							Ejecutar comprobación de estado
 						</Button>
 					</div>
 				)}

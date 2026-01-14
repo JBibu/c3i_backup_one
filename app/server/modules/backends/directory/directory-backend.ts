@@ -6,7 +6,7 @@ import { BACKEND_STATUS, type BackendConfig } from "~/schemas/volumes";
 
 const mount = async (config: BackendConfig, _volumePath: string) => {
 	if (config.backend !== "directory") {
-		return { status: BACKEND_STATUS.error, error: "Invalid backend type" };
+		return { status: BACKEND_STATUS.error, error: "Tipo de backend inválido" };
 	}
 
 	logger.info("Mounting directory volume from:", config.path);
@@ -16,7 +16,7 @@ const mount = async (config: BackendConfig, _volumePath: string) => {
 		const stats = await fs.stat(config.path);
 
 		if (!stats.isDirectory()) {
-			return { status: BACKEND_STATUS.error, error: "Path is not a directory" };
+			return { status: BACKEND_STATUS.error, error: "La ruta no es un directorio" };
 		}
 
 		return { status: BACKEND_STATUS.mounted };
@@ -33,7 +33,7 @@ const unmount = async () => {
 
 const checkHealth = async (config: BackendConfig) => {
 	if (config.backend !== "directory") {
-		return { status: BACKEND_STATUS.error, error: "Invalid backend type" };
+		return { status: BACKEND_STATUS.error, error: "Tipo de backend inválido" };
 	}
 
 	try {

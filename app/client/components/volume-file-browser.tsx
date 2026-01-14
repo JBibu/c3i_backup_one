@@ -25,7 +25,7 @@ export const VolumeFileBrowser = ({
 	onSelectionChange,
 	foldersOnly = false,
 	className,
-	emptyMessage = "This volume appears to be empty.",
+	emptyMessage = "Este volume parece estar vacío.",
 	emptyDescription,
 }: VolumeFileBrowserProps) => {
 	const queryClient = useQueryClient();
@@ -59,7 +59,7 @@ export const VolumeFileBrowser = ({
 	if (fileBrowser.isLoading) {
 		return (
 			<div className="flex items-center justify-center h-full min-h-50">
-				<p className="text-muted-foreground">Loading files...</p>
+				<p className="text-muted-foreground">Cargando archivos...</p>
 			</div>
 		);
 	}
@@ -67,7 +67,7 @@ export const VolumeFileBrowser = ({
 	if (error) {
 		return (
 			<div className="flex items-center justify-center h-full min-h-50">
-				<p className="text-destructive">Failed to load files: {parseError(error)?.message}</p>
+				<p className="text-destructive">Error al cargar archivos: {parseError(error)?.message}</p>
 			</div>
 		);
 	}

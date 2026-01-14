@@ -29,7 +29,7 @@ export const SFTPForm = ({ form }: Props) => {
 						<FormControl>
 							<Input placeholder="example.com" {...field} />
 						</FormControl>
-						<FormDescription>SFTP server hostname or IP address.</FormDescription>
+						<FormDescription>Nombre del host o dirección IP del servidor SFTP.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -48,7 +48,7 @@ export const SFTPForm = ({ form }: Props) => {
 								onChange={(e) => field.onChange(parseInt(e.target.value, 10) || undefined)}
 							/>
 						</FormControl>
-						<FormDescription>SFTP server port (default: 22).</FormDescription>
+						<FormDescription>Puerto del servidor SFTP (predeterminado: 22).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -58,11 +58,11 @@ export const SFTPForm = ({ form }: Props) => {
 				name="username"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Username</FormLabel>
+						<FormLabel>Nombre de usuario</FormLabel>
 						<FormControl>
 							<Input placeholder="root" {...field} />
 						</FormControl>
-						<FormDescription>Username for SFTP authentication.</FormDescription>
+						<FormDescription>Nombre de usuario para la autenticación SFTP.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -72,11 +72,11 @@ export const SFTPForm = ({ form }: Props) => {
 				name="password"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Password (Optional)</FormLabel>
+						<FormLabel>Contraseña (Opcional)</FormLabel>
 						<FormControl>
 							<SecretInput placeholder="••••••••" value={field.value ?? ""} onChange={field.onChange} />
 						</FormControl>
-						<FormDescription>Password for SFTP authentication (optional if using private key).</FormDescription>
+						<FormDescription>Contraseña para la autenticación SFTP (opcional si utiliza clave privada).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -86,7 +86,7 @@ export const SFTPForm = ({ form }: Props) => {
 				name="privateKey"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Private Key (Optional)</FormLabel>
+						<FormLabel>Clave Privada (Opcional)</FormLabel>
 						<FormControl>
 							<Textarea
 								placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
@@ -96,7 +96,7 @@ export const SFTPForm = ({ form }: Props) => {
 								value={field.value ?? ""}
 							/>
 						</FormControl>
-						<FormDescription>SSH private key for authentication (optional if using password).</FormDescription>
+						<FormDescription>Clave privada SSH para la autenticación (opcional si utiliza contraseña).</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -106,11 +106,11 @@ export const SFTPForm = ({ form }: Props) => {
 				name="path"
 				render={({ field }) => (
 					<FormItem>
-						<FormLabel>Path</FormLabel>
+						<FormLabel>Ruta</FormLabel>
 						<FormControl>
 							<Input placeholder="/backups" {...field} />
 						</FormControl>
-						<FormDescription>Path to the directory on the SFTP server.</FormDescription>
+						<FormDescription>Ruta al directorio en el servidor SFTP.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				)}
@@ -121,9 +121,9 @@ export const SFTPForm = ({ form }: Props) => {
 				render={({ field }) => (
 					<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
 						<div className="space-y-0.5">
-							<FormLabel>Skip Host Key Verification</FormLabel>
+							<FormLabel>Omitir Verificación de Clave del Host</FormLabel>
 							<FormDescription>
-								Disable SSH host key checking. Useful for servers with dynamic IPs or self-signed keys.
+								Desactiva la verificación de clave del host SSH. Útil para servidores con IPs dinámicas o claves autofirmadas.
 							</FormDescription>
 						</div>
 						<FormControl>
@@ -138,7 +138,7 @@ export const SFTPForm = ({ form }: Props) => {
 					name="knownHosts"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Known Hosts</FormLabel>
+							<FormLabel>Hosts Conocidos</FormLabel>
 							<FormControl>
 								<Textarea
 									placeholder="example.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ..."
@@ -149,7 +149,7 @@ export const SFTPForm = ({ form }: Props) => {
 								/>
 							</FormControl>
 							<FormDescription>
-								The contents of the <code>known_hosts</code> file for this server.
+								El contenido del archivo <code>known_hosts</code> para este servidor.
 							</FormDescription>
 							<FormMessage />
 						</FormItem>

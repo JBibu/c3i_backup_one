@@ -16,7 +16,7 @@ const mount = async (config: BackendConfig, path: string) => {
 		logger.error("Provided config is not for NFS backend");
 		return {
 			status: BACKEND_STATUS.error,
-			error: "Provided config is not for NFS backend",
+			error: "La configuración proporcionada no es para el backend NFS",
 		};
 	}
 
@@ -24,7 +24,7 @@ const mount = async (config: BackendConfig, path: string) => {
 		logger.error("NFS mounting is only supported on Linux hosts.");
 		return {
 			status: BACKEND_STATUS.error,
-			error: "NFS mounting is only supported on Linux hosts.",
+			error: "El montaje de NFS solo es compatible con hosts Linux.",
 		};
 	}
 
@@ -79,7 +79,7 @@ const unmount = async (path: string) => {
 		logger.error("NFS unmounting is only supported on Linux hosts.");
 		return {
 			status: BACKEND_STATUS.error,
-			error: "NFS unmounting is only supported on Linux hosts.",
+			error: "El desmontaje de NFS solo es compatible con hosts Linux.",
 		};
 	}
 
@@ -114,17 +114,17 @@ const checkHealth = async (path: string) => {
 		try {
 			await fs.access(path);
 		} catch {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		const mount = await getMountForPath(path);
 
 		if (!mount || mount.mountPoint !== path) {
-			throw new Error("Volume is not mounted");
+			throw new Error("El volumen no está montado");
 		}
 
 		if (!mount.fstype.startsWith("nfs")) {
-			throw new Error(`Path ${path} is not mounted as NFS (found ${mount.fstype}).`);
+			throw new Error(`La ruta ${path} no está montada como NFS (se encontró ${mount.fstype}).`);
 		}
 
 		logger.debug(`NFS volume at ${path} is healthy and mounted.`);
@@ -135,7 +135,7 @@ const checkHealth = async (path: string) => {
 		return await withTimeout(run(), OPERATION_TIMEOUT, "NFS health check");
 	} catch (error) {
 		const message = toMessage(error);
-		if (message !== "Volume is not mounted") {
+		if (message !== "El volumen no está montado") {
 			logger.error("NFS volume health check failed:", message);
 		}
 		return { status: BACKEND_STATUS.error, error: message };

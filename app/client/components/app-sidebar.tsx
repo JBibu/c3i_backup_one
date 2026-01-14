@@ -22,27 +22,27 @@ import { ReleaseNotesDialog } from "./release-notes-dialog";
 
 const items = [
 	{
-		title: "Volumes",
+		title: "Volúmenes",
 		url: "/volumes",
 		icon: HardDrive,
 	},
 	{
-		title: "Repositories",
+		title: "Repositorios",
 		url: "/repositories",
 		icon: Database,
 	},
 	{
-		title: "Backups",
+		title: "Copias de seguridad",
 		url: "/backups",
 		icon: CalendarClock,
 	},
 	{
-		title: "Notifications",
+		title: "Notificaciones",
 		url: "/notifications",
 		icon: Bell,
 	},
 	{
-		title: "Settings",
+		title: "Configuración",
 		url: "/settings",
 		icon: Settings,
 	},
@@ -60,12 +60,12 @@ export function AppSidebar() {
 			: `https://github.com/nicotsx/zerobyte/releases/tag/${displayVersion}`;
 
 	return (
-		<Sidebar variant="inset" collapsible="icon" className="p-0">
-			<SidebarHeader className="bg-card-header border-b border-border/50 hidden md:flex h-16.25 flex-row items-center p-4">
-				<Link to="/volumes" className="flex items-center gap-3 font-semibold pl-2">
-					<img src="/images/zerobyte.png" alt="C3i Backup ONE Logo" className={cn("h-8 w-8 shrink-0 object-contain -ml-2")} />
+		<Sidebar variant="inset" collapsible="icon" className="p-0 pt-8">
+			<SidebarHeader className="bg-card-header border-b border-border/50 hidden md:flex h-[65px] flex-row items-center px-5 py-2">
+				<Link to="/volumes" className="flex items-center gap-4 font-semibold">
+					<img src="/images/zerobyte.png" alt="C3i Backup ONE Logo" className={cn("h-16 w-16 shrink-0 object-contain")} />
 					<span
-						className={cn("text-base transition-all duration-200 -ml-1", {
+						className={cn("text-base transition-all duration-200 leading-tight", {
 							"opacity-0 w-0 overflow-hidden ": state === "collapsed",
 						})}
 					>
@@ -138,7 +138,7 @@ export function AppSidebar() {
 							onClick={() => setShowReleaseNotes(true)}
 							className="text-[10px] font-medium text-destructive hover:underline cursor-pointer"
 						>
-							Update available
+							Actualización disponible
 						</button>
 					)}
 				</div>

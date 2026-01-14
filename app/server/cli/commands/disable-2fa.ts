@@ -13,11 +13,11 @@ const disable2FA = async (username: string) => {
 	const [user] = await db.select().from(usersTable).where(eq(usersTable.username, username));
 
 	if (!user) {
-		throw new Error(`User "${username}" not found`);
+		throw new Error(`Usuario "${username}" no encontrado`);
 	}
 
 	if (!user.twoFactorEnabled) {
-		throw new Error(`User "${username}" does not have 2FA enabled`);
+		throw new Error(`El usuario "${username}" no tiene 2FA habilitado`);
 	}
 
 	await db.transaction(async (tx) => {
@@ -27,10 +27,10 @@ const disable2FA = async (username: string) => {
 };
 
 export const disable2FACommand = new Command("disable-2fa")
-	.description("Disable two-factor authentication for a user")
-	.option("-u, --username <username>", "Username of the account")
+	.description("Deshabilitar autenticación de dos factores para un usuario")
+	.option("-u, --username <username>", "Nombre de usuario de la cuenta")
 	.action(async (options) => {
-		console.info("\n🔐 C3i Backup ONE 2FA Disable\n");
+		console.info("\n🔐 C3i Backup ONE Deshabilitar 2FA\n");
 
 		let username = options.username;
 
@@ -38,23 +38,23 @@ export const disable2FACommand = new Command("disable-2fa")
 			const users = await listUsers();
 
 			if (users.length === 0) {
-				console.error("❌ No users found in the database.");
-				console.info("   Please create a user first by starting the application.");
+				console.error("❌ No se encontraron usuarios en la base de datos.");
+				console.info("   Por favor, cree un usuario primero iniciando la aplicación.");
 				process.exit(1);
 			}
 
 			username = await select({
-				message: "Select user to disable 2FA for:",
+				message: "Seleccione el usuario para deshabilitar 2FA:",
 				choices: users.map((u) => ({ name: u.username, value: u.username })),
 			});
 		}
 
 		try {
 			await disable2FA(username);
-			console.info(`\n✅ Two-factor authentication has been disabled for user "${username}".`);
-			console.info("   The user can re-enable 2FA from their account settings.");
+			console.info(`\n✅ La autenticación de dos factores ha sido deshabilitada para el usuario "${username}".`);
+			console.info("   El usuario puede volver a habilitar 2FA desde la configuración de su cuenta.");
 		} catch (error) {
-			console.error(`\n❌ Failed to disable 2FA: ${toMessage(error)}`);
+			console.error(`\n❌ Error al deshabilitar 2FA: ${toMessage(error)}`);
 			process.exit(1);
 		}
 

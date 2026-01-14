@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { isTauri } from "~/client/lib/tauri";
 
 type ServerEventType =
 	| "connected"
@@ -66,9 +67,22 @@ export function useServerEvents() {
 
 		eventSource.addEventListener("heartbeat", () => {});
 
-		eventSource.addEventListener("backup:started", (e) => {
+		eventSource.addEventListener("backup:started", async (e) => {
 			const data = JSON.parse(e.data) as BackupEvent;
 			console.info("[SSE] Backup started:", data);
+
+			// Send desktop notification for backup start
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = "⏳ Iniciando copia de seguridad";
+					const body = `${data.volumeName} → ${data.repositoryName}`;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
 
 			handlersRef.current.get("backup:started")?.forEach((handler) => {
 				handler(data);
@@ -83,12 +97,30 @@ export function useServerEvents() {
 			});
 		});
 
-		eventSource.addEventListener("backup:completed", (e) => {
+		eventSource.addEventListener("backup:completed", async (e) => {
 			const data = JSON.parse(e.data) as BackupEvent;
 			console.info("[SSE] Backup completed:", data);
 
 			void queryClient.invalidateQueries();
 			void queryClient.refetchQueries();
+
+			// Send desktop notification for backup completion
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = data.status === "success"
+						? "✓ Copia de seguridad completada"
+						: data.status === "error"
+						? "✗ Error en copia de seguridad"
+						: "⚠ Copia de seguridad completada con advertencias";
+
+					const body = `${data.volumeName} → ${data.repositoryName}`;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
 
 			handlersRef.current.get("backup:completed")?.forEach((handler) => {
 				handler(data);
@@ -135,21 +167,52 @@ export function useServerEvents() {
 			});
 		});
 
-		eventSource.addEventListener("mirror:started", (e) => {
+		eventSource.addEventListener("mirror:started", async (e) => {
 			const data = JSON.parse(e.data) as MirrorEvent;
 			console.info("[SSE] Mirror copy started:", data);
+
+			// Send desktop notification for mirror start
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = "⏳ Iniciando copia espejo";
+					const body = data.repositoryName;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
 
 			handlersRef.current.get("mirror:started")?.forEach((handler) => {
 				handler(data);
 			});
 		});
 
-		eventSource.addEventListener("mirror:completed", (e) => {
+		eventSource.addEventListener("mirror:completed", async (e) => {
 			const data = JSON.parse(e.data) as MirrorEvent;
 			console.info("[SSE] Mirror copy completed:", data);
 
 			// Invalidate queries to refresh mirror status in the UI
 			void queryClient.invalidateQueries();
+
+			// Send desktop notification for mirror completion
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = data.status === "success"
+						? "✓ Copia espejo completada"
+						: "✗ Error en copia espejo";
+
+					const body = data.status === "error" && data.error
+						? `${data.repositoryName}: ${data.error}`
+						: data.repositoryName;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
 
 			handlersRef.current.get("mirror:completed")?.forEach((handler) => {
 				handler(data);

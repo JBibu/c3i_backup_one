@@ -18,9 +18,9 @@ export function ReleaseNotesDialog({ open, onOpenChange, updates }: ReleaseNotes
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-h-[80vh] flex flex-col p-0">
 				<DialogHeader className="p-6 pb-2">
-					<DialogTitle className="flex items-center gap-2">Release Notes</DialogTitle>
+					<DialogTitle className="flex items-center gap-2">Notas de la versión</DialogTitle>
 					<DialogDescription>
-						Current version: {updates.currentVersion} • Latest version: {updates.latestVersion}
+						Versión actual: {updates.currentVersion} • Última versión: {updates.latestVersion}
 					</DialogDescription>
 				</DialogHeader>
 				<ScrollArea className="p-6 pt-2 h-[50vh] min-w-0">

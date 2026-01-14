@@ -77,7 +77,7 @@ export const buildRepoUrl = (config: RepositoryConfig): string => {
 	switch (config.backend) {
 		case "local":
 			if (config.isExistingRepository) {
-				if (!config.path) throw new Error("Path is required for existing local repositories");
+				if (!config.path) throw new Error("La ruta es obligatoria para repositorios locales existentes");
 				return config.path;
 			}
 
@@ -101,7 +101,7 @@ export const buildRepoUrl = (config: RepositoryConfig): string => {
 		case "sftp":
 			return `sftp:${config.user}@${config.host}:${config.path}`;
 		default: {
-			throw new Error(`Unsupported repository backend: ${JSON.stringify(config)}`);
+			throw new Error(`Backend de repositorio no soportado: ${JSON.stringify(config)}`);
 		}
 	}
 };
@@ -169,7 +169,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 
 			if (normalizedKey.includes("ENCRYPTED")) {
 				logger.error("SFTP: Private key appears to be passphrase-protected. Please use an unencrypted key.");
-				throw new Error("Passphrase-protected SSH keys are not supported. Please provide an unencrypted private key.");
+				throw new Error("No se admiten claves SSH protegidas con contraseña. Proporcione una clave privada sin cifrar.");
 			}
 
 			await fs.writeFile(keyPath, normalizedKey, { mode: 0o600 });
@@ -584,7 +584,7 @@ const deleteSnapshots = async (config: RepositoryConfig, snapshotIds: string[]) 
 	const env = await buildEnv(config);
 
 	if (snapshotIds.length === 0) {
-		throw new Error("No snapshot IDs provided for deletion.");
+		throw new Error("No se proporcionaron IDs de snapshot para eliminar.");
 	}
 
 	const args: string[] = ["--repo", repoUrl, "forget", ...snapshotIds, "--prune"];
@@ -614,7 +614,7 @@ const tagSnapshots = async (
 	const env = await buildEnv(config);
 
 	if (snapshotIds.length === 0) {
-		throw new Error("No snapshot IDs provided for tagging.");
+		throw new Error("No se proporcionaron IDs de snapshot para etiquetar.");
 	}
 
 	const args: string[] = ["--repo", repoUrl, "tag", ...snapshotIds];

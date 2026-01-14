@@ -24,24 +24,24 @@ export const DirectoryForm = ({ form }: Props) => {
 			render={({ field }) => {
 				return (
 					<FormItem>
-						<FormLabel>Directory Path</FormLabel>
+						<FormLabel>Ruta del Directorio</FormLabel>
 						<FormControl>
 							{field.value ? (
 								<div className="flex items-center gap-2">
 									<div className="flex-1 border rounded-md p-3 bg-muted/50">
-										<div className="text-xs font-medium text-muted-foreground mb-1">Selected path:</div>
+										<div className="text-xs font-medium text-muted-foreground mb-1">Ruta seleccionada:</div>
 										<div className="text-sm font-mono break-all">{field.value}</div>
 									</div>
 									<Button type="button" variant="outline" size="sm" onClick={() => field.onChange("")}>
 										<Pencil className="h-4 w-4 mr-2" />
-										Change
+										Cambiar
 									</Button>
 								</div>
 							) : (
 								<DirectoryBrowser onSelectPath={(path) => field.onChange(path)} selectedPath={field.value} />
 							)}
 						</FormControl>
-						<FormDescription>Browse and select a directory on the host filesystem to track.</FormDescription>
+						<FormDescription>Examine y seleccione un directorio en el sistema de archivos del host para rastrear.</FormDescription>
 						<FormMessage />
 					</FormItem>
 				);

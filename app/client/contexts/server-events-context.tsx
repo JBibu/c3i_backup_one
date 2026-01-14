@@ -1,0 +1,259 @@
+import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { isTauri } from "~/client/lib/tauri";
+
+type ServerEventType =
+	| "connected"
+	| "heartbeat"
+	| "backup:started"
+	| "backup:progress"
+	| "backup:completed"
+	| "volume:mounted"
+	| "volume:unmounted"
+	| "volume:updated"
+	| "mirror:started"
+	| "mirror:completed";
+
+export interface BackupEvent {
+	scheduleId: number;
+	volumeName: string;
+	repositoryName: string;
+	status?: "success" | "error";
+}
+
+export interface BackupProgressEvent {
+	scheduleId: number;
+	volumeName: string;
+	repositoryName: string;
+	seconds_elapsed: number;
+	percent_done: number;
+	total_files: number;
+	files_done: number;
+	total_bytes: number;
+	bytes_done: number;
+	current_files: string[];
+}
+
+export interface VolumeEvent {
+	volumeName: string;
+}
+
+export interface MirrorEvent {
+	scheduleId: number;
+	repositoryId: string;
+	repositoryName: string;
+	status?: "success" | "error";
+	error?: string;
+}
+
+type EventHandler = (data: unknown) => void;
+
+interface ServerEventsContextValue {
+	addEventListener: (event: ServerEventType, handler: EventHandler) => () => void;
+}
+
+const ServerEventsContext = createContext<ServerEventsContextValue | null>(null);
+
+export function ServerEventsProvider({ children }: { children: ReactNode }) {
+	const queryClient = useQueryClient();
+	const eventSourceRef = useRef<EventSource | null>(null);
+	const handlersRef = useRef<Map<ServerEventType, Set<EventHandler>>>(new Map());
+
+	useEffect(() => {
+		const eventSource = new EventSource("/api/v1/events");
+		eventSourceRef.current = eventSource;
+
+		eventSource.addEventListener("connected", () => {
+			console.info("[SSE] Connected to server events");
+		});
+
+		eventSource.addEventListener("heartbeat", () => {});
+
+		eventSource.addEventListener("backup:started", async (e) => {
+			const data = JSON.parse(e.data) as BackupEvent;
+			console.info("[SSE] Backup started:", data);
+
+			// Send desktop notification for backup start
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = "⏳ Iniciando copia de seguridad";
+					const body = `${data.volumeName} → ${data.repositoryName}`;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
+
+			handlersRef.current.get("backup:started")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("backup:progress", (e) => {
+			const data = JSON.parse(e.data) as BackupProgressEvent;
+
+			handlersRef.current.get("backup:progress")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("backup:completed", async (e) => {
+			const data = JSON.parse(e.data) as BackupEvent;
+			console.info("[SSE] Backup completed:", data);
+
+			void queryClient.invalidateQueries();
+			void queryClient.refetchQueries();
+
+			// Send desktop notification for backup completion
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = data.status === "success"
+						? "✓ Copia de seguridad completada"
+						: data.status === "error"
+						? "✗ Error en copia de seguridad"
+						: "⚠ Copia de seguridad completada con advertencias";
+
+					const body = `${data.volumeName} → ${data.repositoryName}`;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
+
+			handlersRef.current.get("backup:completed")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("volume:mounted", (e) => {
+			const data = JSON.parse(e.data) as VolumeEvent;
+			console.info("[SSE] Volume mounted:", data);
+
+			handlersRef.current.get("volume:mounted")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("volume:unmounted", (e) => {
+			const data = JSON.parse(e.data) as VolumeEvent;
+			console.info("[SSE] Volume unmounted:", data);
+
+			handlersRef.current.get("volume:unmounted")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("volume:updated", (e) => {
+			const data = JSON.parse(e.data) as VolumeEvent;
+			console.info("[SSE] Volume updated:", data);
+
+			void queryClient.invalidateQueries();
+
+			handlersRef.current.get("volume:updated")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("volume:status_updated", (e) => {
+			const data = JSON.parse(e.data) as VolumeEvent;
+			console.info("[SSE] Volume status updated:", data);
+
+			void queryClient.invalidateQueries();
+
+			handlersRef.current.get("volume:updated")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("mirror:started", async (e) => {
+			const data = JSON.parse(e.data) as MirrorEvent;
+			console.info("[SSE] Mirror copy started:", data);
+
+			// Send desktop notification for mirror start
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = "⏳ Iniciando copia espejo";
+					const body = data.repositoryName;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
+
+			handlersRef.current.get("mirror:started")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.addEventListener("mirror:completed", async (e) => {
+			const data = JSON.parse(e.data) as MirrorEvent;
+			console.info("[SSE] Mirror copy completed:", data);
+
+			// Invalidate queries to refresh mirror status in the UI
+			void queryClient.invalidateQueries();
+
+			// Send desktop notification for mirror completion
+			if (isTauri()) {
+				try {
+					const { invoke } = await import("@tauri-apps/api/core");
+					const title = data.status === "success"
+						? "✓ Copia espejo completada"
+						: "✗ Error en copia espejo";
+
+					const body = data.status === "error" && data.error
+						? `${data.repositoryName}: ${data.error}`
+						: data.repositoryName;
+
+					await invoke("send_notification", { title, body });
+				} catch (error) {
+					console.error("Failed to send notification:", error);
+				}
+			}
+
+			handlersRef.current.get("mirror:completed")?.forEach((handler) => {
+				handler(data);
+			});
+		});
+
+		eventSource.onerror = (error) => {
+			console.error("[SSE] Connection error:", error);
+		};
+
+		return () => {
+			console.info("[SSE] Disconnecting from server events");
+			eventSource.close();
+			eventSourceRef.current = null;
+		};
+	}, [queryClient]);
+
+	const addEventListener = (event: ServerEventType, handler: EventHandler) => {
+		if (!handlersRef.current.has(event)) {
+			handlersRef.current.set(event, new Set());
+		}
+		handlersRef.current.get(event)?.add(handler);
+
+		return () => {
+			handlersRef.current.get(event)?.delete(handler);
+		};
+	};
+
+	return (
+		<ServerEventsContext.Provider value={{ addEventListener }}>
+			{children}
+		</ServerEventsContext.Provider>
+	);
+}
+
+export function useServerEvents() {
+	const context = useContext(ServerEventsContext);
+	if (!context) {
+		throw new Error("useServerEvents must be used within ServerEventsProvider");
+	}
+	return context;
+}

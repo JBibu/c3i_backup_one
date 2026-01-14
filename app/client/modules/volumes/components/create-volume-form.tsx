@@ -86,7 +86,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 		onError: (error) => {
 			setTestMessage({
 				success: false,
-				message: error?.message || "Failed to test connection. Please try again.",
+				message: error?.message || "Error al probar la conexión. Por favor, inténtelo de nuevo.",
 			});
 		},
 		onSuccess: (data) => {
@@ -117,17 +117,17 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 					name="name"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Name</FormLabel>
+							<FormLabel>Nombre</FormLabel>
 							<FormControl>
 								<Input
 									{...field}
-									placeholder="Volume name"
+									placeholder="Nombre del volume"
 									onChange={(e) => field.onChange(slugify(e.target.value))}
 									maxLength={32}
 									minLength={2}
 								/>
 							</FormControl>
-							<FormDescription>Unique identifier for the volume.</FormDescription>
+							<FormDescription>Identificador único para el volume.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -142,11 +142,11 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 							<Select onValueChange={field.onChange} value={field.value}>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Select a backend" />
+										<SelectValue placeholder="Seleccione un backend" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									<SelectItem value="directory">Directory</SelectItem>
+									<SelectItem value="directory">Directorio</SelectItem>
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<div>
@@ -156,7 +156,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 											</div>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.sysAdmin })}>
-											<p>Remote mounts require SYS_ADMIN capability</p>
+											<p>Los montajes remotos requieren capacidad SYS_ADMIN</p>
 										</TooltipContent>
 									</Tooltip>
 									<Tooltip>
@@ -168,7 +168,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 											</div>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.sysAdmin })}>
-											<p>Remote mounts require SYS_ADMIN capability</p>
+											<p>Los montajes remotos requieren capacidad SYS_ADMIN</p>
 										</TooltipContent>
 									</Tooltip>
 									<Tooltip>
@@ -180,7 +180,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 											</div>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.sysAdmin })}>
-											<p>Remote mounts require SYS_ADMIN capability</p>
+											<p>Los montajes remotos requieren capacidad SYS_ADMIN</p>
 										</TooltipContent>
 									</Tooltip>
 									<Tooltip>
@@ -192,7 +192,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 											</div>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.sysAdmin })}>
-											<p>Remote mounts require SYS_ADMIN capability</p>
+											<p>Los montajes remotos requieren capacidad SYS_ADMIN</p>
 										</TooltipContent>
 									</Tooltip>
 									<Tooltip>
@@ -204,15 +204,15 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 											</div>
 										</TooltipTrigger>
 										<TooltipContent className={cn({ hidden: capabilities.sysAdmin })}>
-											<p>Remote mounts require SYS_ADMIN capability</p>
+											<p>Los montajes remotos requieren capacidad SYS_ADMIN</p>
 										</TooltipContent>
 										<TooltipContent className={cn({ hidden: !capabilities.sysAdmin || capabilities.rclone })}>
-											<p>Setup rclone to use this backend</p>
+											<p>Configure rclone para usar este backend</p>
 										</TooltipContent>
 									</Tooltip>
 								</SelectContent>
 							</Select>
-							<FormDescription>Choose the storage backend for this volume.</FormDescription>
+							<FormDescription>Elija el backend de almacenamiento para este volume.</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -242,12 +242,12 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 								)}
 								{!testBackendConnection.isPending && !testMessage && <Plug className="mr-2 h-4 w-4" />}
 								{testBackendConnection.isPending
-									? "Testing..."
+									? "Probando..."
 									: testMessage
 										? testMessage.success
-											? "Connection Successful"
-											: "Test Failed"
-										: "Test Connection"}
+											? "Conexión exitosa"
+											: "Prueba fallida"
+										: "Probar conexión"}
 							</Button>
 						</div>
 						{testMessage && (
@@ -265,7 +265,7 @@ export const CreateVolumeForm = ({ onSubmit, mode = "create", initialValues, for
 				{mode === "update" && (
 					<Button type="submit" className="w-full" loading={loading}>
 						<Save className="h-4 w-4 mr-2" />
-						Save changes
+						Guardar cambios
 					</Button>
 				)}
 			</form>

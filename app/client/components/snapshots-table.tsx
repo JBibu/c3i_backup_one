@@ -89,9 +89,9 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 				body: { snapshotIds: Array.from(selectedIds) },
 			}),
 			{
-				loading: `Deleting ${selectedIds.size} snapshots...`,
-				success: "Snapshots deleted successfully",
-				error: (error) => parseError(error)?.message || "Failed to delete snapshots",
+				loading: `Eliminando ${selectedIds.size} snapshots...`,
+				success: "Snapshots eliminados correctamente",
+				error: (error) => parseError(error)?.message || "Error al eliminar snapshots",
 			},
 		);
 	};
@@ -109,9 +109,9 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 				},
 			}),
 			{
-				loading: `Re-tagging ${selectedIds.size} snapshots...`,
-				success: `Snapshots re-tagged to ${schedule.name}`,
-				error: (error) => parseError(error)?.message || "Failed to re-tag snapshots",
+				loading: `Reetiquetando ${selectedIds.size} snapshots...`,
+				success: `Snapshots reetiquetados a ${schedule.name}`,
+				error: (error) => parseError(error)?.message || "Error al reetiquetar snapshots",
 			},
 		);
 	};
@@ -126,14 +126,14 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 								<Checkbox
 									checked={selectedIds.size === snapshots.length && snapshots.length > 0}
 									onCheckedChange={toggleSelectAll}
-									aria-label="Select all"
+									aria-label="Seleccionar todo"
 								/>
 							</TableHead>
-							<TableHead className="uppercase">Snapshot ID</TableHead>
-							<TableHead className="uppercase">Schedule</TableHead>
-							<TableHead className="uppercase">Date & Time</TableHead>
-							<TableHead className="uppercase">Size</TableHead>
-							<TableHead className="uppercase hidden md:table-cell text-right">Duration</TableHead>
+							<TableHead className="uppercase">ID Snapshot</TableHead>
+							<TableHead className="uppercase">Programación</TableHead>
+							<TableHead className="uppercase">Fecha y hora</TableHead>
+							<TableHead className="uppercase">Tamaño</TableHead>
+							<TableHead className="uppercase hidden md:table-cell text-right">Duración</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -159,7 +159,7 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 												}
 												setSelectedIds(newSelected);
 											}}
-											aria-label={`Select snapshot ${snapshot.short_id}` as string}
+											aria-label={`Seleccionar snapshot ${snapshot.short_id}` as string}
 										/>
 									</TableCell>
 									<TableCell className="font-mono text-sm">
@@ -222,7 +222,7 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 							>
 								<X className="h-4 w-4" />
 							</Button>
-							<span className="text-sm font-medium">{selectedIds.size} selected</span>
+							<span className="text-sm font-medium">{selectedIds.size} seleccionado{selectedIds.size === 1 ? "" : "s"}</span>
 						</div>
 						<div className="flex items-center gap-2">
 							<Button
@@ -232,7 +232,7 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 								onClick={() => setShowReTagDialog(true)}
 							>
 								<Tag className="h-4 w-4 mr-2" />
-								Re-tag
+								Reetiquetar
 							</Button>
 							<Button
 								variant="destructive"
@@ -241,7 +241,7 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 								onClick={() => setShowBulkDeleteConfirm(true)}
 							>
 								<Trash2 className="h-4 w-4 mr-2" />
-								Delete
+								Eliminar
 							</Button>
 						</div>
 					</div>
@@ -251,20 +251,20 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 			<AlertDialog open={showBulkDeleteConfirm} onOpenChange={setShowBulkDeleteConfirm}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {selectedIds.size} snapshots?</AlertDialogTitle>
+						<AlertDialogTitle>¿Eliminar {selectedIds.size} snapshots?</AlertDialogTitle>
 						<AlertDialogDescription>
-							This action cannot be undone. This will permanently delete the selected snapshots and all their data from
-							the repository.
+							Esta acción no se puede deshacer. Esto eliminará permanentemente los snapshots seleccionados y todos sus datos del
+							repository.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Cancelar</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={handleBulkDelete}
 							disabled={deleteSnapshots.isPending}
 							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 						>
-							Delete {selectedIds.size} snapshots
+							Eliminar {selectedIds.size} snapshots
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -273,16 +273,16 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 			<Dialog open={showReTagDialog} onOpenChange={setShowReTagDialog}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Re-tag snapshots</DialogTitle>
+						<DialogTitle>Reetiquetar snapshots</DialogTitle>
 						<DialogDescription>
-							Select a backup schedule to re-tag the {selectedIds.size} selected snapshots. All {selectedIds.size}{" "}
-							selected snapshots will be associated with the chosen schedule.
+							Seleccione una programación de copia de seguridad para reetiquetar los {selectedIds.size} snapshots seleccionados. Todos los {selectedIds.size}{" "}
+							snapshots seleccionados se asociarán con la programación elegida.
 						</DialogDescription>
 					</DialogHeader>
 					<div className="py-4">
 						<Select value={targetScheduleId} onValueChange={setTargetScheduleId}>
 							<SelectTrigger>
-								<SelectValue placeholder="Select a schedule" />
+								<SelectValue placeholder="Seleccione una programación" />
 							</SelectTrigger>
 							<SelectContent>
 								{backups.map((backup) => (
@@ -295,10 +295,10 @@ export const SnapshotsTable = ({ snapshots, repositoryId, backups }: Props) => {
 					</div>
 					<DialogFooter>
 						<Button variant="outline" onClick={() => setShowReTagDialog(false)}>
-							Cancel
+							Cancelar
 						</Button>
 						<Button onClick={handleBulkReTag} disabled={!targetScheduleId}>
-							Apply tags
+							Aplicar etiquetas
 						</Button>
 					</DialogFooter>
 				</DialogContent>

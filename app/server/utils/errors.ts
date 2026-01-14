@@ -19,20 +19,20 @@ export const toMessage = (err: unknown): string => {
 };
 
 const resticErrorCodes: Record<number, string> = {
-	1: "Command failed: An error occurred while executing the command.",
-	2: "Go runtime error: A runtime error occurred in the Go program.",
-	3: "Backup could not read all files: Some files could not be read during backup.",
-	10: "Repository not found: The specified repository could not be found.",
-	11: "Failed to lock repository: Unable to acquire a lock on the repository. Try to run doctor on the repository.",
-	12: "Wrong repository password: The provided password for the repository is incorrect.",
-	130: "Backup interrupted: The backup process was interrupted.",
+	1: "Comando fallido: Se produjo un error al ejecutar el comando.",
+	2: "Error de ejecución de Go: Se produjo un error de ejecución en el programa Go.",
+	3: "La copia de seguridad no pudo leer todos los archivos: No se pudieron leer algunos archivos durante la copia de seguridad.",
+	10: "Repositorio no encontrado: No se pudo encontrar el repositorio especificado.",
+	11: "Error al bloquear el repositorio: No se pudo adquirir un bloqueo en el repositorio. Intente ejecutar el doctor en el repositorio.",
+	12: "Contraseña de repositorio incorrecta: La contraseña proporcionada para el repositorio es incorrecta.",
+	130: "Copia de seguridad interrumpida: El proceso de copia de seguridad fue interrumpido.",
 };
 
 export class ResticError extends Error {
 	code: number;
 
 	constructor(code: number, stderr: string) {
-		const message = resticErrorCodes[code] || `Unknown restic error with code ${code}`;
+		const message = resticErrorCodes[code] || `Error de restic desconocido con código ${code}`;
 		super(`${message}\n${stderr}`);
 
 		this.code = code;
