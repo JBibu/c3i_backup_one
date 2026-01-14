@@ -1,9 +1,5 @@
-import { redirect } from "react-router";
+import { Navigate } from "react-router";
 
-export const clientLoader = async () => {
-	return redirect("/volumes");
-};
-
-export const loader = async () => {
-	return redirect("/volumes");
-};
+export default function Root() {
+	return <Navigate to="/volumes" replace />;
+}

@@ -5,6 +5,7 @@
 	"scripts": {
 		"lint": "oxlint --type-aware",
 		"build": "react-router build",
+		"build:tauri": "BUILD_TARGET=tauri react-router build",
 		"dev": "NODE_ENV=development C3I_BACKUP_ONE_RESOURCES_PATH=$(pwd)/src-tauri/resources/bin bunx --bun vite",
 		"start": "bun ./dist/server/index.js",
 		"cli:dev": "bun run app/server/cli/main.ts",
