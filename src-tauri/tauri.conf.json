@@ -61,9 +61,6 @@
     "shortDescription": "Backup automation tool powered by Restic",
     "longDescription": "C3i Backup ONE is a backup automation tool that provides a modern interface for scheduling, managing, and monitoring encrypted backups using Restic.",
     "windows": {
-      "wix": {
-        "enableElevatedUpdateInstall": true
-      },
       "nsis": {
         "installerIcon": "icons/icon.ico",
         "installMode": "perMachine",
