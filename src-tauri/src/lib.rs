@@ -26,13 +26,13 @@ fn get_backend_url(state: State<AppState>) -> Result<String, String> {
 fn get_data_dir(app: AppHandle) -> Result<String, String> {
     app.path()
         .app_data_dir()
-        .map(|p| p.to_string_lossy().to_string())
+        .map(|p| normalize_windows_path(p).to_string_lossy().to_string())
         .map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 fn open_data_dir(app: AppHandle) -> Result<(), String> {
-    let data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    let data_dir = normalize_windows_path(app.path().app_data_dir().map_err(|e| e.to_string())?);
 
     #[cfg(target_os = "linux")]
     {
@@ -63,7 +63,7 @@ fn open_data_dir(app: AppHandle) -> Result<(), String> {
 
 #[tauri::command]
 fn open_logs_dir(app: AppHandle) -> Result<(), String> {
-    let logs_dir = app.path().app_log_dir().map_err(|e| e.to_string())?;
+    let logs_dir = normalize_windows_path(app.path().app_log_dir().map_err(|e| e.to_string())?);
 
     #[cfg(target_os = "linux")]
     {
@@ -126,9 +126,26 @@ async fn send_notification(app: tauri::AppHandle, title: String, body: String) -
         .map_err(|e| e.to_string())
 }
 
+fn normalize_windows_path(path: std::path::PathBuf) -> std::path::PathBuf {
+    // Remove Windows UNC prefix (\\?\) if present
+    if cfg!(target_os = "windows") {
+        if let Some(path_str) = path.to_str() {
+            if path_str.starts_with(r"\\?\") {
+                if let Some(normalized) = path_str.strip_prefix(r"\\?\") {
+                    return std::path::PathBuf::from(normalized);
+                }
+            }
+        }
+    }
+    path
+}
+
 fn get_sidecar_path(app: &AppHandle) -> Option<std::path::PathBuf> {
     // First check if there's a compiled sidecar in resources
     if let Ok(resource_dir) = app.path().resource_dir() {
+        // Normalize Windows UNC paths
+        let resource_dir = normalize_windows_path(resource_dir);
+
         let target = if cfg!(target_os = "windows") {
             "x86_64-pc-windows-msvc"
         } else if cfg!(target_os = "macos") {
@@ -149,8 +166,12 @@ fn get_sidecar_path(app: &AppHandle) -> Option<std::path::PathBuf> {
         let sidecar_name = format!("c3i-backup-one-server-{}{}", target, ext);
         let sidecar_path = resource_dir.join(&sidecar_name);
 
+        log::info!("Looking for sidecar at: {:?}", sidecar_path);
+
         if sidecar_path.exists() {
             return Some(sidecar_path);
+        } else {
+            log::warn!("Sidecar not found at expected path: {:?}", sidecar_path);
         }
     }
 
@@ -158,11 +179,17 @@ fn get_sidecar_path(app: &AppHandle) -> Option<std::path::PathBuf> {
 }
 
 fn get_resources_path(app: &AppHandle) -> Option<std::path::PathBuf> {
-    app.path().resource_dir().ok().map(|p| p.join("bin"))
+    app.path()
+        .resource_dir()
+        .ok()
+        .map(|p| normalize_windows_path(p).join("bin"))
 }
 
 fn get_migrations_path(app: &AppHandle) -> Option<std::path::PathBuf> {
-    app.path().resource_dir().ok().map(|p| p.join("drizzle"))
+    app.path()
+        .resource_dir()
+        .ok()
+        .map(|p| normalize_windows_path(p).join("drizzle"))
 }
 
 async fn start_sidecar_async(app: AppHandle) -> Result<(), String> {
@@ -189,8 +216,8 @@ async fn start_sidecar_async(app: AppHandle) -> Result<(), String> {
 async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     let port = portpicker::pick_unused_port().ok_or("Failed to find available port")?;
 
-    // Get paths
-    let data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    // Get paths and normalize them
+    let data_dir = normalize_windows_path(app.path().app_data_dir().map_err(|e| e.to_string())?);
     let resources_path = get_resources_path(&app)
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
