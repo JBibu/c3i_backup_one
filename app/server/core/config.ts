@@ -3,6 +3,19 @@ import os from "node:os";
 import { type } from "arktype";
 import "dotenv/config";
 
+/**
+ * Normalize Windows UNC paths (\\?\C:\...) to regular paths
+ * Windows UNC paths can cause issues with some filesystem operations
+ */
+const normalizeWindowsPath = (path: string | undefined): string | undefined => {
+	if (!path) return path;
+	// Remove UNC prefix if present
+	if (path.startsWith("\\\\?\\")) {
+		return path.slice(4);
+	}
+	return path;
+};
+
 const getResticHostname = () => {
 	// In Tauri mode, use the machine hostname
 	if (process.env.C3I_BACKUP_ONE_TAURI === "1") {
@@ -52,7 +65,7 @@ const envSchema = type({
 	serverIdleTimeout: s.SERVER_IDLE_TIMEOUT,
 	resticHostname: s.RESTIC_HOSTNAME || getResticHostname(),
 	port: s.PORT,
-	migrationsPath: s.MIGRATIONS_PATH,
+	migrationsPath: normalizeWindowsPath(s.MIGRATIONS_PATH),
 	appVersion: s.APP_VERSION,
 	trustedOrigins: s.TRUSTED_ORIGINS?.split(",").map((origin) => origin.trim()),
 	disableRateLimiting: s.DISABLE_RATE_LIMITING === "true",

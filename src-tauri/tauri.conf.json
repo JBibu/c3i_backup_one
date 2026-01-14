@@ -52,11 +52,11 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "resources": {
-      "resources/bin/**/*": "bin/",
-      "resources/c3i-backup-one-server-*": "./",
-      "../app/drizzle/**/*": "drizzle/"
-    },
+    "resources": [
+      "resources/bin/**/*",
+      "resources/c3i-backup-one-server-*",
+      "../app/drizzle"
+    ],
     "category": "Utility",
     "shortDescription": "Backup automation tool powered by Restic",
     "longDescription": "C3i Backup ONE is a backup automation tool that provides a modern interface for scheduling, managing, and monitoring encrypted backups using Restic.",

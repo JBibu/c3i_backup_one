@@ -60,7 +60,7 @@ export const runDbMigrations = () => {
 	const isCompiledExecutable = Bun.main.endsWith(".exe") || (!Bun.main.endsWith(".js") && !Bun.main.endsWith(".ts"));
 
 	if (config.migrationsPath) {
-		// Tauri sets this to the bundled drizzle directory
+		// Tauri sets this to the bundled drizzle directory (already normalized in config)
 		migrationsFolder = config.migrationsPath;
 	} else if (isCompiledExecutable) {
 		// When running as compiled sidecar, look for drizzle folder next to the executable on disk
