@@ -60,10 +60,12 @@ export const runDbMigrations = () => {
 	const isCompiledExecutable = Bun.main.endsWith(".exe") || (!Bun.main.endsWith(".js") && !Bun.main.endsWith(".ts"));
 
 	if (config.migrationsPath) {
+		// Tauri sets this to the bundled drizzle directory
 		migrationsFolder = config.migrationsPath;
 	} else if (isCompiledExecutable) {
-		// When running as compiled executable, migrations are embedded relative to the executable
-		migrationsFolder = path.join(path.dirname(Bun.main), "drizzle");
+		// When running as compiled sidecar, look for drizzle folder next to the executable on disk
+		// process.execPath gives the actual filesystem path (Bun.main gives virtual /$bunfs/root path)
+		migrationsFolder = path.join(path.dirname(process.execPath), "drizzle");
 	} else if (config.__prod__) {
 		migrationsFolder = path.join("/app", "assets", "migrations");
 	} else {
