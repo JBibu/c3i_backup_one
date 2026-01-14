@@ -1,5 +1,6 @@
 use std::process::{Child, Command, Stdio};
 use std::sync::Mutex;
+use std::io::{BufRead, BufReader};
 use tauri::{AppHandle, Manager, State};
 use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{TrayIconBuilder, TrayIconEvent};
@@ -53,6 +54,37 @@ fn open_data_dir(app: AppHandle) -> Result<(), String> {
     {
         std::process::Command::new("explorer")
             .arg(&data_dir)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
+fn open_logs_dir(app: AppHandle) -> Result<(), String> {
+    let logs_dir = app.path().app_log_dir().map_err(|e| e.to_string())?;
+
+    #[cfg(target_os = "linux")]
+    {
+        std::process::Command::new("xdg-open")
+            .arg(&logs_dir)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open")
+            .arg(&logs_dir)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("explorer")
+            .arg(&logs_dir)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
@@ -180,7 +212,7 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     // Try to find the sidecar binary
     let sidecar_path = get_sidecar_path(&app);
 
-    let child = if let Some(path) = sidecar_path {
+    let mut child = if let Some(path) = sidecar_path {
         log::info!("Using compiled sidecar: {:?}", path);
 
         Command::new(&path)
@@ -228,6 +260,29 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .spawn()
             .map_err(|e| format!("Failed to spawn bun server: {}", e))?
     };
+
+    // Capture and log sidecar output
+    if let Some(stdout) = child.stdout.take() {
+        let reader = BufReader::new(stdout);
+        std::thread::spawn(move || {
+            for line in reader.lines() {
+                if let Ok(line) = line {
+                    log::info!("[SIDECAR] {}", line);
+                }
+            }
+        });
+    }
+
+    if let Some(stderr) = child.stderr.take() {
+        let reader = BufReader::new(stderr);
+        std::thread::spawn(move || {
+            for line in reader.lines() {
+                if let Ok(line) = line {
+                    log::error!("[SIDECAR] {}", line);
+                }
+            }
+        });
+    }
 
     // Store the port and process
     {
@@ -296,13 +351,18 @@ pub fn run() {
             sidecar_process: Mutex::new(None),
         })
         .setup(|app| {
-            if cfg!(debug_assertions) {
-                app.handle().plugin(
-                    tauri_plugin_log::Builder::default()
-                        .level(log::LevelFilter::Info)
-                        .build(),
-                )?;
-            }
+            // Enable logging in both debug and release builds
+            let log_level = if cfg!(debug_assertions) {
+                log::LevelFilter::Info
+            } else {
+                log::LevelFilter::Info
+            };
+
+            app.handle().plugin(
+                tauri_plugin_log::Builder::default()
+                    .level(log_level)
+                    .build(),
+            )?;
 
             // Create system tray (ordered same as sidebar)
             let show = MenuItemBuilder::with_id("show", "Mostrar App").build(app)?;
@@ -311,6 +371,7 @@ pub fn run() {
             let backups = MenuItemBuilder::with_id("backups", "Copias de seguridad").build(app)?;
             let notifications = MenuItemBuilder::with_id("notifications", "Notificaciones").build(app)?;
             let settings = MenuItemBuilder::with_id("settings", "Configuración").build(app)?;
+            let open_logs = MenuItemBuilder::with_id("open_logs", "Abrir logs").build(app)?;
             let quit = MenuItemBuilder::with_id("quit", "Salir").build(app)?;
 
             let menu = MenuBuilder::new(app)
@@ -322,6 +383,7 @@ pub fn run() {
                 .item(&notifications)
                 .separator()
                 .item(&settings)
+                .item(&open_logs)
                 .separator()
                 .item(&quit)
                 .build()?;
@@ -377,6 +439,9 @@ pub fn run() {
                                 let _ = window.eval("window.location.href = '/settings'");
                             }
                         }
+                        "open_logs" => {
+                            let _ = open_logs_dir(app.clone());
+                        }
                         "quit" => {
                             app.exit(0);
                         }
@@ -424,6 +489,7 @@ pub fn run() {
             get_backend_url,
             get_data_dir,
             open_data_dir,
+            open_logs_dir,
             is_backend_ready,
             get_autostart_enabled,
             set_autostart_enabled,
