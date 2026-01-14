@@ -46,6 +46,7 @@
     "targets": ["deb", "rpm", "msi", "nsis"],
     "icon": [
       "icons/32x32.png",
+      "icons/64x64.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
@@ -58,7 +59,17 @@
     },
     "category": "Utility",
     "shortDescription": "Backup automation tool powered by Restic",
-    "longDescription": "C3i Backup ONE is a backup automation tool that provides a modern interface for scheduling, managing, and monitoring encrypted backups using Restic."
+    "longDescription": "C3i Backup ONE is a backup automation tool that provides a modern interface for scheduling, managing, and monitoring encrypted backups using Restic.",
+    "windows": {
+      "wix": {
+        "enableElevatedUpdateInstall": true
+      },
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "installMode": "perMachine",
+        "displayLanguageSelector": false
+      }
+    }
   },
   "plugins": {
     "shell": {

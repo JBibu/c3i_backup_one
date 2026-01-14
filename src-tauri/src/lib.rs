@@ -222,6 +222,12 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
 
     let mut child = if let Some(path) = sidecar_path {
         log::info!("Using compiled sidecar: {:?}", path);
+        log::info!("Sidecar exists: {}", path.exists());
+
+        // Verify migrations exist
+        if let Some(migrations) = get_migrations_path(&app) {
+            log::info!("Migrations path: {:?}, exists: {}", migrations, migrations.exists());
+        }
 
         Command::new(&path)
             .env("PORT", port.to_string())
@@ -237,10 +243,10 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
-            .map_err(|e| format!("Failed to spawn sidecar: {}", e))?
+            .map_err(|e| format!("Failed to spawn sidecar at {:?}: {}", path, e))?
     } else {
         // In development, try to run with bun directly
-        log::info!("No compiled sidecar found, trying bun for development...");
+        log::warn!("No compiled sidecar found, trying bun for development...");
 
         // Get the project root (parent of src-tauri)
         let project_root = app
@@ -250,6 +256,8 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .parent()
             .map(|p| p.to_path_buf())
             .unwrap_or_else(|| std::env::current_dir().unwrap_or_default());
+
+        log::info!("Project root: {:?}", project_root);
 
         Command::new("bun")
             .arg("run")
@@ -309,6 +317,8 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     let mut attempts = 0;
     let max_attempts = 120; // 60 seconds
 
+    log::info!("Waiting for backend to respond at {}/healthcheck", backend_url);
+
     while attempts < max_attempts {
         match reqwest::get(format!("{}/healthcheck", backend_url)).await {
             Ok(resp) if resp.status().is_success() => {
@@ -317,14 +327,40 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
                 *running = true;
                 return Ok(());
             }
-            _ => {
+            Ok(resp) => {
+                log::warn!("Backend responded with status: {} (attempt {}/{})", resp.status(), attempts + 1, max_attempts);
+                attempts += 1;
+                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+            }
+            Err(e) => {
+                if attempts == 0 || attempts % 10 == 0 {
+                    log::warn!("Failed to connect to backend: {} (attempt {}/{})", e, attempts + 1, max_attempts);
+                }
                 attempts += 1;
                 tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
             }
         }
     }
 
-    Err("Backend failed to start within timeout".to_string())
+    // Check if process is still running
+    {
+        let mut process_lock = state.sidecar_process.lock().map_err(|e| e.to_string())?;
+        if let Some(child) = process_lock.as_mut() {
+            match child.try_wait() {
+                Ok(Some(status)) => {
+                    return Err(format!("Backend process exited with status: {}", status));
+                }
+                Ok(None) => {
+                    log::error!("Backend process is still running but not responding");
+                }
+                Err(e) => {
+                    log::error!("Failed to check backend process status: {}", e);
+                }
+            }
+        }
+    }
+
+    Err("Backend failed to start within timeout - check logs directory for details".to_string())
 }
 
 fn stop_sidecar(state: &AppState) {
