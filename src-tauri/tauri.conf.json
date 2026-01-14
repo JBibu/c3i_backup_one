@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "C3i Backup ONE",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "identifier": "com.c3i.backup-one",
   "build": {
     "frontendDist": "../dist/client",
