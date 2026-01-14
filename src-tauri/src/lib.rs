@@ -164,14 +164,23 @@ fn get_sidecar_path(app: &AppHandle) -> Option<std::path::PathBuf> {
 
         let ext = if cfg!(target_os = "windows") { ".exe" } else { "" };
         let sidecar_name = format!("c3i-backup-one-server-{}{}", target, ext);
-        let sidecar_path = resource_dir.join(&sidecar_name);
 
+        // Try resources subdirectory first (where Tauri actually puts it)
+        let sidecar_path = resource_dir.join("resources").join(&sidecar_name);
+        log::info!("Looking for sidecar at: {:?}", sidecar_path);
+
+        if sidecar_path.exists() {
+            return Some(sidecar_path);
+        }
+
+        // Fall back to root of resource_dir
+        let sidecar_path = resource_dir.join(&sidecar_name);
         log::info!("Looking for sidecar at: {:?}", sidecar_path);
 
         if sidecar_path.exists() {
             return Some(sidecar_path);
         } else {
-            log::warn!("Sidecar not found at expected path: {:?}", sidecar_path);
+            log::warn!("Sidecar not found in resources directory");
         }
     }
 
@@ -182,14 +191,34 @@ fn get_resources_path(app: &AppHandle) -> Option<std::path::PathBuf> {
     app.path()
         .resource_dir()
         .ok()
-        .map(|p| normalize_windows_path(p).join("bin"))
+        .map(|p| {
+            let base = normalize_windows_path(p);
+            // Try resources/bin first
+            let resources_bin = base.join("resources").join("bin");
+            if resources_bin.exists() {
+                resources_bin
+            } else {
+                // Fall back to bin at root
+                base.join("bin")
+            }
+        })
 }
 
 fn get_migrations_path(app: &AppHandle) -> Option<std::path::PathBuf> {
     app.path()
         .resource_dir()
         .ok()
-        .map(|p| normalize_windows_path(p).join("drizzle"))
+        .map(|p| {
+            let base = normalize_windows_path(p);
+            // Try _up_/app/drizzle first (where Tauri puts it)
+            let up_path = base.join("_up_").join("app").join("drizzle");
+            if up_path.exists() {
+                up_path
+            } else {
+                // Fall back to drizzle at root
+                base.join("drizzle")
+            }
+        })
 }
 
 async fn start_sidecar_async(app: AppHandle) -> Result<(), String> {
