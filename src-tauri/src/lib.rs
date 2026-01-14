@@ -161,6 +161,10 @@ fn get_resources_path(app: &AppHandle) -> Option<std::path::PathBuf> {
     app.path().resource_dir().ok().map(|p| p.join("bin"))
 }
 
+fn get_migrations_path(app: &AppHandle) -> Option<std::path::PathBuf> {
+    app.path().resource_dir().ok().map(|p| p.join("drizzle"))
+}
+
 async fn start_sidecar_async(app: AppHandle) -> Result<(), String> {
     // In debug mode (tauri dev), the Vite server is already running on port 4096
     // No need to spawn a separate sidecar
@@ -190,6 +194,9 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     let resources_path = get_resources_path(&app)
         .map(|p| p.to_string_lossy().to_string())
         .unwrap_or_default();
+    let migrations_path = get_migrations_path(&app)
+        .map(|p| p.to_string_lossy().to_string())
+        .unwrap_or_default();
 
     // Ensure data directory exists
     std::fs::create_dir_all(&data_dir).map_err(|e| e.to_string())?;
@@ -208,6 +215,7 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     log::info!("Starting sidecar on port {}", port);
     log::info!("Data directory: {:?}", data_dir);
     log::info!("Resources path: {}", resources_path);
+    log::info!("Migrations path: {}", migrations_path);
 
     // Try to find the sidecar binary
     let sidecar_path = get_sidecar_path(&app);
@@ -219,6 +227,7 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .env("PORT", port.to_string())
             .env("C3I_BACKUP_ONE_TAURI", "1")
             .env("C3I_BACKUP_ONE_RESOURCES_PATH", &resources_path)
+            .env("MIGRATIONS_PATH", &migrations_path)
             .env("DATABASE_URL", db_path.to_string_lossy().to_string())
             .env("C3I_BACKUP_ONE_REPOSITORIES_DIR", repos_dir.to_string_lossy().to_string())
             .env("C3I_BACKUP_ONE_VOLUMES_DIR", volumes_dir.to_string_lossy().to_string())
@@ -249,6 +258,7 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .env("PORT", port.to_string())
             .env("C3I_BACKUP_ONE_TAURI", "1")
             .env("C3I_BACKUP_ONE_RESOURCES_PATH", &resources_path)
+            .env("MIGRATIONS_PATH", &migrations_path)
             .env("DATABASE_URL", db_path.to_string_lossy().to_string())
             .env("C3I_BACKUP_ONE_REPOSITORIES_DIR", repos_dir.to_string_lossy().to_string())
             .env("C3I_BACKUP_ONE_VOLUMES_DIR", volumes_dir.to_string_lossy().to_string())
