@@ -85,7 +85,7 @@ export async function openDataDir(): Promise<void> {
 /**
  * Wait for the backend to be ready with a timeout
  */
-export async function waitForBackend(timeoutMs = 30000): Promise<string> {
+export async function waitForBackend(timeoutMs = 60000): Promise<string> {
 	if (!isTauri()) {
 		return "/"; // In web mode, use relative URL
 	}

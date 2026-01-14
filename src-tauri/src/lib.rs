@@ -242,10 +242,10 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     // Wait for server to be ready
     let backend_url = format!("http://localhost:{}", port);
     let mut attempts = 0;
-    let max_attempts = 60; // 30 seconds
+    let max_attempts = 120; // 60 seconds
 
     while attempts < max_attempts {
-        match reqwest::get(format!("{}/api/system/health", backend_url)).await {
+        match reqwest::get(format!("{}/healthcheck", backend_url)).await {
             Ok(resp) if resp.status().is_success() => {
                 log::info!("Backend is ready on port {}", port);
                 let mut running = state.sidecar_running.lock().map_err(|e| e.to_string())?;
