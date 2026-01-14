@@ -4,6 +4,17 @@ import { type } from "arktype";
 import "dotenv/config";
 
 const getResticHostname = () => {
+	// In Tauri mode, use the machine hostname
+	if (process.env.C3I_BACKUP_ONE_TAURI === "1") {
+		return os.hostname() || "c3i-backup-one";
+	}
+
+	// On non-Linux platforms, just use the hostname
+	if (process.platform !== "linux") {
+		return os.hostname() || "c3i-backup-one";
+	}
+
+	// On Linux, try to detect if running in Docker container
 	try {
 		const mountinfo = readFileSync("/proc/self/mountinfo", "utf-8");
 		const hostnameLine = mountinfo.split("\n").find((line) => line.includes(" /etc/hostname "));
@@ -14,14 +25,14 @@ const getResticHostname = () => {
 			const containerId = containerIdMatch ? containerIdMatch[0] : null;
 
 			if (containerId?.startsWith(hostname)) {
-				return "zerobyte";
+				return "c3i-backup-one";
 			}
 
-			return hostname || "zerobyte";
+			return hostname || "c3i-backup-one";
 		}
 	} catch {}
 
-	return "zerobyte";
+	return "c3i-backup-one";
 };
 
 const envSchema = type({

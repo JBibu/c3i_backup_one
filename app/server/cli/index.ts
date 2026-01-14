@@ -5,14 +5,14 @@ import { resetPasswordCommand } from "./commands/reset-password";
 
 const program = new Command();
 
-program.name("zerobyte").description("Zerobyte CLI - Backup automation tool built on top of Restic").version("1.0.0");
+program.name("c3i-backup-one").description("C3i Backup ONE CLI - Backup automation tool built on top of Restic").version("1.0.0");
 program.addCommand(resetPasswordCommand);
 program.addCommand(disable2FACommand);
 program.addCommand(changeUsernameCommand);
 
 export async function runCLI(argv: string[]): Promise<boolean> {
 	const args = argv.slice(2);
-	const isCLIMode = process.env.ZEROBYTE_CLI === "1";
+	const isCLIMode = process.env.C3I_BACKUP_ONE_CLI === "1";
 
 	if (args.length === 0) {
 		if (isCLIMode) {

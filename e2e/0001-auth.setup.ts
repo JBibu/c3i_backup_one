@@ -19,7 +19,7 @@ test("should redirect to onboarding", async ({ page }) => {
 
 	await page.waitForURL(/onboarding/);
 
-	await expect(page).toHaveTitle(/Zerobyte - Onboarding/);
+	await expect(page).toHaveTitle(/C3i Backup ONE - Onboarding/);
 });
 
 test("user can register a new account", async ({ page }) => {

@@ -73,7 +73,7 @@ export const SftpRepositoryForm = ({ form }: Props) => {
 					<FormItem>
 						<FormLabel>Path</FormLabel>
 						<FormControl>
-							<Input placeholder="backups/zerobyte" {...field} />
+							<Input placeholder="backups/c3i-backup-one" {...field} />
 						</FormControl>
 						<FormDescription>Repository path on the SFTP server. </FormDescription>
 						<FormMessage />

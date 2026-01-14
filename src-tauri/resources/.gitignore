@@ -1,0 +1,3 @@
+# Ignore downloaded binaries (they're downloaded during build)
+bin/
+c3i-backup-one-server-*

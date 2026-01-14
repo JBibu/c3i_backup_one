@@ -1,7 +1,7 @@
 services:
-  zerobyte:
-    image: ghcr.io/nicotsx/zerobyte:latest
-    container_name: zerobyte
+  c3i-backup-one:
+    image: ghcr.io/nicotsx/c3i-backup-one:latest
+    container_name: c3i-backup-one
     restart: unless-stopped
     ports:
       - "4096:4096"
@@ -9,5 +9,5 @@ services:
       - TZ=${TZ:-UTC}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/lib/zerobyte:/var/lib/zerobyte
+      - /var/lib/c3i-backup-one:/var/lib/c3i-backup-one
       - ${HOST_DATA_DIR:?HOST_DATA_DIR must be set}:/mydata

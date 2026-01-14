@@ -12,7 +12,7 @@ import type { VolumeBackend } from "../backend";
 import { executeUnmount } from "../utils/backend-utils";
 import { BACKEND_STATUS, type BackendConfig } from "~/schemas/volumes";
 
-const SSH_KEYS_DIR = "/var/lib/zerobyte/ssh";
+const SSH_KEYS_DIR = "/var/lib/c3i-backup-one/ssh";
 
 const getPrivateKeyPath = (mountPath: string) => {
 	const name = path.basename(mountPath);

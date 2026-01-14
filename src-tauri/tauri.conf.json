@@ -1,0 +1,51 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "C3i Backup ONE",
+  "version": "0.1.0",
+  "identifier": "com.c3i-backup-one.app",
+  "build": {
+    "frontendDist": "../dist/client",
+    "devUrl": "http://localhost:4096",
+    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "bun run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "C3i Backup ONE",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "resources/bin/*": "bin/"
+    },
+    "category": "Utility",
+    "shortDescription": "Backup automation tool powered by Restic",
+    "longDescription": "C3i Backup ONE is a backup automation tool that provides a modern interface for scheduling, managing, and monitoring encrypted backups using Restic."
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    }
+  }
+}

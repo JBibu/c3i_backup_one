@@ -1,22 +1,63 @@
-import { $ } from "bun";
+import { spawn } from "node:child_process";
 import { logger } from "./logger";
 import { toMessage } from "./errors";
+import { resolveBinaryPath } from "./binary-resolver";
+
+/**
+ * Execute rclone command and return result
+ */
+async function execRclone(args: string[]): Promise<{ exitCode: number; stdout: string; stderr: string }> {
+	const rclonePath = resolveBinaryPath("rclone");
+
+	return new Promise((resolve) => {
+		let stdout = "";
+		let stderr = "";
+
+		const child = spawn(rclonePath, args, {
+			env: process.env,
+		});
+
+		child.stdout.on("data", (data) => {
+			stdout += data.toString();
+		});
+
+		child.stderr.on("data", (data) => {
+			stderr += data.toString();
+		});
+
+		child.on("close", (code) => {
+			resolve({
+				exitCode: code ?? -1,
+				stdout,
+				stderr,
+			});
+		});
+
+		child.on("error", (error) => {
+			stderr = error.message;
+			resolve({
+				exitCode: -1,
+				stdout,
+				stderr,
+			});
+		});
+	});
+}
 
 /**
  * List all configured rclone remotes
  * @returns Array of remote names
  */
 export async function listRcloneRemotes(): Promise<string[]> {
-	const result = await $`rclone listremotes`.nothrow();
+	const result = await execRclone(["listremotes"]);
 
 	if (result.exitCode !== 0) {
-		logger.error(`Failed to list rclone remotes: ${result.stderr.toString()}`);
+		logger.error(`Failed to list rclone remotes: ${result.stderr}`);
 		return [];
 	}
 
 	// Parse output - each line is a remote name ending with ":"
 	const remotes = result.stdout
-		.toString()
 		.split("\n")
 		.map((line) => line.trim())
 		.filter((line) => line.endsWith(":"))
@@ -34,15 +75,15 @@ export async function getRcloneRemoteInfo(
 	remote: string,
 ): Promise<{ type: string; config: Record<string, string> } | null> {
 	try {
-		const result = await $`rclone config show ${remote}`.quiet();
+		const result = await execRclone(["config", "show", remote]);
 
 		if (result.exitCode !== 0) {
-			logger.error(`Failed to get info for remote ${remote}: ${result.stderr.toString()}`);
+			logger.error(`Failed to get info for remote ${remote}: ${result.stderr}`);
 			return null;
 		}
 
 		// Parse the output to extract type and config
-		const output = result.stdout.toString();
+		const output = result.stdout;
 		const lines = output
 			.split("\n")
 			.map((l) => l.trim())

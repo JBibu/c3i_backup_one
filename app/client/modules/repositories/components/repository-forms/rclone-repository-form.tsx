@@ -84,7 +84,7 @@ export const RcloneRepositoryForm = ({ form }: Props) => {
 					<FormItem>
 						<FormLabel>Path</FormLabel>
 						<FormControl>
-							<Input placeholder="backups/zerobyte" {...field} />
+							<Input placeholder="backups/c3i-backup-one" {...field} />
 						</FormControl>
 						<FormDescription>Path within the remote where backups will be stored.</FormDescription>
 						<FormMessage />

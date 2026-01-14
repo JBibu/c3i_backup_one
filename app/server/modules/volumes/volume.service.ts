@@ -237,7 +237,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 };
 
 const testConnection = async (backendConfig: BackendConfig) => {
-	const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "zerobyte-test-"));
+	const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "c3i-backup-one-test-"));
 
 	const mockVolume = {
 		id: 0,

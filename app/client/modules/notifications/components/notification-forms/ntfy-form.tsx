@@ -33,7 +33,7 @@ export const NtfyForm = ({ form }: Props) => {
 					<FormItem>
 						<FormLabel>Topic</FormLabel>
 						<FormControl>
-							<Input {...field} placeholder="zerobyte-backups" />
+							<Input {...field} placeholder="c3i-backup-one-backups" />
 						</FormControl>
 						<FormDescription>The ntfy topic name to publish to.</FormDescription>
 						<FormMessage />

@@ -12,6 +12,7 @@ import type { RetentionPolicy } from "../modules/backups/backups.dto";
 import { safeSpawn } from "./spawn";
 import type { CompressionMode, RepositoryConfig, OverwriteMode } from "~/schemas/restic";
 import { ResticError } from "./errors";
+import { resolveBinaryPath } from "./binary-resolver";
 
 const backupOutputSchema = type({
 	message_type: "'summary'",
@@ -113,7 +114,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 
 	if (config.isExistingRepository && config.customPassword) {
 		const decryptedPassword = await cryptoUtils.resolveSecret(config.customPassword);
-		const passwordFilePath = path.join("/tmp", `zerobyte-pass-${crypto.randomBytes(8).toString("hex")}.txt`);
+		const passwordFilePath = path.join("/tmp", `c3i-backup-one-pass-${crypto.randomBytes(8).toString("hex")}.txt`);
 
 		await fs.writeFile(passwordFilePath, decryptedPassword, { mode: 0o600 });
 		env.RESTIC_PASSWORD_FILE = passwordFilePath;
@@ -134,7 +135,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 			break;
 		case "gcs": {
 			const decryptedCredentials = await cryptoUtils.resolveSecret(config.credentialsJson);
-			const credentialsPath = path.join("/tmp", `zerobyte-gcs-${crypto.randomBytes(8).toString("hex")}.json`);
+			const credentialsPath = path.join("/tmp", `c3i-backup-one-gcs-${crypto.randomBytes(8).toString("hex")}.json`);
 			await fs.writeFile(credentialsPath, decryptedCredentials, { mode: 0o600 });
 			env.GOOGLE_PROJECT_ID = config.projectId;
 			env.GOOGLE_APPLICATION_CREDENTIALS = credentialsPath;
@@ -159,7 +160,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 		}
 		case "sftp": {
 			const decryptedKey = await cryptoUtils.resolveSecret(config.privateKey);
-			const keyPath = path.join("/tmp", `zerobyte-ssh-${crypto.randomBytes(8).toString("hex")}`);
+			const keyPath = path.join("/tmp", `c3i-backup-one-ssh-${crypto.randomBytes(8).toString("hex")}`);
 
 			let normalizedKey = decryptedKey.replace(/\r\n/g, "\n");
 			if (!normalizedKey.endsWith("\n")) {
@@ -189,7 +190,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 			if (config.skipHostKeyCheck || !config.knownHosts) {
 				sshArgs.push("-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null");
 			} else if (config.knownHosts) {
-				const knownHostsPath = path.join("/tmp", `zerobyte-known-hosts-${crypto.randomBytes(8).toString("hex")}`);
+				const knownHostsPath = path.join("/tmp", `c3i-backup-one-known-hosts-${crypto.randomBytes(8).toString("hex")}`);
 				await fs.writeFile(knownHostsPath, config.knownHosts, { mode: 0o600 });
 				env._SFTP_KNOWN_HOSTS_PATH = knownHostsPath;
 				sshArgs.push("-o", "StrictHostKeyChecking=yes", "-o", `UserKnownHostsFile=${knownHostsPath}`);
@@ -207,7 +208,7 @@ export const buildEnv = async (config: RepositoryConfig) => {
 
 	if (config.cacert) {
 		const decryptedCert = await cryptoUtils.resolveSecret(config.cacert);
-		const certPath = path.join("/tmp", `zerobyte-cacert-${crypto.randomBytes(8).toString("hex")}.pem`);
+		const certPath = path.join("/tmp", `c3i-backup-one-cacert-${crypto.randomBytes(8).toString("hex")}.pem`);
 		await fs.writeFile(certPath, decryptedCert, { mode: 0o600 });
 		env.RESTIC_CACERT = certPath;
 	}
@@ -231,7 +232,7 @@ const init = async (config: RepositoryConfig) => {
 	const args = ["init", "--repo", repoUrl];
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -291,7 +292,7 @@ const backup = async (
 
 	let includeFile: string | null = null;
 	if (options?.include && options.include.length > 0) {
-		const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "zerobyte-restic-include-"));
+		const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "c3i-backup-one-restic-include-"));
 		includeFile = path.join(tmp, `include.txt`);
 
 		await fs.writeFile(includeFile, options.include.join("\n"), "utf-8");
@@ -307,7 +308,7 @@ const backup = async (
 
 	let excludeFile: string | null = null;
 	if (options?.exclude && options.exclude.length > 0) {
-		const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "zerobyte-restic-exclude-"));
+		const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "c3i-backup-one-restic-exclude-"));
 		excludeFile = path.join(tmp, `exclude.txt`);
 
 		await fs.writeFile(excludeFile, options.exclude.join("\n"), "utf-8");
@@ -345,7 +346,7 @@ const backup = async (
 
 	logger.debug(`Executing: restic ${args.join(" ")}`);
 	const res = await safeSpawn({
-		command: "restic",
+		command: resolveBinaryPath("restic"),
 		args,
 		env,
 		signal: options?.signal,
@@ -456,7 +457,7 @@ const restore = async (
 	addCommonArgs(args, env);
 
 	logger.debug(`Executing: restic ${args.join(" ")}`);
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 
 	await cleanupTemporaryKeys(env);
 
@@ -518,7 +519,7 @@ const snapshots = async (config: RepositoryConfig, options: { tags?: string[] } 
 
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -567,7 +568,7 @@ const forget = async (config: RepositoryConfig, options: RetentionPolicy, extra:
 	args.push("--prune");
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -589,7 +590,7 @@ const deleteSnapshots = async (config: RepositoryConfig, snapshotIds: string[]) 
 	const args: string[] = ["--repo", repoUrl, "forget", ...snapshotIds, "--prune"];
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -638,7 +639,7 @@ const tagSnapshots = async (
 
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -688,7 +689,7 @@ const ls = async (config: RepositoryConfig, snapshotId: string, path?: string) =
 
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -739,7 +740,7 @@ const unlock = async (config: RepositoryConfig) => {
 	const args = ["unlock", "--repo", repoUrl, "--remove-all"];
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	if (res.exitCode !== 0) {
@@ -763,7 +764,7 @@ const check = async (config: RepositoryConfig, options?: { readData?: boolean })
 
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	const { stdout, stderr } = res;
@@ -796,7 +797,7 @@ const repairIndex = async (config: RepositoryConfig) => {
 	const args = ["repair", "index", "--repo", repoUrl];
 	addCommonArgs(args, env);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 	await cleanupTemporaryKeys(env);
 
 	const { stdout, stderr } = res;
@@ -855,7 +856,7 @@ const copy = async (
 	logger.info(`Copying snapshots from ${sourceRepoUrl} to ${destRepoUrl}...`);
 	logger.debug(`Executing: restic ${args.join(" ")}`);
 
-	const res = await safeSpawn({ command: "restic", args, env });
+	const res = await safeSpawn({ command: resolveBinaryPath("restic"), args, env });
 
 	await cleanupTemporaryKeys(sourceEnv);
 	await cleanupTemporaryKeys(destEnv);

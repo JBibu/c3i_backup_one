@@ -231,7 +231,7 @@ export const CreateRepositoryForm = ({
 								</SelectContent>
 							</Select>
 							<FormDescription>
-								Choose whether to use Zerobyte's recovery key (which you downloaded when creating your account) or enter
+								Choose whether to use C3i Backup ONE's recovery key (which you downloaded when creating your account) or enter
 								a custom password for the existing repository.
 							</FormDescription>
 						</FormItem>

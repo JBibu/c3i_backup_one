@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "~/client/components/ui/dialog";
 
-const RESET_PASSWORD_COMMAND = "docker exec -it zerobyte bun run cli reset-password";
+const RESET_PASSWORD_COMMAND = "docker exec -it c3i-backup-one bun run cli reset-password";
 
 type ResetPasswordDialogProps = {
 	open: boolean;
@@ -14,7 +14,7 @@ export const ResetPasswordDialog = ({ open, onOpenChange }: ResetPasswordDialogP
 				<DialogHeader>
 					<DialogTitle>Reset your password</DialogTitle>
 					<DialogDescription>
-						To reset your password, run the following command on the server where Zerobyte is installed.
+						To reset your password, run the following command on the server where C3i Backup ONE is installed.
 					</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-4">

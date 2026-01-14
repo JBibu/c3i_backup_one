@@ -24,7 +24,7 @@ export const handle = {
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "Zerobyte - Create Backup Job" },
+		{ title: "C3i Backup ONE - Create Backup Job" },
 		{
 			name: "description",
 			content: "Create a new automated backup job for your volumes.",
@@ -33,10 +33,15 @@ export function meta(_: Route.MetaArgs) {
 }
 
 export const clientLoader = async () => {
-	const [volumes, repositories] = await Promise.all([listVolumes(), listRepositories()]);
+	try {
+		const [volumes, repositories] = await Promise.all([listVolumes(), listRepositories()]);
 
-	if (volumes.data && repositories.data) return { volumes: volumes.data, repositories: repositories.data };
-	return { volumes: [], repositories: [] };
+		if (volumes.data && repositories.data) return { volumes: volumes.data, repositories: repositories.data };
+		return { volumes: [], repositories: [] };
+	} catch (error) {
+		console.error("Failed to load create backup data:", error);
+		return { volumes: [], repositories: [] };
+	}
 };
 
 export default function CreateBackup({ loaderData }: Route.ComponentProps) {
@@ -44,14 +49,17 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 	const formId = useId();
 	const [selectedVolumeId, setSelectedVolumeId] = useState<number | undefined>();
 
-	const { data: volumesData, isLoading: loadingVolumes } = useQuery({
+	const initialVolumes = loaderData?.volumes ?? [];
+	const initialRepositories = loaderData?.repositories ?? [];
+
+	const { data: volumesData = [], isLoading: loadingVolumes } = useQuery({
 		...listVolumesOptions(),
-		initialData: loaderData.volumes,
+		initialData: initialVolumes,
 	});
 
-	const { data: repositoriesData } = useQuery({
+	const { data: repositoriesData = [] } = useQuery({
 		...listRepositoriesOptions(),
-		initialData: loaderData.repositories,
+		initialData: initialRepositories,
 	});
 
 	const createSchedule = useMutation({
@@ -127,7 +135,7 @@ export default function CreateBackup({ loaderData }: Route.ComponentProps) {
 		);
 	}
 
-	if (!repositoriesData?.length) {
+	if (!repositoriesData.length) {
 		return (
 			<EmptyState
 				icon={Database}

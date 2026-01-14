@@ -15,7 +15,7 @@ export class CleanupDanglingMountsJob extends Job {
 		const allSystemMounts = await readMountInfo();
 
 		for (const mount of allSystemMounts) {
-			if (mount.mountPoint.includes("zerobyte") && mount.mountPoint.endsWith("_data")) {
+			if (mount.mountPoint.includes("c3i-backup-one") && mount.mountPoint.endsWith("_data")) {
 				const matchingVolume = allVolumes.find((v) => getVolumePath(v) === mount.mountPoint);
 				if (!matchingVolume) {
 					logger.info(`Found dangling mount at ${mount.mountPoint}, attempting to unmount...`);

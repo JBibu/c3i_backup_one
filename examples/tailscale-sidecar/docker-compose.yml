@@ -1,8 +1,8 @@
 services:
   tailscale:
     image: tailscale/tailscale:stable
-    container_name: zerobyte-tailscale
-    hostname: ${TS_HOSTNAME:-zerobyte}
+    container_name: c3i-backup-one-tailscale
+    hostname: ${TS_HOSTNAME:-c3i-backup-one}
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -22,7 +22,7 @@ services:
       - TS_USERSPACE=${TS_USERSPACE:-false}
       # Optional flags passed to `tailscale up`.
       # Examples:
-      # - --advertise-tags=tag:zerobyte
+      # - --advertise-tags=tag:c3i-backup-one
       # - --accept-dns=true --accept-routes
       - TS_EXTRA_ARGS=${TS_EXTRA_ARGS:-}
     volumes:
@@ -31,9 +31,9 @@ services:
     ports:
       - "4096:4096"
 
-  zerobyte:
-    image: ghcr.io/nicotsx/zerobyte:latest
-    container_name: zerobyte
+  c3i-backup-one:
+    image: ghcr.io/nicotsx/c3i-backup-one:latest
+    container_name: c3i-backup-one
     restart: unless-stopped
     # Uncomment if you need to mount NFS/SMB/WebDAV volumes:
     # cap_add:
@@ -48,4 +48,4 @@ services:
       - TZ=${TZ:-UTC}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/lib/zerobyte:/var/lib/zerobyte
+      - /var/lib/c3i-backup-one:/var/lib/c3i-backup-one

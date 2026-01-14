@@ -10,11 +10,9 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy } from "@dnd-kit/sortable";
 import { CalendarClock, Plus } from "lucide-react";
-import { Link } from "react-router";
 import { useState, useEffect } from "react";
 import { EmptyState } from "~/client/components/empty-state";
 import { Button } from "~/client/components/ui/button";
-import { Card, CardContent } from "~/client/components/ui/card";
 import type { Route } from "./+types/backups";
 import { listBackupSchedules } from "~/client/api-client";
 import {
@@ -30,7 +28,7 @@ export const handle = {
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "Zerobyte - Backup Jobs" },
+		{ title: "C3i Backup ONE - Backup Jobs" },
 		{
 			name: "description",
 			content: "Automate volume backups with scheduled jobs and retention policies.",
@@ -100,11 +98,9 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 				title="No backup job"
 				description="Backup jobs help you automate the process of backing up your volumes on a regular schedule to ensure your data is safe and secure."
 				button={
-					<Button>
-						<Link to="/backups/create" className="flex items-center">
-							<Plus className="h-4 w-4 mr-2" />
-							Create a backup job
-						</Link>
+					<Button onClick={() => (window.location.href = "/backups/create")}>
+						<Plus className="h-4 w-4 mr-2" />
+						Create a backup job
 					</Button>
 				}
 			/>
@@ -115,6 +111,12 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div className="container mx-auto space-y-6">
+			<div className="flex justify-end">
+				<Button onClick={() => (window.location.href = "/backups/create")}>
+					<Plus className="h-4 w-4 mr-2" />
+					Create backup job
+				</Button>
+			</div>
 			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 				<SortableContext items={items} strategy={rectSortingStrategy}>
 					<div className="grid gap-4 @md:grid-cols-1 @lg:grid-cols-2 @2xl:grid-cols-3 auto-rows-fr">
@@ -127,14 +129,6 @@ export default function Backups({ loaderData }: Route.ComponentProps) {
 								</SortableCard>
 							);
 						})}
-						<Link to="/backups/create">
-							<Card className="flex flex-col items-center justify-center h-full hover:bg-muted/50 transition-colors cursor-pointer">
-								<CardContent className="flex flex-col items-center justify-center gap-2">
-									<Plus className="h-8 w-8 text-muted-foreground" />
-									<span className="text-sm font-medium text-muted-foreground">Create a backup job</span>
-								</CardContent>
-							</Card>
-						</Link>
 					</div>
 				</SortableContext>
 			</DndContext>

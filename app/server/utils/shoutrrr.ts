@@ -1,6 +1,7 @@
 import { safeSpawn } from "./spawn";
 import { logger } from "./logger";
 import { toMessage } from "./errors";
+import { resolveBinaryPath } from "./binary-resolver";
 
 export interface SendNotificationParams {
 	shoutrrrUrl: string;
@@ -17,7 +18,7 @@ export async function sendNotification(params: SendNotificationParams) {
 		logger.debug(`Sending notification via Shoutrrr: ${title}`);
 
 		const result = await safeSpawn({
-			command: "shoutrrr",
+			command: resolveBinaryPath("shoutrrr"),
 			args,
 		});
 

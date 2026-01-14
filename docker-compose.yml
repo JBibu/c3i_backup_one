@@ -1,10 +1,10 @@
 services:
-  zerobyte-dev:
+  c3i-backup-one-dev:
     build:
       context: .
       dockerfile: Dockerfile
       target: development
-    container_name: zerobyte
+    container_name: c3i-backup-one
     restart: unless-stopped
     devices:
       - /dev/fuse:/dev/fuse
@@ -16,18 +16,18 @@ services:
       - "4096:4096"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/lib/zerobyte:/var/lib/zerobyte
+      - /var/lib/c3i-backup-one:/var/lib/c3i-backup-one
       - ./app:/app/app
       - ~/.config/rclone:/root/.config/rclone
 
-  zerobyte-prod:
+  c3i-backup-one-prod:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
       args:
         - APP_VERSION=0.20.0
-    container_name: zerobyte
+    container_name: c3i-backup-one
     restart: unless-stopped
     devices:
       - /dev/fuse:/dev/fuse
@@ -37,15 +37,15 @@ services:
       - "4096:4096"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/lib/zerobyte:/var/lib/zerobyte
+      - /var/lib/c3i-backup-one:/var/lib/c3i-backup-one
       - ~/.config/rclone:/root/.config/rclone
 
-  zerobyte-e2e:
+  c3i-backup-one-e2e:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: zerobyte
+    container_name: c3i-backup-one
     restart: unless-stopped
     environment:
       - DISABLE_RATE_LIMITING=true
@@ -57,5 +57,5 @@ services:
       - "4096:4096"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./playwright/data:/var/lib/zerobyte/data
+      - ./playwright/data:/var/lib/c3i-backup-one/data
       - ./playwright/temp:/test-data
