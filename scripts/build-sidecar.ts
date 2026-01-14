@@ -65,10 +65,11 @@ async function buildSidecar(target?: string) {
 	console.log("Building server with react-router...");
 	await $`bun run build`.cwd(ROOT_DIR);
 
-	// Copy migrations to dist folder so they get embedded in the compiled binary
-	console.log("Copying migrations to dist folder...");
+	// Copy migrations to dist/server folder so they get embedded in the compiled binary
+	// Bun only embeds files in the same directory tree as the entry point
+	console.log("Copying migrations to dist/server/drizzle...");
 	const migrationsSource = path.join(ROOT_DIR, "app", "drizzle");
-	const migrationsDest = path.join(ROOT_DIR, "dist", "drizzle");
+	const migrationsDest = path.join(ROOT_DIR, "dist", "server", "drizzle");
 	await fs.rm(migrationsDest, { recursive: true, force: true });
 	await fs.cp(migrationsSource, migrationsDest, { recursive: true });
 
