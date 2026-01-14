@@ -56,8 +56,14 @@ export const db = new Proxy(
 export const runDbMigrations = () => {
 	let migrationsFolder: string;
 
+	// Check if running as Bun compiled executable
+	const isCompiledExecutable = Bun.main.endsWith(".exe") || (!Bun.main.endsWith(".js") && !Bun.main.endsWith(".ts"));
+
 	if (config.migrationsPath) {
 		migrationsFolder = config.migrationsPath;
+	} else if (isCompiledExecutable) {
+		// When running as compiled executable, migrations are embedded relative to the executable
+		migrationsFolder = path.join(path.dirname(Bun.main), "drizzle");
 	} else if (config.__prod__) {
 		migrationsFolder = path.join("/app", "assets", "migrations");
 	} else {
