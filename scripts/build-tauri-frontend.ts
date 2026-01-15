@@ -7,4 +7,5 @@
 import { $ } from "bun";
 
 // Set environment variable and run react-router build
-await $`react-router build`.env({ BUILD_TARGET: "tauri" });
+// Use bunx to ensure compatibility in CI environments without Node.js
+await $`bunx --bun react-router build`.env({ BUILD_TARGET: "tauri" });
