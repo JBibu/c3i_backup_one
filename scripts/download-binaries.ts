@@ -8,14 +8,15 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { createWriteStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
+import { BINARY_VERSIONS, getCurrentPlatform, convertArchName } from "./config";
 
 const ROOT_DIR = path.resolve(import.meta.dir, "..");
 const OUTPUT_DIR = path.join(ROOT_DIR, "src-tauri", "resources", "bin");
 
-// Binary versions (keep in sync with Dockerfile)
-const RESTIC_VERSION = "0.18.1";
-const RCLONE_VERSION = "1.72.1";
-const SHOUTRRR_VERSION = "0.13.1";
+// Binary versions from shared config
+const RESTIC_VERSION = BINARY_VERSIONS.RESTIC;
+const RCLONE_VERSION = BINARY_VERSIONS.RCLONE;
+const SHOUTRRR_VERSION = BINARY_VERSIONS.SHOUTRRR;
 
 interface PlatformConfig {
 	restic: string;
@@ -218,22 +219,11 @@ async function downloadForPlatform(platform: string): Promise<void> {
 	}
 }
 
-function getCurrentPlatform(): string {
-	const platform = process.platform;
-	const arch = process.arch;
-
-	const platformMap: Record<string, string> = {
-		linux: "linux",
-		darwin: "darwin",
-		win32: "windows",
-	};
-
-	const archMap: Record<string, string> = {
-		x64: "amd64",
-		arm64: "arm64",
-	};
-
-	return `${platformMap[platform]}-${archMap[arch]}`;
+function getCurrentPlatformForDownload(): string {
+	const platformInfo = getCurrentPlatform();
+	// Download binaries use amd64 naming convention instead of x64
+	const arch = convertArchName(platformInfo.arch, "amd64");
+	return `${platformInfo.platform}-${arch}`;
 }
 
 // CLI entry point
@@ -252,7 +242,7 @@ if (args.includes("--all")) {
 	await downloadForPlatform(platform);
 } else {
 	// Download for current platform only
-	const currentPlatform = getCurrentPlatform();
+	const currentPlatform = getCurrentPlatformForDownload();
 	console.log(`Downloading binaries for current platform: ${currentPlatform}`);
 	console.log(`Versions: restic=${RESTIC_VERSION}, rclone=${RCLONE_VERSION}, shoutrrr=${SHOUTRRR_VERSION}`);
 	await downloadForPlatform(currentPlatform);

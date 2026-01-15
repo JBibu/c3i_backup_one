@@ -32,10 +32,10 @@ const getUpdates = async (): Promise<UpdateInfoDto> => {
 		const controller = new AbortController();
 		const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-		const response = await fetch("https://api.github.com/repos/nicotsx/zerobyte/releases", {
+		const response = await fetch("https://api.github.com/repos/JBibu/c3i_backup_one/releases", {
 			signal: controller.signal,
 			headers: {
-				"User-Agent": "zerobyte-app",
+				"User-Agent": "c3i-backup-one-app",
 			},
 		});
 		clearTimeout(timeoutId);

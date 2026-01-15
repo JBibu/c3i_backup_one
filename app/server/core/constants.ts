@@ -24,7 +24,7 @@ export const RESTIC_CACHE_DIR = normalizeWindowsPath(
 );
 
 export const DATABASE_URL = normalizeWindowsPath(
-	process.env.DATABASE_URL || "/var/lib/c3i-backup-one/data/zerobyte.db",
+	process.env.DATABASE_URL || "/var/lib/c3i-backup-one/data/c3i-backup-one.db",
 );
 export const RESTIC_PASS_FILE = normalizeWindowsPath(
 	process.env.RESTIC_PASS_FILE || "/var/lib/c3i-backup-one/data/restic.pass",

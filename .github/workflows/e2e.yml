@@ -49,17 +49,17 @@ jobs:
           chmod -R 777 playwright/temp
           touch .env.local
           echo "SERVER_IP=localhost" >> .env.local
-          echo "DATABASE_URL=./data/zerobyte.db" >> .env.local
+          echo "DATABASE_URL=./data/c3i-backup-one.db" >> .env.local
 
-      - name: Start zerobyte-e2e service
+      - name: Start c3i-backup-one-e2e service
         run: bun run start:e2e -- -d
 
-      - name: Wait for zerobyte to be ready
+      - name: Wait for c3i-backup-one to be ready
         run: |
           timeout 30s bash -c 'until curl -f http://localhost:4096/healthcheck; do echo "Waiting for server..." && sleep 2; done'
 
       - name: Make playwright directory writable
-        run: sudo chmod 777 playwright/data/zerobyte.db
+        run: sudo chmod 777 playwright/data/c3i-backup-one.db
 
       - name: Run Playwright tests
         run: bun run test:e2e
@@ -68,12 +68,12 @@ jobs:
         if: always()
         run: |
           tree playwright
-          docker logs zerobyte > playwright-report/container-logs.txt || true
+          docker logs c3i-backup-one > playwright-report/container-logs.txt || true
 
       - name: Debug - print content of /test-data in container
         if: failure()
         run: |
-          docker exec zerobyte /bin/ash -c "ls -la /test-data" || true
+          docker exec c3i-backup-one /bin/ash -c "ls -la /test-data" || true
 
       - uses: actions/upload-artifact@v5
         if: always()

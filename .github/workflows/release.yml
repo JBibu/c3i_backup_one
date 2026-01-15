@@ -56,10 +56,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          driver: cloud
-          endpoint: "meienberger/runtipi-builder"
-          install: true
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -76,7 +72,7 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
-          tags: local/zerobyte:ci
+          tags: local/c3i-backup-one:ci
           build-args: |
             APP_VERSION=${{ needs.determine-release-type.outputs.tagname }}
 
@@ -85,7 +81,7 @@ jobs:
         uses: anchore/scan-action@v7
         id: scan
         with:
-          image: local/zerobyte:ci
+          image: local/c3i-backup-one:ci
           fail-build: true
           only-fixed: true
           severity-cutoff: critical
@@ -100,7 +96,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/zerobyte
+          images: ghcr.io/${{ github.repository_owner }}/c3i-backup-one
           tags: |
             type=semver,pattern={{version}},prefix=v
             type=semver,pattern={{major}},prefix=v,enable=${{ needs.determine-release-type.outputs.release_type == 'release' }}
@@ -140,4 +136,3 @@ jobs:
           name: ${{ needs.determine-release-type.outputs.tagname }}
           draft: false
           prerelease: true
-          files: cli/runtipi-cli-*

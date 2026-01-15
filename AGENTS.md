@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-Zerobyte is a backup automation tool built on top of Restic that provides a web interface for scheduling, managing, and monitoring encrypted backups. It supports multiple volume backends (NFS, SMB, WebDAV, SFTP, local directories) and repository backends (S3, Azure, GCS, local, and rclone-based storage).
+C3i Backup ONE is a backup automation tool built on top of Restic that provides a web interface for scheduling, managing, and monitoring encrypted backups. It supports multiple volume backends (NFS, SMB, WebDAV, SFTP, local directories) and repository backends (S3, Azure, GCS, local, and rclone-based storage).
 
 ## Technology Stack
 
@@ -167,13 +167,13 @@ These schemas provide runtime validation and TypeScript types.
 
 ## Restic Integration
 
-Zerobyte is a wrapper around Restic for backup operations. Key integration points:
+C3i Backup ONE is a wrapper around Restic for backup operations. Key integration points:
 
 **Repository Management**:
 
 - Creates/initializes Restic repositories via `restic init`
 - Supports multiple backends: local, S3, Azure Blob Storage, Google Cloud Storage, or any rclone-supported backend
-- Stores single encryption password in `/var/lib/zerobyte/restic/password` (auto-generated on first run)
+- Stores single encryption password in `/var/lib/c3i-backup-one/restic/password` (auto-generated on first run)
 
 **Backup Operations**:
 
@@ -199,11 +199,11 @@ Zerobyte is a wrapper around Restic for backup operations. Key integration point
 
 **Runtime Environment Variables**:
 
-- Database path: `./data/zerobyte.db` (configurable via `drizzle.config.ts`)
-- Restic cache: `/var/lib/zerobyte/restic/cache`
-- Restic password: `/var/lib/zerobyte/restic/password`
-- Volume mounts: `/var/lib/zerobyte/mounts/<volume-name>`
-- Local repositories: `/var/lib/zerobyte/repositories/<repo-name>`
+- Database path: `./data/c3i-backup-one.db` (configurable via `drizzle.config.ts`)
+- Restic cache: `/var/lib/c3i-backup-one/restic/cache`
+- Restic password: `/var/lib/c3i-backup-one/restic/password`
+- Volume mounts: `/var/lib/c3i-backup-one/mounts/<volume-name>`
+- Local repositories: `/var/lib/c3i-backup-one/repositories/<repo-name>`
 
 **Capabilities Detection**:
 On startup, the server detects available capabilities (see `core/capabilities.ts`):

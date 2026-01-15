@@ -304,7 +304,7 @@ DATABASE_URL=./data/c3i-backup-one.db
 RESTIC_PASS_FILE=./data/restic.pass
 RESTIC_CACHE_DIR=./data/restic/cache
 C3I_BACKUP_ONE_REPOSITORIES_DIR=./data/repositories
-ZEROBYTE_VOLUMES_DIR=./data/volumes
+C3I_BACKUP_ONE_VOLUMES_DIR=./data/volumes
 ```
 
 Notes:

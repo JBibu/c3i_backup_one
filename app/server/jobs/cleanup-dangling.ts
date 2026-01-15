@@ -32,9 +32,9 @@ export class CleanupDanglingMountsJob extends Job {
 			}
 		}
 
-		const allZerobyteDirs = await fs.readdir(VOLUME_MOUNT_BASE).catch(() => []);
+		const allVolumeDirs = await fs.readdir(VOLUME_MOUNT_BASE).catch(() => []);
 
-		for (const dir of allZerobyteDirs) {
+		for (const dir of allVolumeDirs) {
 			const volumePath = `${VOLUME_MOUNT_BASE}/${dir}/_data`;
 			const matchingVolume = allVolumes.find((v) => getVolumePath(v) === volumePath);
 			if (!matchingVolume) {

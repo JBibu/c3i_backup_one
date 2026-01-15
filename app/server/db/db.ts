@@ -28,14 +28,44 @@ const initDb = () => {
 		throw new Error("Database schema not set. Call setSchema() before accessing the database.");
 	}
 
-	fs.mkdirSync(path.dirname(DATABASE_URL), { recursive: true });
+	const dbDir = path.dirname(DATABASE_URL);
 
-	if (fs.existsSync(path.join(path.dirname(DATABASE_URL), "ironmount.db")) && !fs.existsSync(DATABASE_URL)) {
-		fs.renameSync(path.join(path.dirname(DATABASE_URL), "ironmount.db"), DATABASE_URL);
+	console.log(`[Database] Initializing database at: ${DATABASE_URL}`);
+	console.log(`[Database] Database directory: ${dbDir}`);
+	console.log(`[Database] Platform: ${process.platform}`);
+
+	try {
+		fs.mkdirSync(dbDir, { recursive: true });
+		console.log(`[Database] Created database directory: ${dbDir}`);
+	} catch (err) {
+		console.error(`[Database] Failed to create database directory: ${err}`);
+		throw err;
 	}
 
-	_sqlite = new Database(DATABASE_URL);
-	return drizzle({ client: _sqlite, schema: _schema });
+	// Legacy database migration
+	if (fs.existsSync(path.join(dbDir, "ironmount.db")) && !fs.existsSync(DATABASE_URL)) {
+		console.log(`[Database] Migrating from ironmount.db to ${path.basename(DATABASE_URL)}`);
+		fs.renameSync(path.join(dbDir, "ironmount.db"), DATABASE_URL);
+	}
+
+	try {
+		console.log(`[Database] Opening SQLite database: ${DATABASE_URL}`);
+		_sqlite = new Database(DATABASE_URL);
+
+		// Windows compatibility: Use DELETE journal mode instead of WAL
+		if (process.platform === "win32") {
+			console.log(`[Database] Windows detected - Setting journal_mode to DELETE`);
+			_sqlite.run("PRAGMA journal_mode = DELETE");
+			_sqlite.run("PRAGMA synchronous = NORMAL");
+		}
+
+		console.log(`[Database] Database opened successfully`);
+		return drizzle({ client: _sqlite, schema: _schema });
+	} catch (err) {
+		console.error(`[Database] Failed to open database: ${err}`);
+		console.error(`[Database] Error details:`, err);
+		throw err;
+	}
 };
 
 /**
@@ -72,11 +102,21 @@ export const runDbMigrations = () => {
 		migrationsFolder = path.join(process.cwd(), "app", "drizzle");
 	}
 
-	migrate(db, { migrationsFolder });
+	console.log(`[Database] Running migrations from: ${migrationsFolder}`);
+	console.log(`[Database] Migrations folder exists: ${fs.existsSync(migrationsFolder)}`);
+
+	try {
+		migrate(db, { migrationsFolder });
+		console.log(`[Database] Migrations completed successfully`);
+	} catch (err) {
+		console.error(`[Database] Migration failed:`, err);
+		throw err;
+	}
 
 	if (!_sqlite) {
 		throw new Error("Database not initialized");
 	}
 
+	console.log(`[Database] Enabling foreign keys`);
 	_sqlite.run("PRAGMA foreign_keys = ON;");
 };

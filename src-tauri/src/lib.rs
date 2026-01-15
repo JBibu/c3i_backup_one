@@ -263,13 +263,18 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
     let cache_dir = data_dir.join("cache");
     let passfile = data_dir.join("restic-pass");
 
+    // Get the proper logs directory (platform-specific)
+    let logs_dir = normalize_windows_path(app.path().app_log_dir().map_err(|e| e.to_string())?);
+
     // Create subdirectories
     std::fs::create_dir_all(&repos_dir).map_err(|e| e.to_string())?;
     std::fs::create_dir_all(&volumes_dir).map_err(|e| e.to_string())?;
     std::fs::create_dir_all(&cache_dir).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(&logs_dir).map_err(|e| e.to_string())?;
 
     log::info!("Starting sidecar on port {}", port);
     log::info!("Data directory: {:?}", data_dir);
+    log::info!("Logs directory: {:?}", logs_dir);
     log::info!("Resources path: {}", resources_path);
     log::info!("Migrations path: {}", migrations_path);
 
@@ -289,6 +294,7 @@ async fn start_sidecar(app: AppHandle, state: &AppState) -> Result<(), String> {
             .env("PORT", port.to_string())
             .env("C3I_BACKUP_ONE_TAURI", "1")
             .env("C3I_BACKUP_ONE_RESOURCES_PATH", &resources_path)
+            .env("C3I_BACKUP_ONE_LOGS_DIR", logs_dir.to_string_lossy().to_string())
             .env("MIGRATIONS_PATH", &migrations_path)
             .env("DATABASE_URL", db_path.to_string_lossy().to_string())
             .env("C3I_BACKUP_ONE_REPOSITORIES_DIR", repos_dir.to_string_lossy().to_string())
@@ -490,8 +496,8 @@ pub fn run() {
                 .item(&quit)
                 .build()?;
 
-            // Load tray icon from embedded bytes (custom zerobyte logo)
-            let icon = Image::from_bytes(include_bytes!("../../public/images/zerobyte.png"))
+            // Load tray icon from embedded bytes (custom C3i Backup ONE logo)
+            let icon = Image::from_bytes(include_bytes!("../../public/images/logo.png"))
                 .expect("Failed to load tray icon");
 
             let _tray = TrayIconBuilder::new()

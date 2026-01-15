@@ -7,45 +7,19 @@
 import { $ } from "bun";
 import path from "node:path";
 import fs from "node:fs/promises";
+import { getCurrentPlatform, getTauriTarget, getSupportedPlatforms } from "./config";
 
 const ROOT_DIR = path.resolve(import.meta.dir, "..");
 const OUTPUT_DIR = path.join(ROOT_DIR, "src-tauri", "resources");
 
-// Platform/architecture mappings for Tauri sidecar naming convention
-const TARGETS: Record<string, { bunTarget: string; tauriSuffix: string }> = {
-	"linux-x64": { bunTarget: "bun-linux-x64", tauriSuffix: "x86_64-unknown-linux-gnu" },
-	"linux-arm64": { bunTarget: "bun-linux-arm64", tauriSuffix: "aarch64-unknown-linux-gnu" },
-	"darwin-x64": { bunTarget: "bun-darwin-x64", tauriSuffix: "x86_64-apple-darwin" },
-	"darwin-arm64": { bunTarget: "bun-darwin-arm64", tauriSuffix: "aarch64-apple-darwin" },
-	"windows-x64": { bunTarget: "bun-windows-x64", tauriSuffix: "x86_64-pc-windows-msvc" },
-};
-
-async function getCurrentPlatform(): Promise<string> {
-	const platform = process.platform;
-	const arch = process.arch;
-
-	const platformMap: Record<string, string> = {
-		linux: "linux",
-		darwin: "darwin",
-		win32: "windows",
-	};
-
-	const archMap: Record<string, string> = {
-		x64: "x64",
-		arm64: "arm64",
-	};
-
-	return `${platformMap[platform]}-${archMap[arch]}`;
-}
-
 async function buildSidecar(target?: string) {
-	const currentPlatform = await getCurrentPlatform();
-	const targetPlatform = target || currentPlatform;
+	const currentPlatform = getCurrentPlatform();
+	const targetPlatform = target || currentPlatform.key;
 
-	const targetConfig = TARGETS[targetPlatform];
+	const targetConfig = getTauriTarget(targetPlatform);
 	if (!targetConfig) {
 		console.error(`Unknown target platform: ${targetPlatform}`);
-		console.error(`Available targets: ${Object.keys(TARGETS).join(", ")}`);
+		console.error(`Available targets: ${getSupportedPlatforms().join(", ")}`);
 		process.exit(1);
 	}
 
@@ -97,7 +71,7 @@ async function buildSidecar(target?: string) {
 async function buildAllPlatforms() {
 	console.log("Building sidecars for all platforms...");
 
-	for (const target of Object.keys(TARGETS)) {
+	for (const target of getSupportedPlatforms()) {
 		try {
 			await buildSidecar(target);
 		} catch (error) {

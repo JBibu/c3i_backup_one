@@ -56,14 +56,14 @@ export function AppSidebar() {
 	const displayVersion = APP_VERSION.startsWith("v") || APP_VERSION === "dev" ? APP_VERSION : `v${APP_VERSION}`;
 	const releaseUrl =
 		APP_VERSION === "dev"
-			? "https://github.com/nicotsx/zerobyte"
-			: `https://github.com/nicotsx/zerobyte/releases/tag/${displayVersion}`;
+			? "https://github.com/JBibu/c3i_backup_one"
+			: `https://github.com/JBibu/c3i_backup_one/releases/tag/${displayVersion}`;
 
 	return (
 		<Sidebar variant="inset" collapsible="icon" className="p-0 pt-8">
 			<SidebarHeader className="bg-card-header border-b border-border/50 hidden md:flex h-[65px] flex-row items-center px-5 py-2">
 				<Link to="/volumes" className="flex items-center gap-4 font-semibold">
-					<img src="/images/zerobyte.png" alt="C3i Backup ONE Logo" className={cn("h-16 w-16 shrink-0 object-contain")} />
+					<img src="/images/logo.png" alt="C3i Backup ONE Logo" className={cn("h-16 w-16 shrink-0 object-contain")} />
 					<span
 						className={cn("text-base transition-all duration-200 leading-tight", {
 							"opacity-0 w-0 overflow-hidden ": state === "collapsed",

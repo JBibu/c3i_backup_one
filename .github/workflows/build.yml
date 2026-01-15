@@ -23,15 +23,23 @@ jobs:
           - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
             bundles: deb,rpm
+            bin_platform: linux-amd64
+            sidecar_target: linux-x64
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
             bundles: msi,nsis
+            bin_platform: windows-amd64
+            sidecar_target: windows-x64
           - platform: macos-latest
             target: x86_64-apple-darwin
             bundles: dmg,app
+            bin_platform: darwin-amd64
+            sidecar_target: darwin-x64
           - platform: macos-latest
             target: aarch64-apple-darwin
             bundles: dmg,app
+            bin_platform: darwin-arm64
+            sidecar_target: darwin-arm64
 
     runs-on: ${{ matrix.platform }}
 
@@ -70,10 +78,10 @@ jobs:
         run: bun install
 
       - name: Download platform binaries
-        run: bun run download:binaries --platform ${{ matrix.target == 'x86_64-unknown-linux-gnu' && 'linux-amd64' || matrix.target == 'x86_64-pc-windows-msvc' && 'windows-amd64' || matrix.target == 'x86_64-apple-darwin' && 'darwin-amd64' || matrix.target == 'aarch64-apple-darwin' && 'darwin-arm64' || matrix.target }}
+        run: bun run download:binaries --platform ${{ matrix.bin_platform }}
 
       - name: Build sidecar
-        run: bun run build:sidecar --target ${{ matrix.target == 'x86_64-unknown-linux-gnu' && 'linux-x64' || matrix.target == 'x86_64-pc-windows-msvc' && 'windows-x64' || matrix.target == 'x86_64-apple-darwin' && 'darwin-x64' || matrix.target == 'aarch64-apple-darwin' && 'darwin-arm64' || 'linux-x64' }}
+        run: bun run build:sidecar --target ${{ matrix.sidecar_target }}
 
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0

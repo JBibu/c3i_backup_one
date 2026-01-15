@@ -1,6 +1,6 @@
 # Troubleshooting
 
-If you encounter any issues while using Zerobyte, you can check the application logs for more information.
+If you encounter any issues while using C3i Backup ONE, you can check the application logs for more information.
 These logs can help you identify and resolve common problems; you should also check existing and closed issues on GitHub.
 In case you need further assistance, feel free to open a new issue with detailed information about the problem you are facing and any relevant log entries.
 
@@ -10,8 +10,8 @@ In case you need further assistance, feel free to open a new issue with detailed
 To view the logs, run the command below:
 
 ```bash
-# replace 'zerobyte' with your container name if different
-docker logs -f zerobyte
+# replace 'c3i-backup-one' with your container name if different
+docker logs -f c3i-backup-one
 ```
 
 ---
@@ -20,7 +20,7 @@ docker logs -f zerobyte
 
 ### Permission denied errors when mounting remote shares
 
-Mounting remote filesystems (such as SMB/CIFS) requires kernel-level privileges. When Zerobyte attempts to perform mounts from inside a container, additional permissions may be required.
+Mounting remote filesystems (such as SMB/CIFS) requires kernel-level privileges. When C3i Backup ONE attempts to perform mounts from inside a container, additional permissions may be required.
 
 Ensure that:
 
@@ -34,19 +34,19 @@ In some environments, Linux security mechanisms such as AppArmor or seccomp may 
 
 ### Security levels for mounting remote shares
 
-Zerobyte supports multiple deployment models depending on your security requirements and environment.
+C3i Backup ONE supports multiple deployment models depending on your security requirements and environment.
 
 ---
 
 #### **Secure** (recommended)
 
-Mount remote shares **outside of Zerobyte** (on the host) and point Zerobyte to an already mounted local path.
+Mount remote shares **outside of C3i Backup ONE** (on the host) and point C3i Backup ONE to an already mounted local path.
 
 This approach avoids granting additional privileges to the container and is the most portable and secure option.
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     volumes:
       - /mnt/your-remote-share:/data
 ```
@@ -55,13 +55,13 @@ Remote mounts can be managed via `systemd`, `autofs`, or manual host mounts.
 
 ---
 
-#### **Advanced** (Zerobyte performs mounts)
+#### **Advanced** (C3i Backup ONE performs mounts)
 
-If Zerobyte must perform filesystem mounts itself, the container requires the `SYS_ADMIN` capability.
+If C3i Backup ONE must perform filesystem mounts itself, the container requires the `SYS_ADMIN` capability.
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     cap_add:
       - SYS_ADMIN
 ```
@@ -80,14 +80,14 @@ If mount operations fail with permission errors, you may need to disable AppArmo
 # check if AppArmor is enabled
 sudo aa-status
 # if next command returns 'docker-default', AppArmor is enabled on the container
-docker inspect --format='{{.AppArmorProfile}}' zerobyte
+docker inspect --format='{{.AppArmorProfile}}' c3i-backup-one
 ```
 
-If AppArmor is enabled, you can disable it for the Zerobyte container by adding the following to your `docker-compose.yml`:
+If AppArmor is enabled, you can disable it for the C3i Backup ONE container by adding the following to your `docker-compose.yml`:
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -104,7 +104,7 @@ If mount operations continue to fail, you may need to disable seccomp filtering 
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -120,7 +120,7 @@ If mount operations fail with permission errors, you can try adding the followin
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -131,7 +131,7 @@ or disable SELinux enforcement for the container:
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     cap_add:
       - SYS_ADMIN
     security_opt:
@@ -148,7 +148,7 @@ This option should be used only as a last resort for troubleshooting.
 
 ```yaml
 services:
-  zerobyte:
+  c3i-backup-one:
     privileged: true
 ```
 

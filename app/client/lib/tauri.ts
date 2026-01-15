@@ -103,5 +103,5 @@ export async function waitForBackend(timeoutMs = 60000): Promise<string> {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 	}
 
-	throw new Error("El backend no pudo iniciarse dentro del tiempo límite");
+	throw new Error("Backend failed to start within the timeout period");
 }
