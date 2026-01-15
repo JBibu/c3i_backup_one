@@ -28,7 +28,7 @@ const getDestination = async (id: number) => {
 	});
 
 	if (!destination) {
-		throw new NotFoundError("Destino de notificación no encontrado");
+		throw new NotFoundError("Notification destination not found");
 	}
 
 	return destination;
@@ -140,7 +140,7 @@ const createDestination = async (name: string, config: NotificationConfig) => {
 	});
 
 	if (existing) {
-		throw new ConflictError("Ya existe un destino de notificación con este nombre");
+		throw new ConflictError("A notification destination with this name already exists");
 	}
 
 	const encryptedConfig = await encryptSensitiveFields(config);
@@ -155,7 +155,7 @@ const createDestination = async (name: string, config: NotificationConfig) => {
 		.returning();
 
 	if (!created) {
-		throw new InternalServerError("Error al crear destino de notificación");
+		throw new InternalServerError("Error creating notification destination");
 	}
 
 	return created;
@@ -168,7 +168,7 @@ const updateDestination = async (
 	const existing = await getDestination(id);
 
 	if (!existing) {
-		throw new NotFoundError("Destino de notificación no encontrado");
+		throw new NotFoundError("Notification destination not found");
 	}
 
 	const updateData: Partial<NotificationDestination> = {
@@ -183,7 +183,7 @@ const updateDestination = async (
 		});
 
 		if (conflict) {
-			throw new ConflictError("Ya existe un destino de notificación con este nombre");
+			throw new ConflictError("A notification destination with this name already exists");
 		}
 		updateData.name = slug;
 	}
@@ -194,7 +194,7 @@ const updateDestination = async (
 
 	const newConfig = notificationConfigSchema(updates.config || existing.config);
 	if (newConfig instanceof type.errors) {
-		throw new InternalServerError("Configuración de notificación inválida");
+		throw new InternalServerError("Invalid notification configuration");
 	}
 
 	const encryptedConfig = await encryptSensitiveFields(newConfig);
@@ -208,7 +208,7 @@ const updateDestination = async (
 		.returning();
 
 	if (!updated) {
-		throw new InternalServerError("Error al actualizar destino de notificación");
+		throw new InternalServerError("Error updating notification destination");
 	}
 
 	return updated;
@@ -222,7 +222,7 @@ const testDestination = async (id: number) => {
 	const destination = await getDestination(id);
 
 	if (!destination.enabled) {
-		throw new ConflictError("No se puede probar un destino de notificación deshabilitado");
+		throw new ConflictError("Cannot test a disabled notification destination");
 	}
 
 	const decryptedConfig = await decryptSensitiveFields(destination.config);
@@ -238,7 +238,7 @@ const testDestination = async (id: number) => {
 	});
 
 	if (!result.success) {
-		throw new InternalServerError(`Error al enviar notificación de prueba: ${result.error}`);
+		throw new InternalServerError(`Error sending test notification: ${result.error}`);
 	}
 
 	return { success: true };

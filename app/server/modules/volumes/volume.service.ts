@@ -93,7 +93,7 @@ const deleteVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -107,7 +107,7 @@ const mountVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -131,7 +131,7 @@ const unmountVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -152,7 +152,7 @@ const getVolume = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	let statfs: Partial<StatFs> = {};
@@ -172,7 +172,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 	});
 
 	if (!existing) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	let newName = existing.name;
@@ -201,7 +201,7 @@ const updateVolume = async (name: string, volumeData: UpdateVolumeBody) => {
 
 	const newConfig = volumeConfigSchema(volumeData.config || existing.config);
 	if (newConfig instanceof type.errors) {
-		throw new InternalServerError("Configuración de Volume inválida");
+		throw new InternalServerError("Invalid volume configuration");
 	}
 
 	const encryptedConfig = await encryptSensitiveFields(newConfig);
@@ -274,7 +274,7 @@ const checkHealth = async (name: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	const backend = createVolumeBackend(volume);
@@ -298,11 +298,11 @@ const listFiles = async (name: string, subPath?: string) => {
 	});
 
 	if (!volume) {
-		throw new NotFoundError("Volume no encontrado");
+		throw new NotFoundError("Volume not found");
 	}
 
 	if (volume.status !== "mounted") {
-		throw new InternalServerError("El Volume no está montado");
+		throw new InternalServerError("Volume is not mounted");
 	}
 
 	// For directory volumes, use the configured path directly
@@ -312,7 +312,7 @@ const listFiles = async (name: string, subPath?: string) => {
 
 	const normalizedPath = path.normalize(requestedPath);
 	if (!normalizedPath.startsWith(volumePath)) {
-		throw new InternalServerError("Ruta inválida");
+		throw new InternalServerError("Invalid path");
 	}
 
 	try {

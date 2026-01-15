@@ -128,7 +128,7 @@ const getRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	return { repository };
@@ -138,7 +138,7 @@ const deleteRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	// TODO: Add cleanup logic for the actual restic repository files
@@ -161,7 +161,7 @@ const listSnapshots = async (id: string, backupId?: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const cacheKey = `snapshots:${repository.id}:${backupId || "all"}`;
@@ -192,7 +192,7 @@ const listSnapshotFiles = async (id: string, snapshotId: string, path?: string) 
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const cacheKey = `ls:${repository.id}:${snapshotId}:${path || "root"}`;
@@ -209,7 +209,7 @@ const listSnapshotFiles = async (id: string, snapshotId: string, path?: string) 
 		const result = await restic.ls(repository.config, snapshotId, path);
 
 		if (!result.snapshot) {
-			throw new NotFoundError("Snapshot no encontrado o vacío");
+			throw new NotFoundError("Snapshot not found or empty");
 		}
 
 		const response = {
@@ -246,7 +246,7 @@ const restoreSnapshot = async (
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const target = options?.targetPath || "/";
@@ -270,7 +270,7 @@ const getSnapshotDetails = async (id: string, snapshotId: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const cacheKey = `snapshots:${repository.id}:all`;
@@ -289,7 +289,7 @@ const getSnapshotDetails = async (id: string, snapshotId: string) => {
 	const snapshot = snapshots.find((snap) => snap.id === snapshotId || snap.short_id === snapshotId);
 
 	if (!snapshot) {
-		throw new NotFoundError("Snapshot no encontrado");
+		throw new NotFoundError("Snapshot not found");
 	}
 
 	return snapshot;
@@ -299,7 +299,7 @@ const checkHealth = async (repositoryId: string) => {
 	const repository = await findRepository(repositoryId);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, "check");
@@ -325,7 +325,7 @@ const doctorRepository = async (id: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const steps: Array<{ step: string; success: boolean; output: string | null; error: string | null }> = [];
@@ -414,7 +414,7 @@ const deleteSnapshot = async (id: string, snapshotId: string) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `delete:${snapshotId}`);
@@ -431,7 +431,7 @@ const deleteSnapshots = async (id: string, snapshotIds: string[]) => {
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `delete:bulk`);
@@ -454,7 +454,7 @@ const tagSnapshots = async (
 	const repository = await findRepository(id);
 
 	if (!repository) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const releaseLock = await repoMutex.acquireExclusive(repository.id, `tag:bulk`);
@@ -473,12 +473,12 @@ const updateRepository = async (id: string, updates: { name?: string; compressio
 	const existing = await findRepository(id);
 
 	if (!existing) {
-		throw new NotFoundError("Repository no encontrado");
+		throw new NotFoundError("Repository not found");
 	}
 
 	const newConfig = repositoryConfigSchema(existing.config);
 	if (newConfig instanceof type.errors) {
-		throw new InternalServerError("Configuración de Repository inválida");
+		throw new InternalServerError("Invalid repository configuration");
 	}
 
 	const encryptedConfig = await encryptConfig(newConfig);
