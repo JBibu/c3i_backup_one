@@ -77,7 +77,11 @@ export default function App() {
 		if (isTauri() && !isDev) {
 			waitForBackend()
 				.then((backendUrl) => {
+					console.info("[App] Backend ready at:", backendUrl);
+					// Set backend URL for API client
 					client.setConfig({ baseUrl: backendUrl });
+					// Set global variable for auth client
+					(window as any).__TAURI_BACKEND_URL__ = backendUrl;
 					setBackendReady(true);
 				})
 				.catch((err) => {

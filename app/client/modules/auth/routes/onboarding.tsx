@@ -64,29 +64,49 @@ export default function OnboardingPage() {
 			return;
 		}
 
-		const { data, error } = await authClient.signUp.email({
-			username: values.username.toLowerCase().trim(),
-			password: values.password,
-			email: values.email.toLowerCase().trim(),
-			name: values.username,
-			displayUsername: values.username,
-			hasDownloadedResticPassword: false,
-			fetchOptions: {
-				onRequest: () => {
-					setSubmitting(true);
-				},
-				onResponse: () => {
-					setSubmitting(false);
-				},
-			},
-		});
+		console.info("[Auth] Starting account creation for:", values.username);
+		console.info("[Auth] Email:", values.email);
 
-		if (data?.token) {
-			toast.success("¡Usuario administrador creado con éxito!");
-			void navigate("/download-recovery-key");
-		} else if (error) {
-			console.error(error);
-			toast.error("Error al crear el usuario administrador", { description: error.message });
+		try {
+			const { data, error } = await authClient.signUp.email({
+				username: values.username.toLowerCase().trim(),
+				password: values.password,
+				email: values.email.toLowerCase().trim(),
+				name: values.username,
+				displayUsername: values.username,
+				hasDownloadedResticPassword: false,
+				fetchOptions: {
+					onRequest: () => {
+						console.info("[Auth] Sending signup request...");
+						setSubmitting(true);
+					},
+					onResponse: () => {
+						console.info("[Auth] Received response");
+						setSubmitting(false);
+					},
+				},
+			});
+
+			console.info("[Auth] Response data:", data);
+			console.info("[Auth] Response error:", error);
+
+			if (data?.token) {
+				console.info("[Auth] Account created successfully!");
+				toast.success("¡Usuario administrador creado con éxito!");
+				void navigate("/download-recovery-key");
+			} else if (error) {
+				console.error("[Auth] Signup error:", error);
+				toast.error("Error al crear el usuario administrador", { description: error.message });
+			} else {
+				console.error("[Auth] Unknown error - no data and no error");
+				toast.error("Error desconocido al crear el usuario administrador");
+			}
+		} catch (err) {
+			console.error("[Auth] Exception during signup:", err);
+			toast.error("Error de red al crear el usuario", {
+				description: err instanceof Error ? err.message : String(err)
+			});
+			setSubmitting(false);
 		}
 	};
 
