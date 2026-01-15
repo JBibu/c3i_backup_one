@@ -24,10 +24,10 @@ export const clientMiddleware = [authMiddleware];
 
 export function meta(_: Route.MetaArgs) {
 	return [
-		{ title: "C3i Backup ONE - Configuración inicial" },
+		{ title: "C3i Backup ONE - Onboarding" },
 		{
 			name: "description",
-			content: "Bienvenido a C3i Backup ONE. Cree su cuenta de administrador para comenzar.",
+			content: "Welcome to C3i Backup ONE. Create your administrator account to get started.",
 		},
 	];
 }
@@ -59,7 +59,7 @@ export default function OnboardingPage() {
 		if (values.password !== values.confirmPassword) {
 			form.setError("confirmPassword", {
 				type: "manual",
-				message: "Las contraseñas no coinciden",
+				message: "Passwords do not match",
 			});
 			return;
 		}
@@ -92,18 +92,18 @@ export default function OnboardingPage() {
 
 			if (data?.token) {
 				console.info("[Auth] Account created successfully!");
-				toast.success("¡Usuario administrador creado con éxito!");
+				toast.success("Administrator account created successfully!");
 				void navigate("/download-recovery-key");
 			} else if (error) {
 				console.error("[Auth] Signup error:", error);
-				toast.error("Error al crear el usuario administrador", { description: error.message });
+				toast.error("Error creating administrator account", { description: error.message });
 			} else {
 				console.error("[Auth] Unknown error - no data and no error");
-				toast.error("Error desconocido al crear el usuario administrador");
+				toast.error("Unknown error creating administrator account");
 			}
 		} catch (err) {
 			console.error("[Auth] Exception during signup:", err);
-			toast.error("Error de red al crear el usuario", {
+			toast.error("Network error creating account", {
 				description: err instanceof Error ? err.message : String(err)
 			});
 			setSubmitting(false);
@@ -111,7 +111,7 @@ export default function OnboardingPage() {
 	};
 
 	return (
-		<AuthLayout title="Bienvenido a C3i Backup ONE" description="Cree el usuario administrador para comenzar">
+		<AuthLayout title="Welcome to C3i Backup ONE" description="Create the administrator account to get started">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 					<FormField
@@ -119,11 +119,11 @@ export default function OnboardingPage() {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Correo electrónico</FormLabel>
+								<FormLabel>Email</FormLabel>
 								<FormControl>
-									<Input {...field} type="email" placeholder="usted@ejemplo.com" disabled={submitting} />
+									<Input {...field} type="email" placeholder="you@example.com" disabled={submitting} />
 								</FormControl>
-								<FormDescription>Introduzca su dirección de correo electrónico</FormDescription>
+								<FormDescription>Enter your email address</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -133,11 +133,11 @@ export default function OnboardingPage() {
 						name="username"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Nombre de usuario</FormLabel>
+								<FormLabel>Username</FormLabel>
 								<FormControl>
 									<Input {...field} type="text" placeholder="admin" disabled={submitting} />
 								</FormControl>
-								<FormDescription>Elija un nombre de usuario para la cuenta de administrador</FormDescription>
+								<FormDescription>Choose a username for the administrator account</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -147,11 +147,11 @@ export default function OnboardingPage() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Contraseña</FormLabel>
+								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input {...field} type="password" placeholder="Introduzca una contraseña segura" disabled={submitting} />
+									<Input {...field} type="password" placeholder="Enter a secure password" disabled={submitting} />
 								</FormControl>
-								<FormDescription>La contraseña debe tener al menos 8 caracteres.</FormDescription>
+								<FormDescription>Password must be at least 8 characters.</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -161,16 +161,16 @@ export default function OnboardingPage() {
 						name="confirmPassword"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Confirmar contraseña</FormLabel>
+								<FormLabel>Confirm Password</FormLabel>
 								<FormControl>
-									<Input {...field} type="password" placeholder="Vuelva a introducir su contraseña" disabled={submitting} />
+									<Input {...field} type="password" placeholder="Re-enter your password" disabled={submitting} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					<Button type="submit" className="w-full" loading={submitting}>
-						Crear usuario administrador
+						Create admin user
 					</Button>
 				</form>
 			</Form>
