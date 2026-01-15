@@ -15,39 +15,39 @@ async function main() {
 	const skipSidecar = args.includes("--skip-sidecar");
 	const allPlatforms = args.includes("--all");
 
-	console.log("=== C3i Backup ONE Tauri Build ===\n");
+	console.info("=== C3i Backup ONE Tauri Build ===\n");
 
 	// Step 1: Download binaries
 	if (!skipDownload) {
-		console.log("Step 1: Downloading platform binaries...");
+		console.info("Step 1: Downloading platform binaries...");
 		if (allPlatforms) {
 			await $`bun run ${path.join(ROOT_DIR, "scripts/download-binaries.ts")} --all`.cwd(ROOT_DIR);
 		} else {
 			await $`bun run ${path.join(ROOT_DIR, "scripts/download-binaries.ts")}`.cwd(ROOT_DIR);
 		}
-		console.log("");
+		console.info("");
 	} else {
-		console.log("Step 1: Skipping binary download (--skip-download)\n");
+		console.info("Step 1: Skipping binary download (--skip-download)\n");
 	}
 
 	// Step 2: Build sidecar
 	if (!skipSidecar) {
-		console.log("Step 2: Building sidecar binary...");
+		console.info("Step 2: Building sidecar binary...");
 		if (allPlatforms) {
 			await $`bun run ${path.join(ROOT_DIR, "scripts/build-sidecar.ts")} --all`.cwd(ROOT_DIR);
 		} else {
 			await $`bun run ${path.join(ROOT_DIR, "scripts/build-sidecar.ts")}`.cwd(ROOT_DIR);
 		}
-		console.log("");
+		console.info("");
 	} else {
-		console.log("Step 2: Skipping sidecar build (--skip-sidecar)\n");
+		console.info("Step 2: Skipping sidecar build (--skip-sidecar)\n");
 	}
 
 	// Step 3: Build Tauri app
-	console.log("Step 3: Building Tauri application...");
+	console.info("Step 3: Building Tauri application...");
 	await $`bunx tauri build`.cwd(ROOT_DIR);
 
-	console.log("\n=== Build Complete ===");
+	console.info("\n=== Build Complete ===");
 }
 
 main().catch((error) => {

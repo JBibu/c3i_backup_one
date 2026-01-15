@@ -84,7 +84,7 @@ export default function App() {
 					setError(err instanceof Error ? err.message : "Failed to connect to backend");
 				});
 		}
-	}, []);
+	}, [isDev]);
 
 	if (error) {
 		return (

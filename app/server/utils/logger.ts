@@ -20,6 +20,7 @@ const printConsole = printf((info) => {
 // File format with full timestamp and JSON structure for parsing
 const printFile = printf((info) => {
 	const ts = info.timestamp as string;
+	// eslint-disable-next-line no-control-regex
 	const level = info.level.replace(/\x1B\[\d+m/g, ""); // Remove color codes
 	const message = String(info.message);
 

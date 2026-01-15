@@ -23,7 +23,7 @@ async function buildSidecar(target?: string) {
 		process.exit(1);
 	}
 
-	console.log(`Building sidecar for ${targetPlatform}...`);
+	console.info(`Building sidecar for ${targetPlatform}...`);
 
 	// Ensure output directory exists
 	await fs.mkdir(OUTPUT_DIR, { recursive: true });
@@ -36,7 +36,7 @@ async function buildSidecar(target?: string) {
 	const outputPath = path.join(OUTPUT_DIR, outputName);
 
 	// Build the server first
-	console.log("Building server with react-router...");
+	console.info("Building server with react-router...");
 	await $`bun run build`.cwd(ROOT_DIR);
 
 	// Note: Migrations are NOT embedded in the sidecar binary
@@ -44,7 +44,7 @@ async function buildSidecar(target?: string) {
 	// or found next to the executable at runtime
 
 	// Compile to standalone binary
-	console.log(`Compiling to standalone binary: ${outputName}`);
+	console.info(`Compiling to standalone binary: ${outputName}`);
 
 	const compileArgs = [
 		"build",
@@ -64,12 +64,12 @@ async function buildSidecar(target?: string) {
 		await fs.chmod(outputPath, 0o755);
 	}
 
-	console.log(`Sidecar built successfully: ${outputPath}`);
+	console.info(`Sidecar built successfully: ${outputPath}`);
 	return outputPath;
 }
 
 async function buildAllPlatforms() {
-	console.log("Building sidecars for all platforms...");
+	console.info("Building sidecars for all platforms...");
 
 	for (const target of getSupportedPlatforms()) {
 		try {

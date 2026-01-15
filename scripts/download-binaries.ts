@@ -65,7 +65,7 @@ const PLATFORMS: Record<string, PlatformConfig> = {
 };
 
 async function downloadFile(url: string, destPath: string): Promise<void> {
-	console.log(`  Downloading: ${url}`);
+	console.info(`  Downloading: ${url}`);
 
 	const response = await fetch(url);
 	if (!response.ok) {
@@ -151,7 +151,7 @@ async function downloadRestic(platform: string, config: PlatformConfig, platform
 	}
 
 	await fs.chmod(binaryPath, 0o755);
-	console.log(`  ✓ restic installed`);
+	console.info(`  ✓ restic installed`);
 }
 
 async function downloadRclone(platform: string, config: PlatformConfig, platformDir: string): Promise<void> {
@@ -168,7 +168,7 @@ async function downloadRclone(platform: string, config: PlatformConfig, platform
 	}
 
 	await fs.chmod(finalPath, 0o755);
-	console.log(`  ✓ rclone installed`);
+	console.info(`  ✓ rclone installed`);
 }
 
 async function downloadShoutrrr(platform: string, config: PlatformConfig, platformDir: string): Promise<void> {
@@ -185,7 +185,7 @@ async function downloadShoutrrr(platform: string, config: PlatformConfig, platfo
 	}
 
 	await fs.chmod(finalPath, 0o755);
-	console.log(`  ✓ shoutrrr installed`);
+	console.info(`  ✓ shoutrrr installed`);
 }
 
 async function downloadForPlatform(platform: string): Promise<void> {
@@ -198,7 +198,7 @@ async function downloadForPlatform(platform: string): Promise<void> {
 	const platformDir = path.join(OUTPUT_DIR, platform);
 	await fs.mkdir(platformDir, { recursive: true });
 
-	console.log(`\nDownloading binaries for ${platform}...`);
+	console.info(`\nDownloading binaries for ${platform}...`);
 
 	try {
 		await downloadRestic(platform, config, platformDir);
@@ -230,8 +230,8 @@ function getCurrentPlatformForDownload(): string {
 const args = process.argv.slice(2);
 
 if (args.includes("--all")) {
-	console.log("Downloading binaries for all platforms...");
-	console.log(`Versions: restic=${RESTIC_VERSION}, rclone=${RCLONE_VERSION}, shoutrrr=${SHOUTRRR_VERSION}`);
+	console.info("Downloading binaries for all platforms...");
+	console.info(`Versions: restic=${RESTIC_VERSION}, rclone=${RCLONE_VERSION}, shoutrrr=${SHOUTRRR_VERSION}`);
 
 	for (const platform of Object.keys(PLATFORMS)) {
 		await downloadForPlatform(platform);
@@ -243,9 +243,9 @@ if (args.includes("--all")) {
 } else {
 	// Download for current platform only
 	const currentPlatform = getCurrentPlatformForDownload();
-	console.log(`Downloading binaries for current platform: ${currentPlatform}`);
-	console.log(`Versions: restic=${RESTIC_VERSION}, rclone=${RCLONE_VERSION}, shoutrrr=${SHOUTRRR_VERSION}`);
+	console.info(`Downloading binaries for current platform: ${currentPlatform}`);
+	console.info(`Versions: restic=${RESTIC_VERSION}, rclone=${RCLONE_VERSION}, shoutrrr=${SHOUTRRR_VERSION}`);
 	await downloadForPlatform(currentPlatform);
 }
 
-console.log("\nDone!");
+console.info("\nDone!");
