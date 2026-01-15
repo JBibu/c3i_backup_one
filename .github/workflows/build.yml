@@ -94,7 +94,7 @@ jobs:
 
       - name: Upload artifacts (Linux)
         if: matrix.platform == 'ubuntu-22.04'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-x86_64
           path: |
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload artifacts (Windows)
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: windows-x86_64
           path: |
@@ -112,7 +112,7 @@ jobs:
 
       - name: Upload artifacts (macOS x86_64)
         if: matrix.platform == 'macos-latest' && matrix.target == 'x86_64-apple-darwin'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-x86_64
           path: |
@@ -121,7 +121,7 @@ jobs:
 
       - name: Upload artifacts (macOS ARM64)
         if: matrix.platform == 'macos-latest' && matrix.target == 'aarch64-apple-darwin'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: macos-aarch64
           path: |
