@@ -98,7 +98,9 @@ async function extractZip(archivePath: string, outputDir: string, binaryName: st
 	const files = await fs.readdir(tempDir, { recursive: true, withFileTypes: true });
 	for (const file of files) {
 		if (file.isFile() && file.name.startsWith(binaryName)) {
-			const sourcePath = path.join(file.parentPath || file.path, file.name);
+			// Type assertion: parentPath exists in Node.js 20+ but not in all TS definitions
+			const fileWithPath = file as any;
+			const sourcePath = path.join(fileWithPath.parentPath || fileWithPath.path || tempDir, file.name);
 			const destPath = path.join(outputDir, file.name);
 			await fs.rename(sourcePath, destPath);
 			await fs.rm(tempDir, { recursive: true });
@@ -122,7 +124,9 @@ async function extractTarGz(archivePath: string, outputDir: string, binaryName: 
 	const files = await fs.readdir(tempDir, { recursive: true, withFileTypes: true });
 	for (const file of files) {
 		if (file.isFile() && file.name.startsWith(binaryName)) {
-			const sourcePath = path.join(file.parentPath || file.path, file.name);
+			// Type assertion: parentPath exists in Node.js 20+ but not in all TS definitions
+			const fileWithPath = file as any;
+			const sourcePath = path.join(fileWithPath.parentPath || fileWithPath.path || tempDir, file.name);
 			const destPath = path.join(outputDir, file.name);
 			await fs.rename(sourcePath, destPath);
 			await fs.rm(tempDir, { recursive: true });
